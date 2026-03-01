@@ -1,0 +1,1 @@
+lib.print.info('red40_template', 'Server script started')

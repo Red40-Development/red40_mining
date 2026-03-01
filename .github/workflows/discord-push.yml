@@ -1,0 +1,20 @@
+name: "Discord Commit"
+
+on: [push]
+
+jobs:
+  discord_notification:
+    if: github.event.repository.default_branch == github.ref_name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Discord Webhook
+        uses: solareon/discord-commits@main
+        with:
+          id: ${{ secrets.DISCORD_WEBHOOK_ID }}
+          token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+          hideCommitUrl: true
+          repoName: ${{ github.event.repository.name }}
+          avatarUrl: ${{ secrets.DISCORD_WEBHOOK_AVATARURL }}

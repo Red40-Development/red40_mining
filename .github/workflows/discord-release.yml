@@ -1,0 +1,24 @@
+name: "Discord Release Notification"
+
+on:
+  release:
+    types: [published]
+jobs:
+  github-releases-to-discord:
+    name: Discord Releases Changelog
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Github Releases To Discord
+        uses: SethCohen/github-releases-to-discord@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          color: "16736808"
+          username: ${{ github.event.repository.name }}
+          avatar_url: "https://assets.red40.dev/red40_short_logo.webp"
+          remove_github_reference_links: true
+          footer_timestamp: true
+          footer_title: "Red40 Development"
+          footer_icon_url: "https://red40.dev/red40_logo_transparent_256.png"
+
