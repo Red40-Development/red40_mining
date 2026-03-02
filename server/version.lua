@@ -1,5 +1,5 @@
 CreateThread(function()
-    PerformHttpRequest("https://version.red40.dev/version/red40_template", function(statusCode, response, headers)
+    PerformHttpRequest("https://version.red40.dev/version/red40_mining", function(statusCode, response, headers)
         if statusCode ~= 200 then
             lib.print.warn("[Version Check]: Failed to fetch latest version from API.")
             return
@@ -20,7 +20,7 @@ CreateThread(function()
         end
 
         if currentVersion ~= latestVersion then
-            lib.print.warn(("[Version Check]: Outdated! Installed: %s, Latest: %s — Download the latest from CFX Portal."):format(currentVersion, latestVersion))
+            lib.print.warn(("[Version Check]: Outdated! Installed: %s, Latest: %s — Download the latest from CFX Portal or GitHub."):format(currentVersion, latestVersion))
 			if jsonData.changeLog ~= '' then
                 lib.print.info('[Version Check] Change Log:\n' .. jsonData.changeLog)
 			end

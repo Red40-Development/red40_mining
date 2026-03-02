@@ -1,11 +1,11 @@
-# red40_template
-A script development template
+# red40_mining
+An advanced mining resource for fivem servers
 
 # Support
-- [Discord](https://discord.gg/ShMFbNQuqy)
+- [Discord](https://red40.dev/support)
 
 # Credits
-- Nobody except us
+- All the other mining scripts on fivem for being junk
 
 # Dependencies
 - [ox_lib](https://github.com/overextended/ox_lib)

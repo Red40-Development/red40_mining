@@ -1,8 +1,8 @@
 fx_version 'cerulean'
 game 'gta5'
 
-name 'red40_template'
-description 'A script development template for Red40 Development'
+name 'red40_mining'
+description 'A mining script by Red40 Development'
 author 'Red40 Development'
 version '0.0.1'
 
@@ -29,10 +29,7 @@ files {
 }
 
 escrow_ignore {
-    'config/*.lua',
-    'server/bridge.lua',
-    'client/bridge.lua',
-    'bridge/**/*.lua',
+    '**/*',
 }
 
 lua54 'yes'
