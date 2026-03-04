@@ -22,6 +22,33 @@ function AddMoney(Player, moneyType, amount)
     Player.Functions.AddMoney(moneyType, amount, "redwire-sale")
 end
 
+function AddItems(src, items, coords)
+    local player = GetPlayer(src)
+    if not player then return end
+    for item, data in pairs(items) do
+        local amount = data.amount or 1
+        local metadata = data.metadata or {}
+        player.Functions.AddItem(item, amount, metadata)
+    end
+end
+
+function AddXp(src, amount, type)
+    local player = GetPlayer(src)
+    local metadataKey = 'red40_mining' .. type
+    if player then
+        player.Functions.SetMetaData(metadataKey, (player.PlayerData.metadata[metadataKey] or 0) + amount)
+    end
+end
+
+function GetXp(src, type)
+    local player = GetPlayer(src)
+    local metadataKey = 'red40_mining' .. type
+    if player then
+        return player.PlayerData.metadata[metadataKey] or 0
+    end
+    return 0
+end
+
 function CheckDuty()
     local dutyCount = 0
     local leoJobs = { 'police', 'bcso' } -- Add your police jobs here...
