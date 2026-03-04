@@ -1,7 +1,7 @@
 return {
     mining = {
         enabled = true,
-        xpTable = {
+        xpTables = {
             { level = 1, xp = 0 },
             { level = 2, xp = 10 },
             { level = 3, xp = 30 },
@@ -69,6 +69,9 @@ return {
         durability = function()
             return math.random(1, 5) -- Random durability loss between 1 and 5 for each use
         end,
+        xpPerAction = function()
+            return math.random(1, 3) -- Random XP between 1 and 3 for each successful action,
+        end,
         locations = {
             {
                 name = 'mine_shaft_1', -- Unique identifier for the location, referenced in logs
@@ -107,7 +110,7 @@ return {
     },
     panning = {
         enabled = true,
-        xpTable = {
+        xpTables = {
             { level = 1, xp = 0 },
             { level = 2, xp = 10 },
             { level = 3, xp = 30 },
@@ -165,7 +168,7 @@ return {
     },
     washing = {
         enabled = true,
-        xpTable = {
+        xpTables = {
             { level = 1, xp = 0 },
             { level = 2, xp = 10 },
             { level = 3, xp = 30 },
@@ -206,7 +209,7 @@ return {
     },
     cracking = {
         enabled = true,
-        xpTable = {
+        xpTables = {
             { level = 1, xp = 0 },
             { level = 2, xp = 10 },
             { level = 3, xp = 30 },
