@@ -4,77 +4,112 @@ if not config.enabled then
     return
 end
 
+local orePoints = {}
 
-local miningObjects = {}
-local miningTools = {}
-
-local function deleteMiningObject(source)
-    local object = miningObjects[source]
-
-    if object and DoesEntityExist(object) then
-        DeleteEntity(object)
-        --- Check if another statebag was made that broke this
-        Player(source).state:set('red40_mining', nil, true)
-        miningObjects[source] = nil
-    end
-end
-
-local function startMining(src, tool)
-    if miningObjects[src] then
-        DeleteEntity(miningObjects[src])
-        miningObjects[src] = nil
-    end
-
-    local ped = GetPlayerPed(src)
-
-    if GetVehiclePedIsIn(ped, false) > 0 then
-        return Notify(src, locale('vehicle_mining'), 'error')
-    end
-
-    local coords = GetEntityCoords(ped)
-
-    local object = CreateObject(config.tools[tool].prop, coords.x, coords.y, coords.z - 20, true, true, true)
-
-    while not DoesEntityExist(object) do
-        Wait(50)
-    end
-
-    SetEntityIgnoreRequestControlFilter(object, true)
-
-    Player(src).state:set('red40_mining', {
-        entity = NetworkGetNetworkIdFromEntity(object),
-        tool = tool,
-        mining = true
-    }, true)
-
-    miningObjects[src] = object
-    miningTools[src] = tool
-end
-
-RegisterNetEvent('red40_mining:server:stopMining', function()
+RegisterNetEvent('red40_mining:server:startMining', function(oreId)
     local src = source
-    deleteMiningObject(src)
+    local orePoint = orePoints[oreId]
+
+    if not orePoint then return end
+
+    -- coord check
+    local coords = GetEntityCoords(GetPlayerPed(src))
+    if #(coords - orePoint.coords) > 2.0 then
+        Notify(src, locale('too_far'), 'error')
+        return
+    end
+
+    local tool = MiningTools[src]
+    lib.print.info('Player ' .. src .. ' is attempting to mine ore point ' .. oreId .. ' with tool: ' .. tostring(tool))
+    if not tool then
+        Notify(src, locale('no_tool'), 'error')
+        return
+    end
+
+    local waitTime = math.random(config.tools[tool].minUseTime, config.tools[tool].maxUseTime)
+
+    local success = lib.callback.await('red40_mining:client:mineSpot', src, waitTime)
+
+    if success and not orePoint.looted then
+        orePoints[orePoint.id].looted = true
+        lib.print.debug('Player ' .. src .. ' mined ore point ' .. orePoint.id)
+        TriggerClientEvent('red40_mining:client:updateMiningSpot', -1, orePoint.id, true)
+        SetTimeout(math.random(orePoint.respawnTimeMin, orePoint.respawnTimeMax), function()
+            orePoints[orePoint.id].looted = false
+            TriggerClientEvent('red40_mining:client:updateMiningSpot', -1, orePoint.id, false)
+            lib.print.debug('Ore point ' .. orePoint.id .. ' has respawned')
+        end)
+
+        lib.print.info(orePoint)
+        local items = GenerateLoot(orePoint.rewards, orePoint.min, orePoint.max,
+            GetXpLevel(GetXp(src, 'mining'), config.xpTables) or 0)
+        lib.print.debug('Generated loot for player ' .. src .. ' at ore point ' .. orePoint.id .. ': ', items)
+
+        if items and next(items) then
+            AddItems(src, items, coords)
+            lib.print.debug('Added items to player ' .. src .. ': ', items)
+        else
+            Notify(src, locale('found_nothing'), 'inform')
+            lib.print.debug('Player ' .. src .. ' found nothing at ore point ' .. orePoint.id)
+        end
+        local xpGained = config.xpPerAction
+        AddXp(src, xpGained, 'mining')
+        lib.print.debug('Added ' .. xpGained .. ' XP to player ' .. src .. ' for mining')
+    end
 end)
 
-AddStateBagChangeHandler('red40_mining', '', function(bagName, _, value)
-    if value then return end
+lib.callback.register('red40_mining:server:getMiningPoints', function(_)
+    return orePoints
+end)
 
-    local source = GetPlayerFromStateBagName(bagName)
-    if source and miningObjects[source] then
-        deleteMiningObject(source)
+-- Build ore points
+local function buildOrePoints()
+    local oreCount = 1
+    for i = 1, #config.locations do
+        local location = config.locations[i]
+
+        for j = 1, #location.ore_locations do
+            local oreLocation = location.ore_locations[j]
+            for k = 1, #oreLocation.coords do
+                local coords = oreLocation.coords[k]
+
+                orePoints[oreCount] = {
+                    id = oreCount,
+                    coords = coords,
+                    prop = oreLocation.prop,
+                    rot = oreLocation.rotation,
+                    looted = false,
+                    rewards = oreLocation.rewards,
+                    min = oreLocation.min,
+                    max = oreLocation.max,
+                    respawnTimeMin = location.respawnTimeMin,
+                    respawnTimeMax = location.respawnTimeMax,
+                }
+
+                oreCount = oreCount + 1
+            end
+        end
+    end
+end
+
+CreateThread(function()
+    buildOrePoints()
+    for zone, lootData in pairs(config.lootTables) do
+        lib.print.info('Registering loot table for zone: ' .. zone)
+        RegisterLootTable(zone, lootData)
     end
 end)
 
 --- Usable items
 if GetResourceState('ox_inventory') ~= 'missing' then
-    local function startMiningExport(_, _, inventory, slot, data)
+    local function startMiningExport(_, item, inventory)
         if inventory.type == 'player' then
             local src = inventory.player.source
 
-            if miningObjects[src] then
-                deleteMiningObject(src)
+            if MiningObjects[src] then
+                DeleteMiningObject(src)
             else
-                startMining(src, slot.item)
+                StartMining(src, 'mining', item.name)
             end
         end
         return true
@@ -90,10 +125,10 @@ if GetResourceState('ox_inventory') ~= 'missing' then
     exports.ox_inventory:registerHook('swapItems', function(payload)
         local source = payload.source
 
-        if payload.toInventory ~= payload.fromInventory and miningObjects[source] then
+        if payload.toInventory ~= payload.fromInventory and MiningObjects[source] then
             SetTimeout(100, function()
-                if exports.ox_inventory:GetItemCount(source, miningTools[source]) == 0 then
-                    deleteMiningObject(source)
+                if exports.ox_inventory:GetItemCount(source, MiningTools[source]) == 0 then
+                    DeleteMiningObject(source)
                 end
             end)
 
@@ -112,10 +147,10 @@ elseif GetResourceState('qb-core') ~= 'missing' then
         QBCore.Functions.CreateUseableItem(item, function(source, _)
             local Player = QBCore.Functions.GetPlayer(source)
             if not Player.Functions.GetItemByName(item) then return end
-            if miningObjects[source] then
-                deleteMiningObject(source)
+            if MiningObjects[source] then
+                DeleteMiningObject(source)
             else
-                startMining(source, item)
+                StartMining(source, 'mining', item)
             end
         end)
     end
@@ -124,10 +159,10 @@ elseif GetResourceState('es_extended') ~= 'missing' then
         ESX.RegisterUsableItem(item, function(source)
             local xPlayer = ESX.GetPlayerFromId(source)
             if not xPlayer.getInventoryItem(item).count then return end
-            if miningObjects[source] then
-                deleteMiningObject(source)
+            if MiningObjects[source] then
+                DeleteMiningObject(source)
             else
-                startMining(source, item)
+                StartMining(source, 'mining', item)
             end
         end)
     end

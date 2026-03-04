@@ -1,124 +1,102 @@
+local config = require 'config.client'
 local sharedConfig = require 'config.shared'.mining
 
 if not sharedConfig.enabled then
     return
 end
 
+local orePoints = {}
 local playerState = LocalPlayer.state
 
+RegisterNetEvent('red40_mining:client:updateMiningSpot', function(oreId, looted)
+    local orePoint = orePoints[oreId]
 
--- Attach prop to player
-
-AddStateBagChangeHandler('red40_mining', ('player:%s'):format(cache.serverId), function(_, _, value)
-    if not value or type(value) ~= 'table' then return end
-
-    if not value.mining then return end
-
-    if value.entity then
-        while not NetworkDoesEntityExistWithNetworkId(value.entity) do
-            Wait(35)
+    if orePoint then
+        orePoints[oreId].looted = looted
+        if looted and orePoint.propNumber then
+            orePoint:onExit()
+        elseif not looted then
+            orePoint:onEnter()
         end
+    end
+end)
 
-        local entity = NetworkGetEntityFromNetworkId(value.entity)
+lib.callback.register('red40_mining:client:mineSpot', function(waitTime)
+    --TODO add animation, skillcheck (optional), and sounds here (tool config based)
+    local success = lib.progressBar({
+        duration = waitTime,
+        label = locale('mining_ore'),
+        useWhileDead = false,
+        canCancel = true,
+        disable = {
+            move = true,
+            combat = true,
+            mouse = false,
+        },
+    })
+    return success
+end)
 
-        if entity == 0 or not DoesEntityExist(entity) then return end
-
-        if NetworkGetEntityOwner(entity) ~= cache.playerId then
-            while NetworkGetEntityOwner(entity) ~= cache.playerId do
-                NetworkRequestControlOfEntity(entity)
-                Wait(35)
-            end
-        end
-
-        if value.bone then
-            local offset, rotation = value.offset, value.rotation
-
-            AttachEntityToEntity(entity, cache.ped, GetPedBoneIndex(cache.ped, value.bone), offset.x, offset.y, offset.z,
-                rotation.x, rotation.y, rotation.z, true, true, false, false, 1,
-                true)
+local function buildOrePoints(orePoint)
+    local point = lib.points.new({
+        coords = orePoint.coords,
+        distance = 200,
+        prop = orePoint.prop,
+        rot = orePoint.rot,
+        id = orePoint.id,
+        looted = orePoint.looted,
+    })
+    function point:onEnter()
+        if not self.looted then
+            lib.requestModel(self.prop, 10000)
+            self.propNumber = CreateObject(self.prop, self.coords.x, self.coords.y, self.coords.z, false, true, false)
+            SetModelAsNoLongerNeeded(self.prop)
+            SetEntityRotation(self.propNumber, self.rot.x, self.rot.y, self.rot.z, 2, true)
+            FreezeEntityPosition(self.propNumber, true)
+            SetEntityInvincible(self.propNumber, true)
         end
     end
 
-    if value.mining then
-        SetTimeout(0, function()
-            local object = NetworkGetEntityFromNetworkId(value.entity)
+    function point:onExit()
+        if self.propNumber and DoesEntityExist(self.propNumber) then
+            DeleteEntity(self.propNumber)
+            self.propNumber = nil
+        end
+    end
 
-            if not DoesEntityExist(object) then
-                return
-            end
-
-            lib.requestAnimDict('mini@golf')
-
-            local offset = sharedConfig.markerOffset
-
-            while playerState.red40_mining.mining do
-                if not IsEntityPlayingAnim(cache.ped, 'mini@golf', 'wood_idle_high_a', 3) then
-                    TaskPlayAnim(cache.ped, 'mini@golf', 'wood_idle_high_a', 1.0, -1.0, -1, 49, 1, false, false, false)
-                end
-
+    function point:nearby()
+        if not self.isClosest or not playerState.red40_mining.activity == 'mining' then return end
+        if not self.looted and self.currentDistance < 2 then
+            if config.use3dText then
+                DrawText3d({ coords = self.coords, text = locale('mine_ore_3d')})
+            else
                 local textOpen, text = lib.isTextUIOpen()
-                textOpen = textOpen and text == locale('mine_spot')
-                local coords = GetOffsetFromEntityInWorldCoords(object, offset.x, offset.y, offset.z)
-
-                if sharedConfig.blockWalkStyle then
-                    ResetPedMovementClipset(cache.ped, 0.0)
+                textOpen = textOpen and text == locale('mine_ore')
+                if not textOpen then
+                    lib.showTextUI(locale('mine_ore'))
                 end
-                local closestPoint = lib.points.getClosestPoint()
-
-                if closestPoint then
-                    local dist = closestPoint.currentDistance
-
-                    if sharedConfig.drawText3d and dist < 2 then
-                        DrawText3d({ coords = coords, text = locale('mine_spot_3d') })
-                    else
-                        if dist < 2 and not textOpen then
-                            lib.showTextUI(locale('mine_spot'))
-                        elseif dist >= 2 and textOpen then
-                            lib.hideTextUI()
-                        end
-                    end
-
-                    for i = 1, #sharedConfig.disableKeys do
-                        DisableControlAction(0, sharedConfig.disableKeys[i], true)
-                    end
-
-                    if textOpen and IsControlJustPressed(0, sharedConfig.pickupKey) and not lib.progressActive() then
-                        TriggerServerEvent('red40_mining:server:startMining', closestPoint.oreId)
-                        lib.hideTextUI()
-                    end
-                    if sharedConfig.drawText3d and dist < 2 and IsControlJustPressed(0, sharedConfig.pickupKey) and not lib.progressActive() then
-                        TriggerServerEvent('red40_mining:server:startMining', closestPoint.oreId)
-                    end
-                end
-
-                Wait(0)
             end
-
-            if IsEntityPlayingAnim(cache.ped, 'mini@golf', 'wood_idle_high_a', 3) then
-                StopAnimTask(cache.ped, 'mini@golf', 'wood_idle_high_a', 1.0)
+            if IsControlJustReleased(0, 38) then
+                TriggerServerEvent('red40_mining:server:startMining', self.id)
             end
-
-            if lib.progressActive() then
+        else
+            local textOpen, text = lib.isTextUIOpen()
+            if textOpen and text == locale('mine_ore') then
                 lib.hideTextUI()
             end
-        end)
+        end
+    end
+
+    orePoints[orePoint.id] = point
+end
+
+
+CreateThread(function()
+    local points = lib.callback.await('red40_mining:server:getMiningPoints')
+
+    for i = 1, #points do
+        local point = points[i]
+        buildOrePoints(point)
     end
 end)
 
-lib.onCache('vehicle', function(vehicle)
-    if playerState.red40_mining.mining and vehicle then
-        TriggerServerEvent('red40_mining:server:stopMining')
-    end
-end)
-
-lib.onCache('ped', function(ped)
-    if playerState.red40_mining.mining and ped then
-        TriggerServerEvent('red40_mining:server:stopMining')
-    end
-end)
-
-lib.onCache('weapon', function(weapon)
-    if playerState.red40_mining.mining and weapon then
-        TriggerServerEvent('red40_mining:server:stopMining')
-    end
-end)
