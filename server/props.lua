@@ -27,7 +27,7 @@ function StartMining(src, activity, tool)
 
     local coords = GetEntityCoords(ped)
 
-    local object = CreateObject(config[activity].tools[tool].prop, coords.x, coords.y, coords.z - 20, true, true, true)
+    local object = CreateObject(config[activity].tools[tool].prop, coords.x, coords.y, coords.z - 25, true, true, true)
 
     while not DoesEntityExist(object) do
         Wait(50)
@@ -51,4 +51,17 @@ end
 RegisterNetEvent('red40_mining:server:stopMining', function()
     local src = source
     DeleteMiningObject(src)
+end)
+
+AddEventHandler('playerDropped', function()
+    local src = source
+    DeleteMiningObject(src)
+end)
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if resourceName == cache.resource then
+        for src, _ in pairs(MiningObjects) do
+            DeleteMiningObject(src)
+        end
+    end
 end)

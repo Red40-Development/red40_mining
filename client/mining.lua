@@ -1,9 +1,10 @@
-local config = require 'config.client'
-local sharedConfig = require 'config.shared'.mining
+local enabled = require 'config.shared'.mining
 
-if not sharedConfig.enabled then
+if not enabled then
     return
 end
+
+local config = require 'config.client'
 
 local orePoints = {}
 local playerState = LocalPlayer.state
@@ -36,6 +37,30 @@ lib.callback.register('red40_mining:client:mineSpot', function(waitTime)
     })
     return success
 end)
+
+local function buildLightPoints(lightPoint)
+    local point = lib.points.new({
+        coords = lightPoint.coords,
+        distance = 200,
+        prop = lightPoint.prop,
+        rot = lightPoint.rot,
+    })
+    function point:onEnter()
+        lib.requestModel(self.prop, 10000)
+        self.propNumber = CreateObject(self.prop, self.coords.x, self.coords.y, self.coords.z, false, true, false)
+        SetModelAsNoLongerNeeded(self.prop)
+        SetEntityRotation(self.propNumber, self.rot.x, self.rot.y, self.rot.z, 2, true)
+        FreezeEntityPosition(self.propNumber, true)
+        SetEntityInvincible(self.propNumber, true)
+    end
+
+    function point:onExit()
+        if self.propNumber and DoesEntityExist(self.propNumber) then
+            DeleteEntity(self.propNumber)
+            self.propNumber = nil
+        end
+    end
+end
 
 local function buildOrePoints(orePoint)
     local point = lib.points.new({
@@ -97,6 +122,21 @@ CreateThread(function()
     for i = 1, #points do
         local point = points[i]
         buildOrePoints(point)
+    end
+
+    local lightPoints = lib.callback.await('red40_mining:server:getMiningLightPoints')
+
+    for i = 1, #lightPoints do
+        local point = lightPoints[i]
+        buildLightPoints(point)
+    end
+end)
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if resourceName ~= cache.resource then return end
+    local points = lib.points.getAllPoints()
+    for i = 1, #points do
+        points[i]:onExit()
     end
 end)
 

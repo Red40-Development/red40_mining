@@ -1,4 +1,5 @@
 --- Modified from original source (https://github.com/Renewed-Scripts/Renewed-Lib/blob/main/modules/loot/server.lua)
+--- License GPL-3.0
 --- Copyright (C) 2024 Renewed Scripts.
 
 local lootTables = {}

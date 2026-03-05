@@ -1,28 +1,44 @@
-local config = require 'config.shared'.mining
+local enabled = require 'config.shared'.mining
 
-if not config.enabled then
+if not enabled then
     return
 end
 
+local config = require 'config.server'.mining
+
 local orePoints = {}
+local lightPoints = {}
 
 RegisterNetEvent('red40_mining:server:startMining', function(oreId)
     local src = source
     local orePoint = orePoints[oreId]
 
-    if not orePoint then return end
+    if not orePoint then
+        --OPTIONAL: Ban player cause they triggered this event
+        Logger(src, 'red40_mining', 'Player attempted to mine an invalid ore point with id: ' .. oreId)
+        return
+    end
 
-    -- coord check
+    if orePoint.looted then
+        Notify(src, locale('already_looted'), 'error')
+        Logger(src, 'red40_mining', 'Player attempted to mine ore point ' .. oreId .. ' but it was already looted.')
+        return
+    end
+
+    -- Distance Check
     local coords = GetEntityCoords(GetPlayerPed(src))
     if #(coords - orePoint.coords) > 2.0 then
         Notify(src, locale('too_far'), 'error')
+        Logger(src, 'red40_mining',
+            'Player attempted to mine ore point ' ..
+            oreId .. ' but was too far away. Distance: ' .. #(coords - orePoint.coords))
         return
     end
 
     local tool = MiningTools[src]
-    lib.print.info('Player ' .. src .. ' is attempting to mine ore point ' .. oreId .. ' with tool: ' .. tostring(tool))
     if not tool then
         Notify(src, locale('no_tool'), 'error')
+        Logger(src, 'red40_mining', 'Player attempted to mine ore point ' .. oreId .. ' without a mining tool.')
         return
     end
 
@@ -40,9 +56,9 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
             lib.print.debug('Ore point ' .. orePoint.id .. ' has respawned')
         end)
 
-        lib.print.info(orePoint)
+        local playerXp = GetXp(src, 'mining') or 0
         local items = GenerateLoot(orePoint.rewards, orePoint.min, orePoint.max,
-            GetXpLevel(GetXp(src, 'mining'), config.xpTables) or 0)
+            GetXpLevel(playerXp, config.xpTables) or 0)
         lib.print.debug('Generated loot for player ' .. src .. ' at ore point ' .. orePoint.id .. ': ', items)
 
         if items and next(items) then
@@ -52,9 +68,12 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
             Notify(src, locale('found_nothing'), 'inform')
             lib.print.debug('Player ' .. src .. ' found nothing at ore point ' .. orePoint.id)
         end
-        local xpGained = config.xpPerAction
-        AddXp(src, xpGained, 'mining')
-        lib.print.debug('Added ' .. xpGained .. ' XP to player ' .. src .. ' for mining')
+
+        if playerXp < config.tools[tool].maxXp then
+            local xpGained = config.xpPerAction()
+            AddXp(src, xpGained, 'mining')
+            lib.print.debug('Added ' .. xpGained .. ' XP to player ' .. src .. ' for mining')
+        end
     end
 end)
 
@@ -62,12 +81,15 @@ lib.callback.register('red40_mining:server:getMiningPoints', function(_)
     return orePoints
 end)
 
+lib.callback.register('red40_mining:server:getMiningLightPoints', function(_)
+    return lightPoints
+end)
+
 -- Build ore points
 local function buildOrePoints()
     local oreCount = 1
     for i = 1, #config.locations do
         local location = config.locations[i]
-
         for j = 1, #location.ore_locations do
             local oreLocation = location.ore_locations[j]
             for k = 1, #oreLocation.coords do
@@ -88,6 +110,15 @@ local function buildOrePoints()
 
                 oreCount = oreCount + 1
             end
+        end
+        for k = 1, #location.lights.locations do
+            local coords = location.lights.locations[k]
+
+            lightPoints[#lightPoints + 1] = {
+                coords = coords,
+                prop = location.lights.prop,
+                rot = location.lights.rotation,
+            }
         end
     end
 end
