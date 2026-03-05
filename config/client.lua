@@ -1,3 +1,5 @@
 return {
-    use3dText = true, -- Set to true to enable 3D text prompts at ore locations
+    use3dText = true, -- Set to true to enable 3D text prompts at ore locations, false for textui
+    useTarget = true, -- Set to true to enable target interactions for peds
+    useKey = 38, -- The control key to use for action prompts (default is E) -- https://docs.fivem.net/docs/game-references/controls/#controls
 }
