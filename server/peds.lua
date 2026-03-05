@@ -24,7 +24,7 @@ if config.style == 'ox_inventory' then
     ---@param payload table
     local function addItemToSecondSlot(id, price, payload)
         SetTimeout(50, function()
-            local addMoney = ox_inventory:AddItem(id, 'money', price, nil, 1)
+            local addMoney = ox_inventory:AddItem(id, config.moneyItem, price, nil, 1)
 
             if addMoney then
                 ox_inventory:RemoveItem(payload.fromInventory, payload.fromSlot.name, payload.count,
@@ -67,7 +67,7 @@ if config.style == 'ox_inventory' then
     ---@param label string
     ---@param items table<string, number>
     ---@param coords vector3
-    function CreateSaleStash(id, label, items, coords)
+    local function createSaleStash(id, label, items, coords)
         id = ('stashshop_%s'):format(id)
 
         if inventories[id] then
@@ -90,7 +90,7 @@ if config.style == 'ox_inventory' then
             return false
         end
 
-        if item == 'money' and not addItem then
+        if item == config.moneyItem and not addItem then
             if payload.count < payload.fromSlot.count then
                 return false
             end
@@ -117,7 +117,7 @@ if config.style == 'ox_inventory' then
                 addItemToSecondSlot(inventory, price, payload)
                 return false
             else
-                local added = ox_inventory:AddItem(inventory, 'money', price, nil, 1)
+                local added = ox_inventory:AddItem(inventory, config.moneyItem, price, nil, 1)
 
                 if added then
                     slotCount += 1
@@ -129,7 +129,7 @@ if config.style == 'ox_inventory' then
                 return added
             end
         elseif payload.fromSlot.slot > 1 and payload.fromSlot.slot == slotCount - 1 then
-            local removed = ox_inventory:RemoveItem(inventory, 'money', price, nil, 1)
+            local removed = ox_inventory:RemoveItem(inventory, config.moneyItem, price, nil, 1)
 
             if removed then
                 slotCount -= 1
@@ -168,5 +168,89 @@ if config.style == 'ox_inventory' then
                 openedBy[inventory] = nil
             end
         end
+    end)
+
+    --- End of modified code
+    ---
+    local pedPoints = {}
+
+    lib.callback.register('red40_mining:server:getPedPoints', function(_)
+        return pedPoints
+    end)
+
+    local function buildPedPoints()
+        for i = 1, #config.locations do
+            local location = config.locations[i]
+            if location.enabled then
+                createSaleStash('red40_mining'..location.name, location.label, config.buys, location.coords)
+                local sellItems = {}
+                for itemName, price in pairs(location.sells) do
+                    sellItems[#sellItems + 1] = {
+                        name = itemName,
+                        price = price,
+                    }
+                end
+                ox_inventory:RegisterShop('red40_mining'.. location.name, { name = location.label, inventory = sellItems, label = location.label })
+
+                local pedPoint = {
+                    shopName = 'red40_mining'..location.name,
+                    style = 'ox_inventory',
+                    blip = location.blip,
+                    coords = location.coords,
+                    pedModel = location.pedModel,
+                    pedAnim = location.pedAnim,
+                    pedScenario = location.pedScenario,
+                }
+                pedPoints[#pedPoints + 1] = pedPoint
+            end
+        end
+    end
+
+    CreateThread(function()
+        buildPedPoints()
+    end)
+else
+    local pedPoints = {}
+    local function getShop(shopName)
+        for i = 1, #config.locations do
+            local location = config.locations[i]
+            if location.name == shopName then
+                return location
+            end
+        end
+    end
+
+    lib.callback.register('red40_mining:server:getSellableItems', function(source, shopName)
+        local shop = getShop(shopName)
+        if not shop then return end
+
+
+
+    end)
+
+    lib.callback.register('red40_mining:server:getPedPoints', function(_)
+        return pedPoints
+    end)
+
+    local function buildPedPoints()
+        for i = 1, #config.locations do
+            local location = config.locations[i]
+            if location.enabled then
+                local pedPoint = {
+                    shopName = location.name,
+                    style = 'ox_lib',
+                    blip = location.blip,
+                    coords = location.coords,
+                    pedModel = location.pedModel,
+                    pedAnim = location.pedAnim,
+                    pedScenario = location.pedScenario,
+                }
+                pedPoints[#pedPoints + 1] = pedPoint
+            end
+        end
+    end
+
+    CreateThread(function()
+        buildPedPoints()
     end)
 end

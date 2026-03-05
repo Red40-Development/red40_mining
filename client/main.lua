@@ -1,3 +1,4 @@
+---@param params { text: string, coords: vector3, scale?: number|vector2, font?: number, color?: vector4, enableDropShadow?: boolean, enableOutline?: boolean }
 function DrawText3d(params) -- luacheck: ignore
     local isScaleparamANumber = type(params.scale) == "number"
     local text = params.text

@@ -392,6 +392,7 @@ return {
         locations = {
             {
                 name = 'ore_vendor_1',
+                label = 'Ore Vendor',
                 enabled = true,
                 blip = {
                     enable = true,
@@ -400,12 +401,13 @@ return {
                     color = 1,
                     coords = vec3(1074.89, -1988.19, 30.89)
                 },
-                coords = vec3(1074.89, -1988.19, 30.89),
+                coords = vec4(1074.89, -1988.19, 30.89, 0),
                 pedModel = `s_m_m_dockwork_01`,
                 pedAnim = {
                     anim = 'base',
                     dict = 'amb@world_human_stand_mobile@male@text@enter',
                 },
+                pedScenario = 'WORLD_HUMAN_STANDING_MOBILE', -- takes priority over animations
                 buys = {
                     copper_ore = 10,
                     iron_ore = 15,

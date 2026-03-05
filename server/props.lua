@@ -1,4 +1,4 @@
-local config = require 'config.shared'
+local config = require 'config.server'
 
 MiningObjects = {}
 MiningTools = {}
@@ -41,6 +41,7 @@ function StartMining(src, activity, tool)
         bone = config[activity].tools[tool].bone,
         offset = config[activity].tools[tool].offset,
         rotation = config[activity].tools[tool].rotation,
+        anim = config[activity].tools[tool].anim,
         activity = activity,
     }, true)
 
