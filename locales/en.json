@@ -1,1 +1,24 @@
-{}
+{
+    "mining_ore": "Mining Ore...",
+    "mine_ore": "[E] Mine Ore",
+    "mine_ore_3d": "~w~[~g~E~w~] to Mine",
+    "already_looted": "This ore has already been mined",
+    "too_far": "You are too far from the ore",
+    "no_tool": "You need a mining tool",
+    "found_nothing": "You found nothing",
+    "vehicle_mining": "You cannot mine while in a vehicle",
+    "sell_item": "Sell %s",
+    "buy_item": "Buy %s",
+    "sell_amount": "Sell %s (Max: %s)",
+    "buy_amount": "Buy %s",
+    "sell_price": "$%s per item",
+    "buy_price": "$%s per item",
+    "sell_menu_title": "Sell Items",
+    "buy_menu_title": "Buy Items",
+    "shop_text": "[E] Sell\n[F] Buy",
+    "shop_text_3d": "~w~[~g~E~w~] to Sell\n~w~[~r~F~w~] to Buy",
+    "target": {
+        "buy": "Buy Items",
+        "sell": "Sell Items"
+    }
+}
