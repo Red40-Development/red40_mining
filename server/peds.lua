@@ -68,7 +68,6 @@ if config.style == 'ox_inventory' then
     ---@param items table<string, number>
     ---@param coords vector3
     local function createSaleStash(id, label, items, coords)
-        id = ('stashshop_%s'):format(id)
 
         if inventories[id] then
             return
@@ -144,7 +143,7 @@ if config.style == 'ox_inventory' then
         return false
     end, {
         inventoryFilter = {
-            '^stashshop_[%w]+'
+            '^red40_mining_sale_[%w]+'
         }
     })
 
@@ -182,7 +181,7 @@ if config.style == 'ox_inventory' then
         for i = 1, #config.locations do
             local location = config.locations[i]
             if location.enabled then
-                createSaleStash('red40_mining'..location.name, location.label, config.buys, location.coords)
+                createSaleStash('red40_mining_sale_' .. location.name, location.label, location.buys, location.coords)
                 local sellItems = {}
                 for itemName, price in pairs(location.sells) do
                     sellItems[#sellItems + 1] = {
@@ -190,10 +189,12 @@ if config.style == 'ox_inventory' then
                         price = price,
                     }
                 end
-                ox_inventory:RegisterShop('red40_mining'.. location.name, { name = location.label, inventory = sellItems, label = location.label })
+                ox_inventory:RegisterShop('red40_mining' .. location.name,
+                    { name = location.label, inventory = sellItems, label = location.label })
 
                 local pedPoint = {
-                    shopName = 'red40_mining'..location.name,
+                    stashName = 'red40_mining_sale_' .. location.name,
+                    shopName = 'red40_mining' .. location.name,
                     style = 'ox_inventory',
                     blip = location.blip,
                     coords = location.coords,
@@ -220,12 +221,94 @@ else
         end
     end
 
+    RegisterNetEvent('red40_mining:server:buy', function(shopName, itemName, amount)
+        local src = source
+
+
+        local shop = getShop(shopName)
+        if not shop then return end
+
+        --Distance check
+        local playerCoords = GetEntityCoords(GetPlayerPed(src))
+        if #(playerCoords - vec3(shop.coords.x, shop.coords.y, shop.coords.z)) > 5 then
+            Notify(src, locale('too_far'))
+            return
+        end
+
+        local price = shop.sells[itemName]
+        if not price then
+            --Drop player cause they are trying to buy an item that doesn't exist in the shop
+            return
+        end
+
+        if not CanCarryItem(src, itemName, amount) then
+            Notify(src, locale('not_carry'))
+            return
+        end
+        local totalPrice = price * amount
+
+        if RemoveMoney(src, 'cash', totalPrice) then
+            AddItem(src, itemName, amount)
+            Logger(src, 'shop_buy', { item = itemName, amount = amount, price = totalPrice })
+        end
+    end)
+
+    RegisterNetEvent('red40_mining:server:sell', function(shopName, itemName, amount)
+        local src = source
+
+        local shop = getShop(shopName)
+        if not shop then return end
+
+        --Distance check
+        local playerCoords = GetEntityCoords(GetPlayerPed(src))
+        if #(playerCoords - vec3(shop.coords.x, shop.coords.y, shop.coords.z)) > 5 then
+            Notify(src, locale('too_far'))
+            return
+        end
+
+        local price = shop.buys[itemName]
+        if not price then
+            --Drop player cause they are trying to sell an item that doesn't exist in the shop
+            return
+        end
+
+        if RemoveItem(src, itemName, amount) then
+            local totalPrice = price * amount
+            AddMoney(src, 'cash', totalPrice)
+            Logger(src, 'shop_sell', { item = itemName, amount = amount, price = totalPrice })
+         end
+    end)
+
     lib.callback.register('red40_mining:server:getSellableItems', function(source, shopName)
         local shop = getShop(shopName)
         if not shop then return end
 
+        local sellableItems = {}
+        for itemName, price in pairs(shop.buys) do
+            local itemCount = GetItemCount(source, itemName)
+            if itemCount > 0 then
+                sellableItems[#sellableItems + 1] = {
+                    name = itemName,
+                    price = price,
+                    maxAmount = itemCount,
+                }
+            end
+        end
+        return sellableItems
+    end)
 
+    lib.callback.register('red40_mining:server:getShopItems', function(source, shopName)
+        local shop = getShop(shopName)
+        if not shop then return end
 
+        local itemsForSale = {}
+        for itemName, price in pairs(shop.sells) do
+            itemsForSale[#itemsForSale + 1] = {
+                name = itemName,
+                price = price,
+            }
+        end
+        return itemsForSale
     end)
 
     lib.callback.register('red40_mining:server:getPedPoints', function(_)
