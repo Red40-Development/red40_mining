@@ -25,8 +25,13 @@ server_scripts {
 files {
     'locales/**/*',
     'config/client.lua',
-    'config/shared.lua'
+    'config/shared.lua',
+    'audiodirectory/red40_mining.awc',
+    'data/audioexample_sounds.dat54.rel',
 }
+
+data_file 'AUDIO_WAVEPACK'  'audiodirectory'
+data_file 'AUDIO_SOUNDDATA' 'data/audioexample_sounds.dat'
 
 escrow_ignore {
     '**/*',
