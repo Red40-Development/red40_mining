@@ -1,7 +1,7 @@
 local playerState = LocalPlayer.state
+Prop = nil
 
 AddStateBagChangeHandler('red40_mining', ('player:%s'):format(cache.serverId), function(_, _, value)
-    lib.print.info('State bag changed', value)
     if not value or type(value) ~= 'table' then return end
 
     if not value.activity then return end
@@ -28,6 +28,7 @@ AddStateBagChangeHandler('red40_mining', ('player:%s'):format(cache.serverId), f
             AttachEntityToEntity(entity, cache.ped, GetPedBoneIndex(cache.ped, value.bone), offset.x, offset.y, offset.z,
                 rotation.x, rotation.y, rotation.z, true, true, false, false, 1,
                 true)
+                Prop = entity
         end
     end
 end)

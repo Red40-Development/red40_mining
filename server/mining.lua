@@ -27,7 +27,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
 
     -- Distance Check
     local coords = GetEntityCoords(GetPlayerPed(src))
-    if #(coords - orePoint.coords) > 2.0 then
+    if #(coords - orePoint.coords) > 5.0 then
         Notify(src, locale('too_far'), 'error')
         Logger(src, 'red40_mining',
             'Player attempted to mine ore point ' ..
@@ -44,7 +44,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
 
     local waitTime = math.random(config.tools[tool].minUseTime, config.tools[tool].maxUseTime)
 
-    local success = lib.callback.await('red40_mining:client:mineSpot', src, waitTime)
+    local success = lib.callback.await('red40_mining:client:mineSpot', src, waitTime,  config.tools[tool].type)
 
     if success and not orePoint.looted then
         orePoints[orePoint.id].looted = true
@@ -62,8 +62,20 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
         lib.print.debug('Generated loot for player ' .. src .. ' at ore point ' .. orePoint.id .. ': ', items)
 
         if items and next(items) then
-            AddItems(src, items, coords)
-            lib.print.debug('Added items to player ' .. src .. ': ', items)
+            local itemList = {}
+            for itemName, v in pairs(items) do
+                if not CanCarryItem(src, itemName, v.amount, v.metadata) then
+                    lib.print.debug('Player ' .. src .. ' cannot carry item ' .. itemName .. ' x' .. v.amount)
+                    itemList[#itemList + 1] = {itemName, v.amount, v.metadata}
+                else
+                     AddItem(src, itemName, v.amount, v.metadata)
+                     lib.print.debug('Added items to player ' .. src .. ': ', items)
+                end
+            end
+            if itemList and next(itemList) then
+                CustomDrop(src, itemList, GetEntityCoords(GetPlayerPed(src)))
+                lib.print.debug('Player ' .. src .. ' had some items dropped due to weight: ', itemList)
+            end
         else
             Notify(src, locale('found_nothing'), 'inform')
             lib.print.debug('Player ' .. src .. ' found nothing at ore point ' .. orePoint.id)
@@ -86,7 +98,7 @@ lib.callback.register('red40_mining:server:getMiningLightPoints', function(_)
 end)
 
 -- Build ore points
-local function buildOrePoints()
+local function buildPoints()
     local oreCount = 1
     for i = 1, #config.locations do
         local location = config.locations[i]
@@ -112,21 +124,20 @@ local function buildOrePoints()
             end
         end
         for k = 1, #location.lights.locations do
-            local coords = location.lights.locations[k]
+            local lightPoint = location.lights.locations[k]
 
             lightPoints[#lightPoints + 1] = {
-                coords = coords,
+                coords = lightPoint.coords,
                 prop = location.lights.prop,
-                rot = location.lights.rotation,
+                rot = lightPoint.rotation,
             }
         end
     end
 end
 
 CreateThread(function()
-    buildOrePoints()
+    buildPoints()
     for zone, lootData in pairs(config.lootTables) do
-        lib.print.info('Registering loot table for zone: ' .. zone)
         RegisterLootTable(zone, lootData)
     end
 end)
