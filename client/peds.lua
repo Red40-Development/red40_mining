@@ -9,9 +9,11 @@ local config = require 'config.client'
 local oxInv = lib.checkDependency('ox_inventory', '2.37.3')
 
 local function inputBox(action, shopName, item, maxAmount)
-    local title = action == 'sell' and locale('sell_item', item.label) or locale('buy_item', item.label)
-    local label = action == 'sell' and locale('sell_amount', item.label, maxAmount) or locale('buy_amount', item.label)
-    local input = lib.inputDialog(title, { type = 'number', label = label, required = true, min = 1, max = maxAmount })
+    local itemLabel = Items[item.name] and Items[item.name].label or item.name
+    local title = action == 'sell' and locale('sell_item', itemLabel) or locale('buy_item', itemLabel)
+    local label = action == 'sell' and locale('sell_amount', itemLabel, maxAmount) or locale('buy_amount', itemLabel)
+    local input = lib.inputDialog(title, {{ type = 'number', label = label, required = true, min = 1, max = maxAmount, precision = 1}},
+        { size = 'sm' })
     if input then
         local amount = tonumber(input[1])
         TriggerServerEvent('red40_mining:server:' .. action, shopName, item.name, amount)
@@ -20,14 +22,14 @@ end
 
 local function openSellMenu(shopName)
     --TODO: query server for list of sellable items and build ox_lib context menu
-    local itemsForSale = lib.callback.await('red40_mining:server:getSellableItems', shopName)
+    local itemsForSale = lib.callback.await('red40_mining:server:getSellableItems', false, shopName)
     local sellOptions = {}
     for i = 1, #itemsForSale do
         local item = itemsForSale[i]
         sellOptions[#sellOptions + 1] = {
-            title = locale('sell_item', item.label),
+            title = locale('sell_item', Items[item.name].label),
             description = locale('sell_price', item.price),
-            image = 'https://cfx-ox_inventory/web/images/items/' .. item.name .. '.png',
+            image = ItemImageURL(item.name),
             onSelect = function()
                 inputBox('sell', shopName, item, item.maxAmount)
             end,
@@ -43,16 +45,17 @@ end
 
 local function openBuyMenu(shopName)
     --TODO: query server for list of items in shop and build ox_lib context menu
-    local itemsForSale = lib.callback.await('red40_mining:server:getShopItems', shopName)
+    local itemsForSale = lib.callback.await('red40_mining:server:getShopItems', false, shopName)
     local buyOptions = {}
     for i = 1, #itemsForSale do
         local item = itemsForSale[i]
+        local label = Items[item.name] and Items[item.name].label or item.name
         buyOptions[#buyOptions + 1] = {
-            title = locale('buy_item', item.label),
+            title = locale('buy_item', label),
             description = locale('buy_price', item.price),
-            image = 'https://cfx-ox_inventory/web/images/items/' .. item.name .. '.png',
+            image = ItemImageURL(item.name),
             onSelect = function()
-                inputBox('buy', shopName, item, item.maxAmount)
+                inputBox('buy', shopName, item)
             end,
         }
     end
@@ -73,7 +76,7 @@ local function createPedPoint(point)
                 label = locale('target.buy'),
                 icon = 'fa-solid fa-box',
                 onSelect = function()
-                    exports.ox_inventory:openInventory('stash', point.shopName)
+                    exports.ox_inventory:openInventory('shop', { type = point.shopName })
                 end,
             },
             {
@@ -81,7 +84,7 @@ local function createPedPoint(point)
                 label = locale('target.sell'),
                 icon = 'fa-solid fa-hand-holding-dollar',
                 onSelect = function()
-                    exports.ox_inventory:openInventory('shop', { type = point.shopName })
+                    exports.ox_inventory:openInventory('stash', point.stashName)
                 end,
             }
         }
@@ -92,7 +95,7 @@ local function createPedPoint(point)
                 label = locale('target.buy'),
                 icon = 'fa-solid fa-box',
                 onSelect = function()
-                    openSellMenu(point.shopName)
+                    openBuyMenu(point.shopName)
                 end,
             },
             {
@@ -100,7 +103,7 @@ local function createPedPoint(point)
                 label = locale('target.sell'),
                 icon = 'fa-solid fa-hand-holding-dollar',
                 onSelect = function()
-                    openBuyMenu(point.shopName)
+                    openSellMenu(point.shopName)
                 end,
             }
         }
@@ -140,7 +143,7 @@ local function createPedPoint(point)
         end
     end
 
-    function point:onExit()
+    function pedPoint:onExit()
         if config.useTarget then
             for i = 1, #self.options do
                 config.removeLocalEntityTarget(self.ped, self.options[i].name)
@@ -156,10 +159,10 @@ local function createPedPoint(point)
     if not config.useTarget then
         function pedPoint:nearby()
             if not self.isClosest then return end
-            if self.currentDistance < 2 then
+            if self.currentDistance < 2 and not lib.getOpenContextMenu() then
                 if config.use3dText then
                     DrawText3d({
-                        coords = self.coords,
+                        coords = vec3(self.coords.x, self.coords.y, self.coords.z + 1.0),
                         text = locale('shop_text_3d'),
                     })
                 else
@@ -170,10 +173,10 @@ local function createPedPoint(point)
                     end
                 end
                 if IsControlJustReleased(0, config.useKey) then
-                    openSellMenu(self.shopName)
+                    openSellMenu(point.shopName)
                 end
                 if IsControlJustReleased(0, config.useKey2) then
-                    openBuyMenu(self.shopName)
+                    openBuyMenu(point.shopName)
                 end
             else
                 local textOpen, text = lib.isTextUIOpen()

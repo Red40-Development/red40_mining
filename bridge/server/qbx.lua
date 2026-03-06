@@ -8,23 +8,36 @@ function Notify(source, message, type)
     exports.qbx_core:Notify(source, message, type or 'inform')
 end
 
-function AddMoney(Player, moneyType, amount)
-    Player.Functions.AddMoney(moneyType, amount, "redwire-sale")
+function AddMoney(src, moneyType, amount)
+    local player = GetPlayer(src)
+    player.Functions.AddMoney(moneyType, amount, "red40_mining-sale")
 end
 
-function AddItems(src, items, coords)
-    for item, data in pairs(items) do
-        local amount = data.amount or 1
-        local metadata = data.metadata or {}
+function RemoveMoney(src, moneyType, amount)
+    local player = GetPlayer(src)
+    player.Functions.RemoveMoney(moneyType, amount, "red40_mining-purchase")
+end
+function GetItemCountFramework(source, itemName)
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    local itemInfo = player.Functions.GetItemByName(itemName)
+    return itemInfo.amount or itemInfo.count or 0
+end
 
-        if exports.ox_inventory:CanCarryItem(src, item, amount, metadata) then
-            exports.ox_inventory:AddItem(src, item, amount, metadata)
-        else
-            exports.ox_inventory:CustomDrop('Mining Drop', {
-                { item, amount, metadata },
-            }, coords)
-        end
-    end
+function CanCarryItemFramework(source, item, amount, metadata)
+    return true -- Unused
+end
+
+function AddItemFramework(src, item, amount, metadata)
+    local player = GetPlayer(src)
+    if not player then return end
+    return player.Functions.AddItem(item, amount, nil, metadata)
+end
+
+function RemoveItemFramework(src, item, count)
+    local player = GetPlayer(src)
+    if not player then return end
+    return player.Functions.RemoveItem(item, count)
 end
 
 function AddXp(src, amount, type)

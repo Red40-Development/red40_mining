@@ -10,25 +10,42 @@ function Notify(src, text, type)
     TriggerClientEvent('esx:showNotification', src, text, type or 'inform')
 end
 
-function AddMoney(xPlayer, moneyType, amount)
+function AddMoney(src, moneyType, amount)
+    local xPlayer = GetPlayer(src)
     local account = moneyType == 'cash' and 'money' or moneyType
-    xPlayer.addAccountMoney(account, amount, "redwire-sale")
+    xPlayer.addAccountMoney(account, amount, "red40_mining-sale")
 end
 
-function AddItems(src, items, coords)
-    for item, data in pairs(items) do
-        local amount = data.amount or 1
-        local metadata = data.metadata or {}
-
-        if exports.ox_inventory:CanCarryItem(src, item, amount, metadata) then
-            exports.ox_inventory:AddItem(src, item, amount, metadata)
-        else
-            exports.ox_inventory:CustomDrop('Mining Drop', {
-                { item, amount, metadata },
-            }, coords)
-        end
-    end
+function RemoveMoney(src, moneyType, amount)
+    local xPlayer = GetPlayer(src)
+    local account = moneyType == 'cash' and 'money' or moneyType
+    xPlayer.removeAccountMoney(account, amount, "red40_mining-purchase")
 end
+
+function GetItemCountFramework(source, itemName)
+    local xPlayer = GetPlayer(source)
+    if not xPlayer then return 0 end
+    local itemInfo = xPlayer.getInventoryItem(itemName)
+    return itemInfo.county or itemInfo.amount or 0
+end
+
+function CanCarryItemFramework(source, item, amount, metadata)
+    local xPlayer = GetPlayer(source)
+    if not xPlayer then return false end
+    return xPlayer.canCarryItem(item, amount, metadata)
+end
+
+function AddItemFramework(src, item, amount, metadata)
+    local xPlayer = GetPlayer(src)
+    return xPlayer.addInventoryItem(item, amount, metadata)
+end
+
+function RemoveItemFramework(src, item, count)
+    local xPlayer = GetPlayer(src)
+    if not xPlayer then return end
+    return xPlayer.removeInventoryItem(item, count)
+end
+
 
 function AddXp(src, amount, type)
     local player = GetPlayer(src)

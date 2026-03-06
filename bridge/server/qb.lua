@@ -18,18 +18,37 @@ function Notify(src, text, nType)
     TriggerClientEvent('QBCore:Notify', src, text, nType)
 end
 
-function AddMoney(Player, moneyType, amount)
-    Player.Functions.AddMoney(moneyType, amount, "redwire-sale")
+function AddMoney(src, moneyType, amount)
+    local player = GetPlayer(src)
+    player.Functions.AddMoney(moneyType, amount, "red40_mining-sale")
 end
 
-function AddItems(src, items, coords)
+function RemoveMoney(src, moneyType, amount)
+    local player = GetPlayer(src)
+    player.Functions.RemoveMoney(moneyType, amount, "red40_mining-purchase")
+end
+
+function GetItemCountFramework(source, itemName)
+    local player = GetPlayer(source)
+    if not player then return 0 end
+    local itemInfo = player.Functions.GetItemByName(itemName)
+    return itemInfo.amount or itemInfo.count or 0
+end
+
+function CanCarryItemFramework(source, item, amount, metadata)
+    return true -- Implement if you want to prevent players from going overweight
+end
+
+function AddItemFramework(src, item, amount, metadata)
     local player = GetPlayer(src)
     if not player then return end
-    for item, data in pairs(items) do
-        local amount = data.amount or 1
-        local metadata = data.metadata or {}
-        player.Functions.AddItem(item, amount, metadata)
-    end
+    return player.Functions.AddItem(item, amount, nil, metadata)
+end
+
+function RemoveItemFramework(src, item, count)
+    local player = GetPlayer(src)
+    if not player then return end
+    return player.Functions.RemoveItem(item, count)
 end
 
 function AddXp(src, amount, type)
