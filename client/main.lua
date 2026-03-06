@@ -28,3 +28,12 @@ function DrawText3d(params) -- luacheck: ignore
 
     ClearDrawOrigin()
 end
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if resourceName ~= cache.resource then return end
+    local points = lib.points.getAllPoints()
+    for i = 1, #points do
+        local point = points[i]
+        point:onExit()
+    end
+end)
