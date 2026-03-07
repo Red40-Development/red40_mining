@@ -56,6 +56,16 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
             lib.print.debug('Ore point ' .. orePoint.id .. ' has respawned')
         end)
 
+        -- This is mildly redundant but the player could have an RGB gaming chair
+        coords = GetEntityCoords(GetPlayerPed(src))
+        if #(coords - orePoint.coords) > 5.0 then
+            Notify(src, locale('too_far'), 'error')
+            Logger(src, 'red40_mining',
+                'Player finished mining ore point ' ..
+                oreId .. ' but was too far away. Distance: ' .. #(coords - orePoint.coords))
+            return
+        end
+
         local playerXp = GetXp(src, 'mining') or 0
         local items = GenerateLoot(orePoint.rewards, orePoint.min, orePoint.max,
             GetXpLevel(playerXp, config.xpTables) or 0)

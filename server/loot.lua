@@ -47,7 +47,7 @@ end
 function GenerateLoot(lootTableName, minLoot, maxLoot, xpLevel)
     local lootTable = lootTables[lootTableName]
 
-    if not next(lootTable) then
+    if not lootTable or not next(lootTable) then
         return
     end
 

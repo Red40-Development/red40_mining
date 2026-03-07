@@ -9,6 +9,7 @@ local config = require 'config.client'
 local orePoints = {}
 local playerState = LocalPlayer.state
 local soundId = nil
+local effectsLoop = false
 
 RegisterNetEvent('red40_mining:client:updateMiningSpot', function(oreId, looted)
     local orePoint = orePoints[oreId]
@@ -23,7 +24,6 @@ RegisterNetEvent('red40_mining:client:updateMiningSpot', function(oreId, looted)
     end
 end)
 
-local effectsLoop = false
 
 local function loadMiningSounds(type)
     if type == 'pickaxe' then
@@ -144,6 +144,7 @@ lib.callback.register('red40_mining:client:mineSpot', function(waitTime, toolTyp
         ReleaseSoundId(soundId)
     end
     unloadMiningSounds(toolType)
+    RemoveNamedPtfxAsset('core')
     ClearPedTasks(cache.ped)
     return success
 end)
@@ -185,6 +186,23 @@ local function buildOrePoints(orePoint)
         id = orePoint.id,
         looted = orePoint.looted,
     })
+
+    local targetOptions = {}
+    if config.miningTarget then
+        targetOptions = {
+            {
+                name = 'red40_mine_ore',
+                label = locale('mine_ore_target'),
+                icon = 'fa-solid fa-hammer',
+                onSelect = function()
+                    TriggerServerEvent('red40_mining:server:startMining', orePoint.id)
+                end,
+                canInteract = function()
+                    if not playerState.red40_mining or not playerState.red40_mining.activity == 'mining' then return false end
+                    return true
+                end
+            }}
+        end
     function point:onEnter()
         if not self.looted then
             lib.requestModel(self.prop, 10000)
@@ -193,38 +211,47 @@ local function buildOrePoints(orePoint)
             SetEntityRotation(self.propNumber, self.rot.x, self.rot.y, self.rot.z, 2, true)
             FreezeEntityPosition(self.propNumber, true)
             SetEntityInvincible(self.propNumber, true)
+            if config.miningTarget then
+                config.addLocalEntityTarget(self.propNumber, targetOptions)
+            end
         end
     end
 
     function point:onExit()
         if self.propNumber and DoesEntityExist(self.propNumber) then
+            if config.miningTarget then
+                config.removeLocalEntityTarget(self.propNumber, 'red40_mine_ore')
+            end
             DeleteEntity(self.propNumber)
             self.propNumber = nil
         end
     end
 
-    function point:nearby()
-        if not self.isClosest or not playerState.red40_mining or not playerState.red40_mining.activity == 'mining' then return end
-        if not self.looted and self.currentDistance < 5 and not effectsLoop then
-            if config.use3dText then
-                DrawText3d({ coords = self.textOffset, text = locale('mine_ore_3d') })
+    if not config.miningTarget then
+        function point:nearby()
+            if not self.isClosest or not playerState.red40_mining or not playerState.red40_mining.activity == 'mining' then return end
+            if not self.looted and self.currentDistance < 5 and not effectsLoop then
+                if config.use3dText then
+                    DrawText3d({ coords = self.textOffset, text = locale('mine_ore_3d') })
+                else
+                    local textOpen, text = lib.isTextUIOpen()
+                    textOpen = textOpen and text == locale('mine_ore')
+                    if not textOpen then
+                        lib.showTextUI(locale('mine_ore'))
+                    end
+                end
+                if IsControlJustReleased(0, 38) then
+                    TriggerServerEvent('red40_mining:server:startMining', self.id)
+                end
             else
                 local textOpen, text = lib.isTextUIOpen()
-                textOpen = textOpen and text == locale('mine_ore')
-                if not textOpen then
-                    lib.showTextUI(locale('mine_ore'))
+                if textOpen and text == locale('mine_ore') then
+                    lib.hideTextUI()
                 end
-            end
-            if IsControlJustReleased(0, 38) then
-                TriggerServerEvent('red40_mining:server:startMining', self.id)
-            end
-        else
-            local textOpen, text = lib.isTextUIOpen()
-            if textOpen and text == locale('mine_ore') then
-                lib.hideTextUI()
             end
         end
     end
+
 
     orePoints[orePoint.id] = point
 end
