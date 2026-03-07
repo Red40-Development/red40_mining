@@ -289,20 +289,33 @@ return {
                 damage = true,
                 minXp = 0,       -- Minimum XP required to use this tool
                 maxXp = 10,      -- Stop earning xp after this level
-                minTime = 5000,  -- Minimum time in milliseconds to crack
-                maxTime = 10000, -- Maximum time in milliseconds to crack
+                minUseTime = 5000,  -- Minimum time in milliseconds to crack
+                maxUseTime = 10000, -- Maximum time in milliseconds to crack
             },
             red40_carbidedrillbit = {
                 level = 2,
                 damage = true,
                 minXp = 10,
                 maxXp = 100,
-                minTime = 3000, -- Minimum time in milliseconds to crack
-                maxTime = 7000, -- Maximum time in milliseconds to crack
+                minUseTime = 3000, -- Minimum time in milliseconds to crack
+                maxUseTime = 7000, -- Maximum time in milliseconds to crack
             },
+        },
+        crackableItems = {
+            red40_stone = {
+                rewards = 'crack_loot',
+                prop = `prop_rock_5_smash1`,
+                offset = vec3(0.0, -0.225, 1.15),
+                rotation = vec3(0.0, 0.0, 0.0),
+                min = 1,
+                max = 3
+            }
         },
         durability = function()
             return math.random(1, 5) -- Random durability loss between 1 and 5 for each use
+        end,
+        xpPerAction = function()
+            return math.random(1, 3) -- Random XP between 1 and 3 for each successful action,
         end,
         locations = {
             {
@@ -313,19 +326,16 @@ return {
                     name = 'Cracking Spot',
                     sprite = 436,
                     color = 1,
-                    coords = vec3(1074.89, -1988.19, 30.89)
+                    coords = vec3(1109.19, -1992.8, 30.98)
                 },
                 prop = `prop_vertdrill_01`,
                 anim = {
-                    anim = 'operate_02_hi_amy_skater_01',
-                    dict = 'anim@amb@machinery@speed_drill@'
+                    anim = 'anim@amb@machinery@speed_drill@',
+                    dict = 'operate_02_hi_amy_skater_01',
                 },
                 locations = {
-                    { coords = vec3(1074.89, -1988.19, 30.89), rotation = vec3(0.0, 0.0, 0.0) },
-                },
-                rewards = 'crack_loot',
-                min = 1,
-                max = 3
+                    { coords = vec3(1109.19, -1992.8, 29.98), rotation = vec3(0.0, 0.0, 326.88) },
+                }
             }
         }
     },

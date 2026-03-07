@@ -127,7 +127,7 @@ end
 ---@param item string
 ---@param amount number
 ---@param metadata? table
----@return boolean
+---@return boolean|nil
 function CanCarryItem(source, item, amount, metadata)
     if Inv then
         if Inv == 'ox_inventory' then
@@ -144,5 +144,73 @@ function CanCarryItem(source, item, amount, metadata)
         end
     else
         return CanCarryItemFramework(source, item, amount, metadata)
+    end
+end
+
+function GetInventory(source)
+    if Inv then
+        if Inv == 'ox_inventory' then
+            return exports.ox_inventory:GetInventory(source)
+        elseif Inv == 'core_inventory' then
+            return exports.core_inventory:getInventory(source)
+        elseif Inv == 'qs-inventory' then
+            return exports['qs-inventory']:GetInventory(source)
+        elseif Inv == 'origen_inventory' then
+            return exports.origen_inventory:getInventory(source)
+        else
+            -- Implement for other inventories if you want
+            return nil
+        end
+    else
+        return nil
+    end
+end
+
+---@param source number
+---@param itemName string
+---@return table|nil
+function GetSlotWithItem(source, itemName)
+    if Inv then
+        if Inv == 'ox_inventory' then
+            return exports.ox_inventory:GetSlotWithItem(source, itemName)
+        elseif Inv == 'core_inventory' then
+            return exports.core_inventory:getFirstSlotByItem(source, itemName)
+        elseif Inv == 'qs-inventory' then
+            return exports['qs-inventory']:GetSlotByItem(source, itemName) -- Maybe?
+        elseif Inv == 'origen_inventory' then
+            return exports.origen_inventory:GetSlot(source, exports.origen_inventory:getSlotIdWithItem(source, itemName))
+        else
+            -- Implement for other inventories if you want
+            return nil
+        end
+    else
+        return nil -- Implement framework fallback if you want
+    end
+end
+
+---@param source number
+---@param itemName string
+---@param durability number
+---@return boolean|nil
+function RemoveItemDurability(source, itemName, durability)
+    if Inv then
+        if Inv == 'ox_inventory' then
+            local slot = exports.ox_inventory:GetSlotWithItem(source, itemName)
+            if not slot then return false end
+            return exports.ox_inventory:SetDurability(source, slot.slot, (slot.metadata.durability - durability))
+        elseif Inv == 'core_inventory' then
+            return exports.core_inventory:removeDurability(source, itemName, durability)
+        elseif Inv == 'qs-inventory' then
+            -- Not supported?
+            return true
+        elseif Inv == 'origen_inventory' then
+            -- Not supported?
+            return true
+        else
+            -- Implement for other inventories if you want
+            return false
+        end
+    else
+        return false -- Implement framework fallback if you want
     end
 end
