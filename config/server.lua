@@ -44,8 +44,8 @@ return {
                 offset = vec3(0.14, 0, -0.01),
                 rotation = vec3(90.0, -90.0, 180.0),
                 anim = {
-                    anim = "anim@heists@fleeca_bank@drilling",
-                    dict = "drill_straight_fail",
+                    anim = 'anim@heists@fleeca_bank@drilling',
+                    dict = 'drill_straight_fail',
                 },
                 type = 'drill'
             },
@@ -55,14 +55,14 @@ return {
                 minXp = 20,
                 maxXp = 200,
                 minUseTime = 750,  -- Minimum time in milliseconds to use the tool
-                maxUseTime = 2000,  -- Maximum time in milliseconds to use the tool
+                maxUseTime = 2000, -- Maximum time in milliseconds to use the tool
                 prop = `ch_prop_laserdrill_01a`,
                 bone = 57005,
                 offset = vec3(0.14, 0, -0.01),
                 rotation = vec3(90.0, -90.0, 180.0),
                 anim = {
-                    anim = "anim@heists@fleeca_bank@drilling",
-                    dict = "drill_straight_fail",
+                    anim = 'anim@heists@fleeca_bank@drilling',
+                    dict = 'drill_straight_fail',
                 },
                 type = 'laserdrill'
             }
@@ -149,23 +149,49 @@ return {
             red40_pan = {
                 level = 1,
                 damage = false,
-                minXp = 0,  -- Minimum XP required to use this tool
-                maxXp = 10, -- Stop earning xp after this level
+                minXp = 0,          -- Minimum XP required to use this tool
+                maxXp = 10,         -- Stop earning xp after this level
+                minUseTime = 5000,  -- Minimum time in milliseconds to use the tool
+                maxUseTime = 10000, -- Maximum time in milliseconds to use the tool
+                prop = `bkr_prop_meth_tray_01b`,
+                bone = 57005,
+                offset = vec3(0.14, 0, -0.01),
+                rotation = vec3(90.0, -90.0, 180.0),
+                anim = {
+                    anim = 'amb@medic@standing@tendtodead@base',
+                    dict = 'base',
+                },
+                type = 'pan',
             },
             red40_sifter = {
                 level = 2,
                 damage = false,
                 minXp = 10,
                 maxXp = 100,
+                minUseTime = 3000, -- Minimum time in milliseconds to use the tool
+                maxUseTime = 7000, -- Maximum time in milliseconds to use the tool
+                prop = `bkr_prop_meth_tray_01b`,
+                bone = 57005,
+                offset = vec3(0.14, 0, -0.01),
+                rotation = vec3(90.0, -90.0, 180.0),
+                anim = {
+                    anim = 'amb@medic@standing@tendtodead@base',
+                    dict = 'base',
+                },
+                type = 'sifter',
             },
         },
         durability = function()
             return math.random(1, 5) -- Random durability loss between 1 and 5 for each use
         end,
+        xpPerAction = function()
+            return math.random(1, 3) -- Random XP between 1 and 3 for each successful action,
+        end,
         locations = {
             {
                 name = 'panning_location_1',
                 enabled = true,
+                debug = false,
                 blip = {
                     enable = true,
                     name = 'Panning Spot',
@@ -174,16 +200,14 @@ return {
                     coords = vec3(1074.89, -1988.19, 30.89)
                 },
                 points = {
-                    vec3(1074.89, -1988.19, 30.89),
-                    vec3(1074.89, -1987.19, 30.89),
-                    vec3(1074.89, -1986.19, 30.89),
-                    vec3(1074.89, -1985.19, 30.89),
+                    vector3(-1380.126, 2004.7308, 59.9556),
+                    vector3(-1403.6226, 2008.2764, 59.9556),
+                    vector3(-1405.707, 2003.3763, 59.9556),
+                    vector3(-1379.6307, 1999.1255, 59.9556),
                 },
-                minTime = 5000,  -- Minimum time in milliseconds to pan
-                maxTime = 10000, -- Maximum time in milliseconds to pan
                 rewards = 'pan_loot',
-                min = 1,
-                max = 3
+                min = 1, -- Minimum amount of items to reward
+                max = 3  -- Maximum amount of items to reward
             }
         }
     },
@@ -202,28 +226,45 @@ return {
                 { name = 'copper',     chance = 0.5, min = 1, max = 4, level = 1 },
             }
         },
+
+        tools = {
+            red40_stone = {
+                level = 1,
+                minXp = 0,
+                maxXp = 100,
+                prop = `prop_rock_5_smash1`,
+                bone = 60309,
+                offset = vec3(0.1, 0.0, 0.05),
+                rotation = vec3(90.0, -90.0, 90.0),
+                minUseTime = 5000,  -- Minimum time in milliseconds to wash
+                maxUseTime = 10000, -- Maximum time in milliseconds to wash
+                rewards = 'wash_loot',
+                min = 1,
+                max = 3
+            }
+        },
+        xpPerAction = function()
+            return math.random(1, 3) -- Random XP between 1 and 3 for each successful action,
+        end,
         locations = {
             {
                 name = 'washing_location_1',
                 enabled = true,
+                debug = true,
                 blip = {
                     enable = true,
                     name = 'Washing Spot',
                     sprite = 436,
                     color = 1,
-                    coords = vec3(1074.89, -1988.19, 30.89)
+                    coords = vec3(1832.7822, 419.7999, 159.3571)
                 },
                 points = {
-                    vec3(1074.89, -1988.19, 30.89),
-                    vec3(1074.89, -1987.19, 30.89),
-                    vec3(1074.89, -1986.19, 30.89),
-                    vec3(1074.89, -1985.19, 30.89),
+                    vector3(1832.7822, 419.7999, 159.3571),
+                    vector3(1834.6827, 405.8199, 159.3571),
+                    vector3(1851.6012, 396.6167, 159.3571),
+                    vector3(1858.0842, 405.7967, 159.3571),
+                    vector3(1851.1173, 428.7765, 159.3571),
                 },
-                minTime = 5000,  -- Minimum time in milliseconds to wash
-                maxTime = 10000, -- Maximum time in milliseconds to wash
-                rewards = 'wash_loot',
-                min = 1,
-                max = 3
             }
         }
     },
