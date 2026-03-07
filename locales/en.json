@@ -2,6 +2,7 @@
     "mining_ore": "Mining Ore...",
     "mine_ore": "[E] Mine Ore",
     "mine_ore_3d": "~w~[~g~E~w~] to Mine",
+    "mine_ore_target": "Mine Ore",
     "already_looted": "This ore has already been mined",
     "too_far": "You are too far from the ore",
     "no_tool": "You need a mining tool",
@@ -17,6 +18,13 @@
     "buy_menu_title": "Buy Items",
     "shop_text": "[E] Sell\n[F] Buy",
     "shop_text_3d": "~w~[~g~E~w~] to Sell\n~w~[~r~F~w~] to Buy",
+    "washing_ore": "Washing Ore...",
+    "not_in_washing_zone": "You are not in a washing zone",
+    "invalid_tool": "Invalid tool",
+    "washing_tool_level_too_low": "Your washing tool level is too low",
+    "panning_ore": "Panning for Gold...",
+    "not_in_panning_zone": "You are not in a panning zone",
+    "not_carry": "You cannot carry that much",
     "target": {
         "buy": "Buy Items",
         "sell": "Sell Items"
