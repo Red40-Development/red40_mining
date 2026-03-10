@@ -50,7 +50,7 @@ lib.callback.register('red40_mining:client:panSpot', function(waitTime)
 
     local success = lib.progressBar({
         duration = waitTime,
-        label = locale('panning_ore'),
+        label = locale('progress.panning'),
         useWhileDead = false,
         canCancel = true,
         disable = {

@@ -22,7 +22,7 @@ function StartMining(src, activity, tool)
     local ped = GetPlayerPed(src)
 
     if GetVehiclePedIsIn(ped, false) > 0 then
-        return Notify(src, locale('vehicle_mining'), 'error')
+        return Notify(src, locale('error.vehicle_mining'), 'error')
     end
 
     local coords = GetEntityCoords(ped)

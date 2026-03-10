@@ -129,7 +129,7 @@ lib.callback.register('red40_mining:client:mineSpot', function(waitTime, toolTyp
     createMiningEffects(toolType, Prop, closestOre.propNumber)
     local success = lib.progressBar({
         duration = waitTime,
-        label = locale('mining_ore'),
+        label = locale('progress.mining'),
         useWhileDead = false,
         canCancel = true,
         disable = {
@@ -192,7 +192,7 @@ local function buildOrePoints(orePoint)
         targetOptions = {
             {
                 name = 'red40_mine_ore',
-                label = locale('mine_ore_target'),
+                label = locale('target.mine'),
                 icon = 'fa-solid fa-hammer',
                 onSelect = function()
                     TriggerServerEvent('red40_mining:server:startMining', orePoint.id)
@@ -232,12 +232,12 @@ local function buildOrePoints(orePoint)
             if not self.isClosest or not playerState.red40_mining or not playerState.red40_mining.activity == 'mining' then return end
             if not self.looted and self.currentDistance < 5 and not effectsLoop then
                 if config.use3dText then
-                    DrawText3d({ coords = self.textOffset, text = locale('mine_ore_3d') })
+                    DrawText3d({ coords = self.textOffset, text = locale('drawtext.mine') })
                 else
                     local textOpen, text = lib.isTextUIOpen()
-                    textOpen = textOpen and text == locale('mine_ore')
+                    textOpen = textOpen and text == locale('textui.mine')
                     if not textOpen then
-                        lib.showTextUI(locale('mine_ore'))
+                        lib.showTextUI(locale('textui.mine'))
                     end
                 end
                 if IsControlJustReleased(0, 38) then
@@ -245,7 +245,7 @@ local function buildOrePoints(orePoint)
                 end
             else
                 local textOpen, text = lib.isTextUIOpen()
-                if textOpen and text == locale('mine_ore') then
+                if textOpen and text == locale('textui.mine') then
                     lib.hideTextUI()
                 end
             end

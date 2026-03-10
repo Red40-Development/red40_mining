@@ -22,7 +22,7 @@ local function panSpot(src, itemName)
     local panningZone = getPanningZone(pedCoords)
 
     if not panningZone then
-        Notify(src, locale('not_in_panning_zone'), 'error')
+        Notify(src, locale('error.not_in_panning_zone'), 'error')
         return
     end
 
@@ -54,7 +54,7 @@ local function panSpot(src, itemName)
                 lib.print.debug('Player ' .. src .. ' had some items dropped due to weight: ', itemList)
             end
         else
-            Notify(src, locale('found_nothing'), 'inform')
+            Notify(src, locale('info.found_nothing'), 'inform')
             lib.print.debug('Player ' .. src .. ' found nothing at pan zone ' .. panningZone.id)
         end
 

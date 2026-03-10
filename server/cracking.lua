@@ -27,12 +27,12 @@ RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
     local crackingSpot = crackingSpots[spotId]
 
     if not crackingSpot then
-        Notify(src, locale('not_in_cracking_spot'), 'error')
+        Notify(src, locale('error.not_in_cracking_spot'), 'error')
         return
     end
 
     if not crackingSpot.coords or #(pedCoords - crackingSpot.coords) > 5.0 then
-        Notify(src, locale('not_in_cracking_spot'), 'error')
+        Notify(src, locale('error.not_in_cracking_spot'), 'error')
         return
     end
 
@@ -42,17 +42,17 @@ RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
     --Find first tool in inventory
     local toolItem = findToolInInventory(src)
     if not toolItem then
-        Notify(src, locale('no_cracking_tool'), 'error')
+        Notify(src, locale('error.no_cracking_tool'), 'error')
         return
     end
     local toolConfig = config.tools[toolItem]
     if not toolConfig then
-        Notify(src, locale('invalid_tool'), 'error')
+        Notify(src, locale('error.invalid_tool'), 'error')
         return
     end
 
     if playerLevel < toolConfig.level then
-        Notify(src, locale('cracking_tool_level_too_low'), 'error')
+        Notify(src, locale('error.cracking_tool_level_too_low'), 'error')
         return
     end
 
@@ -66,13 +66,13 @@ RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
     end
 
     if not crackableItem then
-        Notify(src, locale('no_crackable_item'), 'error')
+        Notify(src, locale('error.no_crackable_item'), 'error')
         return
     end
 
     local crackableConfig = config.crackableItems[crackableItem]
     if not crackableConfig then
-        Notify(src, locale('invalid_crackable_item'), 'error')
+        Notify(src, locale('error.invalid_crackable_item'), 'error')
         return
     end
 
@@ -119,7 +119,7 @@ RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
                 lib.print.debug('Player ' .. src .. ' had some items dropped due to weight: ', itemList)
             end
         else
-            Notify(src, locale('found_nothing'), 'inform')
+            Notify(src, locale('info.found_nothing'), 'inform')
             lib.print.debug('Player ' .. src .. ' found nothing at cracking zone ' .. crackingSpot.id)
         end
 
@@ -135,7 +135,7 @@ RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
             lib.print.debug('Removed ' ..
             durabilityRemoved .. ' durability from player ' .. src .. ' for cracking with tool ' .. toolItem)
             if durabilityLeft and durabilityLeft <= 0 then
-                Notify(src, locale('tool_broke'), 'error')
+                Notify(src, locale('error.tool_broke'), 'error')
                 lib.print.debug('Player ' ..
                 src .. '\'s cracking tool ' .. toolItem .. ' broke due to durability reaching 0')
             end

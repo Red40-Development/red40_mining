@@ -22,19 +22,19 @@ local function washSpot(src, itemName)
     local washingZone = getWashingZone(pedCoords)
 
     if not washingZone then
-        Notify(src, locale('not_in_washing_zone'), 'error')
+        Notify(src, locale('error.not_in_washing_zone'), 'error')
         return
     end
 
     local toolConfig = config.tools[itemName]
     if not toolConfig then
-        Notify(src, locale('invalid_tool'), 'error')
+        Notify(src, locale('error.invalid_tool'), 'error')
         return
     end
     local playerXp = GetXp(src, 'washing') or 0
     local playerLevel = GetXpLevel(playerXp, config.xpTables) or 0
     if playerLevel < toolConfig.level then
-        Notify(src, locale('washing_tool_level_too_low'), 'error')
+        Notify(src, locale('error.washing_tool_level_too_low'), 'error')
         return
     end
 
@@ -64,7 +64,7 @@ local function washSpot(src, itemName)
                 lib.print.debug('Player ' .. src .. ' had some items dropped due to weight: ', itemList)
             end
         else
-            Notify(src, locale('found_nothing'), 'inform')
+            Notify(src, locale('info.found_nothing'), 'inform')
             lib.print.debug('Player ' .. src .. ' found nothing at washing zone ' .. washingZone.id)
         end
 

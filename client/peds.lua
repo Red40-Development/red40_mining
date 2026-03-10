@@ -10,8 +10,8 @@ local oxInv = lib.checkDependency('ox_inventory', '2.37.3')
 
 local function inputBox(action, shopName, item, maxAmount)
     local itemLabel = Items[item.name] and Items[item.name].label or item.name
-    local title = action == 'sell' and locale('sell_item', itemLabel) or locale('buy_item', itemLabel)
-    local label = action == 'sell' and locale('sell_amount', itemLabel, maxAmount) or locale('buy_amount', itemLabel)
+    local title = action == 'sell' and locale('menu.sell_item', itemLabel) or locale('menu.buy_item', itemLabel)
+    local label = action == 'sell' and locale('menu.sell_amount', itemLabel, maxAmount) or locale('menu.buy_amount', itemLabel)
     local input = lib.inputDialog(title, {{ type = 'number', label = label, required = true, min = 1, max = maxAmount, precision = 1}},
         { size = 'sm' })
     if input then
@@ -27,8 +27,8 @@ local function openSellMenu(shopName)
     for i = 1, #itemsForSale do
         local item = itemsForSale[i]
         sellOptions[#sellOptions + 1] = {
-            title = locale('sell_item', Items[item.name].label),
-            description = locale('sell_price', item.price),
+            title = locale('menu.sell_item', Items[item.name].label),
+            description = locale('menu.sell_price', item.price),
             image = ItemImageURL(item.name),
             onSelect = function()
                 inputBox('sell', shopName, item, item.maxAmount)
@@ -37,7 +37,7 @@ local function openSellMenu(shopName)
     end
     lib.registerContext({
         id = 'red40_mining_sell_menu',
-        title = locale('sell_menu_title'),
+        title = locale('menu.sell_title'),
         options = sellOptions,
     })
     lib.showContext('red40_mining_sell_menu')
@@ -51,8 +51,8 @@ local function openBuyMenu(shopName)
         local item = itemsForSale[i]
         local label = Items[item.name] and Items[item.name].label or item.name
         buyOptions[#buyOptions + 1] = {
-            title = locale('buy_item', label),
-            description = locale('buy_price', item.price),
+            title = locale('menu.buy_item', label),
+            description = locale('menu.buy_price', item.price),
             image = ItemImageURL(item.name),
             onSelect = function()
                 inputBox('buy', shopName, item)
@@ -61,7 +61,7 @@ local function openBuyMenu(shopName)
     end
     lib.registerContext({
         id = 'red40_mining_buy_menu',
-        title = locale('buy_menu_title'),
+        title = locale('menu.buy_title'),
         options = buyOptions,
     })
     lib.showContext('red40_mining_buy_menu')
@@ -163,13 +163,13 @@ local function createPedPoint(point)
                 if config.use3dText then
                     DrawText3d({
                         coords = vec3(self.coords.x, self.coords.y, self.coords.z + 1.0),
-                        text = locale('shop_text_3d'),
+                        text = locale('drawtext.shop'),
                     })
                 else
                     local textOpen, text = lib.isTextUIOpen()
-                    textOpen = textOpen and text == locale('shop_text')
+                    textOpen = textOpen and text == locale('textui.shop')
                     if not textOpen then
-                        lib.showTextUI(locale('shop_text'))
+                        lib.showTextUI(locale('textui.shop'))
                     end
                 end
                 if IsControlJustReleased(0, config.useKey) then
@@ -180,7 +180,7 @@ local function createPedPoint(point)
                 end
             else
                 local textOpen, text = lib.isTextUIOpen()
-                if textOpen and text == locale('shop_text') then
+                if textOpen and text == locale('textui.shop') then
                     lib.hideTextUI()
                 end
             end

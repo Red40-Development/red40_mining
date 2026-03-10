@@ -20,7 +20,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
     end
 
     if orePoint.looted then
-        Notify(src, locale('already_looted'), 'error')
+        Notify(src, locale('error.already_looted'), 'error')
         Logger(src, 'red40_mining', 'Player attempted to mine ore point ' .. oreId .. ' but it was already looted.')
         return
     end
@@ -28,7 +28,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
     -- Distance Check
     local coords = GetEntityCoords(GetPlayerPed(src))
     if #(coords - orePoint.coords) > 5.0 then
-        Notify(src, locale('too_far'), 'error')
+        Notify(src, locale('error.too_far'), 'error')
         Logger(src, 'red40_mining',
             'Player attempted to mine ore point ' ..
             oreId .. ' but was too far away. Distance: ' .. #(coords - orePoint.coords))
@@ -37,7 +37,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
 
     local tool = MiningTools[src]
     if not tool then
-        Notify(src, locale('no_tool'), 'error')
+        Notify(src, locale('error.no_tool'), 'error')
         Logger(src, 'red40_mining', 'Player attempted to mine ore point ' .. oreId .. ' without a mining tool.')
         return
     end
@@ -59,7 +59,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
         -- This is mildly redundant but the player could have an RGB gaming chair
         coords = GetEntityCoords(GetPlayerPed(src))
         if #(coords - orePoint.coords) > 5.0 then
-            Notify(src, locale('too_far'), 'error')
+            Notify(src, locale('error.too_far'), 'error')
             Logger(src, 'red40_mining',
                 'Player finished mining ore point ' ..
                 oreId .. ' but was too far away. Distance: ' .. #(coords - orePoint.coords))
@@ -87,7 +87,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
                 lib.print.debug('Player ' .. src .. ' had some items dropped due to weight: ', itemList)
             end
         else
-            Notify(src, locale('found_nothing'), 'inform')
+            Notify(src, locale('info.found_nothing'), 'inform')
             lib.print.debug('Player ' .. src .. ' found nothing at ore point ' .. orePoint.id)
         end
 

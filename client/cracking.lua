@@ -66,7 +66,7 @@ lib.callback.register('red40_mining:client:crackSpot', function(waitTime, entity
     createMiningEffects(entityData.anim, oreCoords)
     local success = lib.progressBar({
         duration = waitTime,
-        label = locale('cracking_ore'),
+        label = locale('progress.cracking'),
         useWhileDead = false,
         canCancel = true,
         disable = {
@@ -101,7 +101,7 @@ local function buildCrackPoints(crackPoint)
         targetOptions = {
             {
                 name = 'red40_crack_ore',
-                label = locale('crack_ore_target'),
+                label = locale('target.crack'),
                 icon = 'fa-solid fa-hammer',
                 onSelect = function()
                     TriggerServerEvent('red40_mining:server:startCracking', crackPoint.id)
@@ -137,12 +137,12 @@ local function buildCrackPoints(crackPoint)
             if not self.isClosest then return end
             if not self.looted and self.currentDistance < 5 and not effectsLoop then
                 if config.use3dText then
-                    DrawText3d({ coords = self.textOffset, text = locale('crack_ore_3d') })
+                    DrawText3d({ coords = self.textOffset, text = locale('drawtext.crack') })
                 else
                     local textOpen, text = lib.isTextUIOpen()
-                    textOpen = textOpen and text == locale('crack_ore')
+                    textOpen = textOpen and text == locale('textui.crack')
                     if not textOpen then
-                        lib.showTextUI(locale('crack_ore'))
+                        lib.showTextUI(locale('textui.crack'))
                     end
                 end
                 if IsControlJustReleased(0, 38) then
@@ -150,7 +150,7 @@ local function buildCrackPoints(crackPoint)
                 end
             else
                 local textOpen, text = lib.isTextUIOpen()
-                if textOpen and text == locale('crack_ore') then
+                if textOpen and text == locale('textui.crack') then
                     lib.hideTextUI()
                 end
             end

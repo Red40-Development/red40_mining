@@ -231,7 +231,7 @@ else
         --Distance check
         local playerCoords = GetEntityCoords(GetPlayerPed(src))
         if #(playerCoords - vec3(shop.coords.x, shop.coords.y, shop.coords.z)) > 5 then
-            Notify(src, locale('too_far'))
+            Notify(src, locale('error.too_far'))
             return
         end
 
@@ -242,7 +242,7 @@ else
         end
 
         if not CanCarryItem(src, itemName, amount) then
-            Notify(src, locale('not_carry'))
+            Notify(src, locale('error.not_carry'))
             return
         end
         local totalPrice = price * amount
@@ -262,7 +262,7 @@ else
         --Distance check
         local playerCoords = GetEntityCoords(GetPlayerPed(src))
         if #(playerCoords - vec3(shop.coords.x, shop.coords.y, shop.coords.z)) > 5 then
-            Notify(src, locale('too_far'))
+            Notify(src, locale('error.too_far'))
             return
         end
 

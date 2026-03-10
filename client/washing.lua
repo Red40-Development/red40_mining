@@ -28,7 +28,7 @@ lib.callback.register('red40_mining:client:washSpot', function(waitTime)
 
     local success = lib.progressBar({
         duration = waitTime,
-        label = locale('washing_ore'),
+        label = locale('progress.washing'),
         useWhileDead = false,
         canCancel = true,
         disable = {
