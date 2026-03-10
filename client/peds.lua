@@ -70,16 +70,18 @@ end
 local function createPedPoint(point)
     local shopOptions = {}
     if point.style == 'ox_inventory' and oxInv and config.useTarget then
-        shopOptions = {
-            {
+        if point.pedpedBuys then
+            shopOptions[#shopOptions + 1] = {
                 name = 'red40_mining_buy',
                 label = locale('target.buy'),
                 icon = 'fa-solid fa-box',
                 onSelect = function()
                     exports.ox_inventory:openInventory('shop', { type = point.shopName })
                 end,
-            },
-            {
+            }
+        end
+        if point.pedpedSells then
+            shopOptions[#shopOptions + 1] = {
                 name = 'red40_mining_sell',
                 label = locale('target.sell'),
                 icon = 'fa-solid fa-hand-holding-dollar',
@@ -87,18 +89,20 @@ local function createPedPoint(point)
                     exports.ox_inventory:openInventory('stash', point.stashName)
                 end,
             }
-        }
+        end
     elseif config.useTarget then
-        shopOptions = {
-            {
+        if point.pedpedBuys then
+            shopOptions[#shopOptions + 1] = {
                 name = 'red40_mining_buy',
                 label = locale('target.buy'),
                 icon = 'fa-solid fa-box',
                 onSelect = function()
                     openBuyMenu(point.shopName)
                 end,
-            },
-            {
+            }
+        end
+        if point.pedpedSells then
+            shopOptions[#shopOptions + 1] = {
                 name = 'red40_mining_sell',
                 label = locale('target.sell'),
                 icon = 'fa-solid fa-hand-holding-dollar',
@@ -106,7 +110,7 @@ local function createPedPoint(point)
                     openSellMenu(point.shopName)
                 end,
             }
-        }
+        end
     end
     local pedPoint = lib.points.new({
         coords = vec3(point.coords.x, point.coords.y, point.coords.z),
@@ -157,19 +161,23 @@ local function createPedPoint(point)
     end
 
     if not config.useTarget then
+        local textLocale = point.pedpedBuys and point.pedpedSells and locale('textui.shop') or
+            (point.pedpedBuys and locale('textui.buyshop') or (point.pedpedSells and locale('textui.sellshop') or ''))
+        local drawTextLocale = point.pedpedBuys and point.pedpedSells and locale('drawtext.shop') or
+            (point.pedpedBuys and locale('drawtext.buyshop') or (point.pedpedSells and locale('drawtext.sellshop') or ''))
         function pedPoint:nearby()
             if not self.isClosest then return end
             if self.currentDistance < 2 and not lib.getOpenContextMenu() then
                 if config.use3dText then
                     DrawText3d({
                         coords = vec3(self.coords.x, self.coords.y, self.coords.z + 1.0),
-                        text = locale('drawtext.shop'),
+                        text = drawTextLocale,
                     })
                 else
                     local textOpen, text = lib.isTextUIOpen()
-                    textOpen = textOpen and text == locale('textui.shop')
+                    textOpen = textOpen and text == textLocale
                     if not textOpen then
-                        lib.showTextUI(locale('textui.shop'))
+                        lib.showTextUI(textLocale)
                     end
                 end
                 if IsControlJustReleased(0, config.useKey) then
@@ -180,7 +188,7 @@ local function createPedPoint(point)
                 end
             else
                 local textOpen, text = lib.isTextUIOpen()
-                if textOpen and text == locale('textui.shop') then
+                if textOpen and text == textLocale then
                     lib.hideTextUI()
                 end
             end

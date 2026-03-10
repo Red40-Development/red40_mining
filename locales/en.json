@@ -51,12 +51,16 @@
         "mine": "~w~[~g~E~w~] to Mine",
         "crack": "~w~[~g~E~w~] to Crack",
         "shop": "~w~[~g~E~w~] to Sell\n~w~[~r~F~w~] to Buy",
+        "buyshop": "~w~[~r~F~w~] to Buy",
+        "sellshop": "~w~[~g~E~w~] to Sell",
         "smelt": "~w~[~g~E~w~] to Smelt"
     },
     "textui": {
         "mine": "[E] Mine Ore",
         "crack": "[E] Crack Ore",
         "shop": "[E] Sell\n[F] Buy",
+        "buyshop": "[F] Buy",
+        "sellshop": "[E] Sell",
         "smelt": "[E] Smelt"
     }
 }

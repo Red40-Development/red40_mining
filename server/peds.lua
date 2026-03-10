@@ -201,6 +201,8 @@ if config.style == 'ox_inventory' then
                     pedModel = location.pedModel,
                     pedAnim = location.pedAnim,
                     pedScenario = location.pedScenario,
+                    pedBuys = location.buys and next(location.buys) and true or false,
+                    pedSells = location.sells and next(location.sells) and true or false,
                 }
                 pedPoints[#pedPoints + 1] = pedPoint
             end
