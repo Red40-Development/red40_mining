@@ -9,9 +9,9 @@ return {
         },
         lootTables = {
             mining_table = {
-                { name = 'metalscrap', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'steel',      chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'copper',     chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'red40_stone', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'coal', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'sand', chance = 0.5, min = 1, max = 4, level = 1 },
             }
         },
         tools = {
@@ -140,9 +140,9 @@ return {
         },
         lootTables = {
             pan_loot = {
-                { name = 'metalscrap', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'steel',      chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'copper',     chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'gold_ore', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'red40_stone', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'sand', chance = 0.5, min = 1, max = 4, level = 1 },
             }
         },
         tools = {
@@ -163,7 +163,7 @@ return {
                 },
                 type = 'pan',
             },
-            red40_sifter = {
+            red40_turbopan = {
                 level = 2,
                 damage = false,
                 minXp = 10,
@@ -221,9 +221,16 @@ return {
         },
         lootTables = {
             wash_loot = {
-                { name = 'metalscrap', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'steel',      chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'copper',     chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'copper_ore', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'gold_ore', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'silver_ore', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'platinum_ore', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'iron_ore', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'aluminum_ore', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'uncut_emerald', chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'uncut_ruby', chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'uncut_sapphire', chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'uncut_diamond', chance = 0.25, min = 1, max = 4, level = 1 },
             }
         },
 
@@ -278,17 +285,24 @@ return {
         },
         lootTables = {
             crack_loot = {
-                { name = 'metalscrap', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'steel',      chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'copper',     chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'copper_ore', chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'gold_ore', chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'silver_ore', chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'platinum_ore', chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'iron_ore', chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'aluminum_ore', chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'uncut_emerald', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'uncut_ruby', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'uncut_sapphire', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'uncut_diamond', chance = 0.5, min = 1, max = 4, level = 1 },
             }
         },
         tools = {
             red40_drillbit = {
                 level = 1,
                 damage = true,
-                minXp = 0,       -- Minimum XP required to use this tool
-                maxXp = 10,      -- Stop earning xp after this level
+                minXp = 0,          -- Minimum XP required to use this tool
+                maxXp = 10,         -- Stop earning xp after this level
                 minUseTime = 5000,  -- Minimum time in milliseconds to crack
                 maxUseTime = 10000, -- Maximum time in milliseconds to crack
             },
@@ -422,22 +436,34 @@ return {
         }
     },
     smelting = {
-        recipes = {
-            { gold_ingot = 1,     input = { gold_ore = 2 },           amount = 1 },
-            { gold_ingot = 1,     input = { gold_necklace = 4 },      amount = 1 },
-            { gold_ingot = 1,     input = { gold_ring = 4 },          amount = 1 },
-            { silver_ingot = 1,   input = { silver_ore = 2 },         amount = 1 },
-            { silver_ingot = 1,   input = { silver_necklace = 4 },    amount = 1 },
-            { silver_ingot = 1,   input = { silver_ring = 4 },        amount = 1 },
-            { platinum_ingot = 1, input = { platinum_ore = 2 },       amount = 1 },
-            { platinum_ingot = 1, input = { platinum_necklace = 4 },  amount = 1 },
-            { platinum_ingot = 1, input = { platinum_ring = 4 },      amount = 1 },
-            { copper_ingot = 1,   input = { copper_ore = 2 },         amount = 1 },
-            { iron_ingot = 1,     input = { iron_ore = 2 },           amount = 1 },
-            { aluminum_ingot = 1, input = { aluminum_ore = 2 },       amount = 1 },
-            { steel_ingot = 1,    input = { iron_ore = 1, coal = 1 }, amount = 1 },
-            { glass_pane = 1,     input = { sand = 2 },               amount = 1 },
+        xpTables = {
+            { level = 1, xp = 0 },
+            { level = 2, xp = 10 },
+            { level = 3, xp = 30 },
+            { level = 4, xp = 60 },
+            { level = 5, xp = 100 },
         },
+        recipes = {
+            forge = {
+                { output = { gold_ingot = 1 },     input = { gold_ore = 2 }, level = 1 },
+                { output = { gold_ingot = 1 },     input = { gold_necklace = 4 }, level = 1 },
+                { output = { gold_ingot = 1 },     input = { gold_ring = 4 }, level = 1 },
+                { output = { silver_ingot = 1 },   input = { silver_ore = 2 }, level = 1 },
+                { output = { silver_ingot = 1 },   input = { silver_necklace = 4 }, level = 1 },
+                { output = { silver_ingot = 1 },   input = { silver_ring = 4 }, level = 1 },
+                { output = { platinum_ingot = 1 }, input = { platinum_ore = 2 }, level = 1 },
+                { output = { platinum_ingot = 1 }, input = { platinum_necklace = 4 }, level = 1 },
+                { output = { platinum_ingot = 1 }, input = { platinum_ring = 4 }, level = 1 },
+                { output = { copper_ingot = 1 },   input = { copper_ore = 2 }, level = 1 },
+                { output = { iron_ingot = 1 },     input = { iron_ore = 2 }, level = 1 },
+                { output = { aluminum_ingot = 1 }, input = { aluminum_ore = 2 }, level = 1 },
+                { output = { steel_ingot = 1 },    input = { iron_ore = 1, coal = 1 }, level = 1 },
+                { output = { glass_pane = 1 },     input = { sand = 2 }, level = 1 },
+            }
+        },
+        xpPerAction = function()
+            return math.random(1, 3) -- Random XP between 1 and 3 for each successful action,
+        end,
         locations = {
             {
                 name = 'smelting_location_1',
@@ -449,7 +475,7 @@ return {
                     color = 1,
                     coords = vec3(1074.89, -1988.19, 30.89)
                 },
-                prop = `red40_forge`,
+                prop = `gr_prop_gr_speeddrill_01c`,
                 anim = {
                     anim = 'operate_02_hi_amy_skater_01',    -- change
                     dict = 'anim@amb@machinery@speed_drill@' -- change
@@ -457,6 +483,9 @@ return {
                 locations = {
                     { coords = vec3(1074.89, -1988.19, 30.89), rotation = vec3(0.0, 0.0, 0.0) },
                 },
+                minUseTime = 5000,  -- Minimum time in milliseconds to smelt
+                maxUseTime = 10000, -- Maximum time in milliseconds to smelt
+                smelts = 'forge'    -- Which recipes are available here
             }
         }
     },
@@ -484,10 +513,15 @@ return {
                 pedScenario = 'WORLD_HUMAN_STANDING_MOBILE', -- takes priority over animations
                 buys = {
                     copper_ore = 10,
-                    iron_ore = 15,
-                    gold_ore = 25,
-                    metalscrap = 5,
-                    copper = 20,
+                    gold_ore = 20,
+                    silver_ore = 15,
+                    platinum_ore = 25,
+                    iron_ore = 5,
+                    aluminum_ore = 5,
+                    copper_ingot = 20,
+                    gold_ingot = 40,
+                    silver_ingot = 30,
+                    platinum_ingot = 50,
                     uncut_emerald = 50,
                     uncut_ruby = 50,
                     uncut_sapphire = 50,
@@ -498,10 +532,60 @@ return {
                     red40_drill = 500,
                     red40_laserdrill = 1000,
                     red40_pan = 50,
-                    red40_sifter = 200,
+                    red40_turbopan = 200,
                     red40_drillbit = 25,
                     red40_carbidedrillbit = 100,
                 }
+            },
+            {
+                name = 'jewel_vendor_1',
+                label = 'Jewel Vendor',
+                enabled = true,
+                blip = {
+                    enable = true,
+                    name = 'Jewel Vendor',
+                    sprite = 436,
+                    color = 1,
+                    coords = vec3(1100.89, -1990.19, 30.89)
+                },
+                coords = vec4(1100.2479, -1995.1158, 29.8811, 0),
+                pedModel = `s_f_m_shop_high`,
+                pedAnim = {
+                    anim = 'base',
+                    dict = 'amb@world_human_stand_mobile@female@text@enter',
+                },
+                pedScenario = 'WORLD_HUMAN_STANDING_MOBILE', -- takes priority over animations
+                buys = {
+                    gold_ingot = 40,
+                    silver_ingot = 30,
+                    platinum_ingot = 50,
+                    gold_ring = 50,
+                    silver_ring = 30,
+                    platinum_ring = 70,
+                    gold_necklace = 50,
+                    silver_necklace = 30,
+                    platinum_necklace = 70,
+                    gold_earring = 25,
+                    silver_earring = 15,
+                    platinum_earring = 35,
+                    gold_diamond_ring = 100,
+                    gold_emerald_ring = 80,
+                    gold_ruby_ring = 80,
+                    gold_sapphire_ring = 80,
+                    silver_diamond_ring = 80,
+                    silver_emerald_ring = 60,
+                    silver_ruby_ring = 60,
+                    silver_sapphire_ring = 60,
+                    platinum_diamond_ring = 150,
+                    platinum_emerald_ring = 120,
+                    platinum_ruby_ring = 120,
+                    platinum_sapphire_ring = 120,
+                    diamond = 100,
+                    emerald = 80,
+                    ruby = 80,
+                    sapphire = 80,
+                },
+                sells = false, -- This vendor doesn't sell anything
             }
         }
     }
