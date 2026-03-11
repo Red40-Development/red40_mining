@@ -194,7 +194,7 @@ local function buildOrePoints(orePoint)
                     TriggerServerEvent('red40_mining:server:startMining', orePoint.id)
                 end,
                 canInteract = function()
-                    if not playerState.red40_mining?.activity == 'mining' then return false end
+                    if playerState.red40_mining?.activity ~= 'mining' then return false end
                     return true
                 end
             }}
@@ -225,7 +225,7 @@ local function buildOrePoints(orePoint)
 
     if not config.miningTarget then
         function point:nearby()
-            if not self.isClosest or not playerState.red40_mining?.activity == 'mining' then return end
+            if not self.isClosest or playerState.red40_mining?.activity ~= 'mining' then return end
             if not self.looted and self.currentDistance < 5 and not effectsLoop then
                 if config.use3dText then
                     DrawText3d({ coords = self.textOffset, text = locale('drawtext.mine') })
