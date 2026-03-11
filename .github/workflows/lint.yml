@@ -19,7 +19,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Lint
-        uses: iLLeniumStudios/fivem-lua-lint-action@v2
+        uses: Red40-Development/fivem-lua-lint-action@v3
         with:
           capture: "junit.xml"
           args: "-t --formatter JUnit"
