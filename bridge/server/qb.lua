@@ -67,12 +67,3 @@ function GetXp(src, type)
     end
     return 0
 end
-
-function CheckDuty()
-    local dutyCount = 0
-    local leoJobs = { 'police', 'bcso' } -- Add your police jobs here...
-    for _, job in ipairs(leoJobs) do
-        dutyCount = dutyCount + QBCore.Functions.GetDutyCount(job)
-    end
-    return dutyCount
-end

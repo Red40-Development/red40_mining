@@ -57,6 +57,7 @@ function GenerateLoot(lootTableName, minLoot, maxLoot, xpLevel)
     for i = 1, #lootTable do
         local item = lootTable[i]
         if item.level and item.level > xpLevel then
+            lib.print.debug('Skipping item ' .. item.name .. ' as it is above the player\'s level')
             -- Skip items that are above the player's level
         else
             local chance = math.random()

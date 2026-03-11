@@ -7,7 +7,6 @@ end
 -- local config = require 'config.client'
 
 local playerState = LocalPlayer.state
-local effectsLoop = false
 
 local function createWashingEffects(type, toolEntity)
     TaskStartScenarioInPlace(cache.ped, 'PROP_HUMAN_BUM_BIN', 0, true)
@@ -23,7 +22,6 @@ lib.callback.register('red40_mining:client:washSpot', function(waitTime)
 
     if not DoesEntityExist(toolEntity) then return end
 
-    effectsLoop = true
     createWashingEffects(toolData.type, toolEntity)
 
     local success = lib.progressBar({
@@ -37,7 +35,6 @@ lib.callback.register('red40_mining:client:washSpot', function(waitTime)
             mouse = false,
         },
     })
-    effectsLoop = false
     ClearPedTasks(cache.ped)
     return success
 end)

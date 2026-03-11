@@ -23,6 +23,7 @@ local function detectInventory()
         Inv = 'qb-inventory'
         Items = exports['qb-core']:GetCoreObject().Shared.Items
     else
+        lib.print.info('No supported inventory found. Item images will not be available.')
         -- Add custom inventory here
     end
 end

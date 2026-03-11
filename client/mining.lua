@@ -27,22 +27,18 @@ end)
 
 local function loadMiningSounds(type)
     if type == 'pickaxe' then
-        -- no sound here
+        lib.print.debug('You could add a sound here')
     elseif type == 'drill' then
-        RequestAmbientAudioBank("DLC_HEIST_FLEECA_SOUNDSET", false)
-        RequestAmbientAudioBank("DLC_MPHEIST\\HEIST_FLEECA_DRILL", false)
-        RequestAmbientAudioBank("DLC_MPHEIST\\HEIST_FLEECA_DRILL_2", false)
+        --TODO load native audio drill sound
     elseif type == 'laserdrill' then
         while not RequestScriptAudioBank('audiodirectory/red40_mining', false) do Wait(0) end
     end
 end
 local function unloadMiningSounds(type)
     if type == 'pickaxe' then
-        -- no sound here
+        lib.print.debug('You could unload a sound here')
     elseif type == 'drill' then
-        ReleaseAmbientAudioBank("DLC_HEIST_FLEECA_SOUNDSET", false)
-        ReleaseAmbientAudioBank("DLC_MPHEIST\\HEIST_FLEECA_DRILL", false)
-        ReleaseAmbientAudioBank("DLC_MPHEIST\\HEIST_FLEECA_DRILL_2", false)
+        --TODO unload native audio drill sound
     elseif type == 'laserdrill' then
         ReleaseNamedScriptAudioBank('audiodirectory/red40_mining')
     end
@@ -51,9 +47,9 @@ end
 local function createMiningSounds(type, toolEntity)
     soundId = GetSoundId()
     if type == 'pickaxe' then
-        -- no sound here
+        lib.print.debug('You could add a sound here')
     elseif type == 'drill' then
-        PlaySoundFromEntity(soundId, 'Drill', toolEntity, 'DLC_HEIST_FLEECA_SOUNDSET', true, 0)
+        --TODO use native audio drill sound
     elseif type == 'laserdrill' then
         PlaySoundFromEntity(soundId, 'laserdrill_start', toolEntity, 'special_soundset', true, 0)
         while not HasSoundFinished(soundId) do
@@ -75,7 +71,7 @@ local function createMiningEffects(type, toolEntity, oreEntity)
     lib.playAnim(cache.ped, playerState.red40_mining.anim.anim, playerState.red40_mining.anim.dict, 8.0, 8.0,
         -1, 1, 1.0, false, false, false)
     if type == 'pickaxe' then
-        -- no effects =(
+        lib.print.debug('You could add a particle effect here')
     elseif type == 'drill' then
         lib.requestNamedPtfxAsset('core', 10000)
         CreateThread(function()
@@ -198,7 +194,7 @@ local function buildOrePoints(orePoint)
                     TriggerServerEvent('red40_mining:server:startMining', orePoint.id)
                 end,
                 canInteract = function()
-                    if not playerState.red40_mining or not playerState.red40_mining.activity == 'mining' then return false end
+                    if not playerState.red40_mining?.activity == 'mining' then return false end
                     return true
                 end
             }}
@@ -229,7 +225,7 @@ local function buildOrePoints(orePoint)
 
     if not config.miningTarget then
         function point:nearby()
-            if not self.isClosest or not playerState.red40_mining or not playerState.red40_mining.activity == 'mining' then return end
+            if not self.isClosest or not playerState.red40_mining?.activity == 'mining' then return end
             if not self.looted and self.currentDistance < 5 and not effectsLoop then
                 if config.use3dText then
                     DrawText3d({ coords = self.textOffset, text = locale('drawtext.mine') })

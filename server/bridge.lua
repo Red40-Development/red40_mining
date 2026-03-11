@@ -15,6 +15,7 @@ local function detectInventory()
     elseif GetResourceState('qb-inventory') == 'started' then
         Inv = 'qb-inventory'
     else
+        lib.print.info('No supported inventory found. Item images will not be available.')
         -- Add custom inventory here
     end
 end
@@ -48,9 +49,11 @@ function CustomDrop(src, items, coords)
         if Inv == 'ox_inventory' then
             exports.ox_inventory:CustomDrop('Mining Drop', items, coords)
         else
+            lib.print.debug('Custom drop not implemented for this inventory, using default drop')
             -- Implement custom drop for other inventories if you want
         end
     else
+        lib.print.debug('No inventory found, skipping drop')
         -- Implement custom drop framework fallback if you want
     end
 end

@@ -6,9 +6,6 @@ end
 
 local config = require 'config.client'
 
-local crackPoints = {}
-local playerState = LocalPlayer.state
-local soundId = nil
 local effectsLoop = false
 
 

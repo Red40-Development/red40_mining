@@ -56,7 +56,3 @@ function GetXp(src, type)
     end
     return 0
 end
-
-function CheckDuty()
-    return exports.qbx_core:GetDutyCountType('leo')
-end

@@ -63,15 +63,3 @@ function GetXp(src, type)
     end
     return 0
 end
-
-function CheckDuty()
-    local amount = 0
-    local players = ESX.GetExtendedPlayers()
-    for i = 1, #players do
-        local xPlayer = players[i]
-        if xPlayer.job.name == 'police' then
-            amount += 1
-        end
-    end
-    return amount
-end
