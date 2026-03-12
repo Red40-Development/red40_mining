@@ -14,7 +14,7 @@ jobs:
           private-key: ${{ secrets.PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -27,9 +27,15 @@ jobs:
 
       - name: Generate Lint Report
         if: always()
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@v6
         with:
           report_paths: "**/junit.xml"
+          check_annotations: true
+          skip_annotations: false
+          annotate_only: false
+          update_check: true
+          test_files_prefix: ""
+          resolve_ignore_classname: false
           check_name: Linting Report
           fail_on_failure: false
           token: ${{ steps.generate_token.outputs.token }}
