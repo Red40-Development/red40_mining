@@ -63,6 +63,17 @@ local function panSpot(src, itemName)
             AddXp(src, xpGained, 'panning')
             lib.print.debug('Added ' .. xpGained .. ' XP to player ' .. src .. ' for panning')
         end
+
+        if config.tools[itemName].damage then
+            local durabilityRemoved = config.durability()
+            local durabilityLeft = RemoveItemDurability(src, itemName, durabilityRemoved)
+            lib.print.debug('Removed ' ..
+            durabilityRemoved .. ' durability from player ' .. src .. ' for panning with tool ' .. itemName)
+            if durabilityLeft and durabilityLeft <= 0 then
+                Notify(src, locale('error.tool_broke'), 'error')
+                Logger(src, 'red40_mining', 'Player ' .. src .. '\'s tool ' .. itemName .. ' broke due to durability reaching 0.')
+            end
+        end
     end
     DeleteMiningObject(src)
 end

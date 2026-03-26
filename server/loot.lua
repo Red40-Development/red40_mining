@@ -39,7 +39,7 @@ local function getAmount(item)
 end
 
 ---Generate loot
----@param id string
+---@param lootTableName string
 ---@param minLoot integer
 ---@param maxLoot integer
 ---@param xpLevel integer

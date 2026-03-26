@@ -58,6 +58,7 @@ if config.style == 'ox_inventory' then
     ---@param coords vector3
     local function prepStash(id, label, coords)
         ox_inventory:RegisterStash(id, label, 2, 9000000, nil, nil, coords and vec3(coords.x, coords.y, coords.z) or nil)
+        ---@diagnostic disable-next-line: param-type-mismatch
         ox_inventory:ClearInventory(id, false)
     end
 
@@ -65,7 +66,7 @@ if config.style == 'ox_inventory' then
     ---Creates a sales stash, where players can insert items into a stash and get money in return
     ---@param id string
     ---@param label string
-    ---@param items table<string, number>
+    ---@param items table<string, number>|boolean
     ---@param coords vector3
     local function createSaleStash(id, label, items, coords)
 
@@ -183,6 +184,7 @@ if config.style == 'ox_inventory' then
             if location.enabled then
                 createSaleStash('red40_mining_sale_' .. location.name, location.label, location.buys, location.coords)
                 local sellItems = {}
+                ---@diagnostic disable-next-line: param-type-mismatch
                 for itemName, price in pairs(location.sells) do
                     sellItems[#sellItems + 1] = {
                         name = itemName,
@@ -201,7 +203,9 @@ if config.style == 'ox_inventory' then
                     pedModel = location.pedModel,
                     pedAnim = location.pedAnim,
                     pedScenario = location.pedScenario,
+                    ---@diagnostic disable-next-line: param-type-mismatch
                     pedBuys = location.buys and next(location.buys) and true or false,
+                    ---@diagnostic disable-next-line: param-type-mismatch
                     pedSells = location.sells and next(location.sells) and true or false,
                 }
                 pedPoints[#pedPoints + 1] = pedPoint
@@ -286,6 +290,7 @@ else
         if not shop then return end
 
         local sellableItems = {}
+        ---@diagnostic disable-next-line: param-type-mismatch
         for itemName, price in pairs(shop.buys) do
             local itemCount = GetItemCount(source, itemName)
             if itemCount > 0 then
@@ -304,6 +309,7 @@ else
         if not shop then return end
 
         local itemsForSale = {}
+        ---@diagnostic disable-next-line: param-type-mismatch
         for itemName, price in pairs(shop.sells) do
             itemsForSale[#itemsForSale + 1] = {
                 name = itemName,

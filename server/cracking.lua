@@ -130,7 +130,7 @@ RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
         end
         RemoveItem(src, crackableItem, 1)
         if toolConfig.damage then
-            local durabilityRemoved = config.durabilityPerAction()
+            local durabilityRemoved = config.durability()
             local durabilityLeft = RemoveItemDurability(src, toolItem, durabilityRemoved)
             lib.print.debug('Removed ' ..
             durabilityRemoved .. ' durability from player ' .. src .. ' for cracking with tool ' .. toolItem)

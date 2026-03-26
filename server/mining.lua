@@ -96,6 +96,17 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
             AddXp(src, xpGained, 'mining')
             lib.print.debug('Added ' .. xpGained .. ' XP to player ' .. src .. ' for mining')
         end
+
+        if config.tools[tool].damage then
+            local durabilityRemoved = config.durability()
+            local durabilityLeft = RemoveItemDurability(src, tool, durabilityRemoved)
+            lib.print.debug('Removed ' ..
+            durabilityRemoved .. ' durability from player ' .. src .. ' for mining with tool ' .. tool)
+            if durabilityLeft and durabilityLeft <= 0 then
+                Notify(src, locale('error.tool_broke'), 'error')
+                Logger(src, 'red40_mining', 'Player ' .. src .. '\'s tool ' .. tool .. ' broke due to durability reaching 0.')
+            end
+        end
     end
 end)
 
@@ -112,8 +123,8 @@ local function buildPoints()
     local oreCount = 1
     for i = 1, #config.locations do
         local location = config.locations[i]
-        for j = 1, #location.ore_locations do
-            local oreLocation = location.ore_locations[j]
+        for j = 1, #location.oreLocations do
+            local oreLocation = location.oreLocations[j]
             for k = 1, #oreLocation.coords do
                 local coords = oreLocation.coords[k]
 
