@@ -1,4 +1,5 @@
 return {
+    ---@type Red40Mining
     mining = {
         xpTables = {
             { level = 1, xp = 0 },
@@ -10,8 +11,8 @@ return {
         lootTables = {
             mining_table = {
                 { name = 'red40_stone', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'coal', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'sand', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'coal',        chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'sand',        chance = 0.5, min = 1, max = 4, level = 1 },
             }
         },
         tools = {
@@ -81,6 +82,7 @@ return {
                     enable = true,
                     name = 'Mines',
                     sprite = 436,
+                    scale = 1.0,
                     color = 1,
                     coords = vec3(1074.89, -1988.19, 30.89)
                 },
@@ -92,7 +94,7 @@ return {
                         { coords = vector3(2991.2056, 2781.1663, 42.6162), rotation = vec3(0.0, 0.0, 96.915) }
                     }
                 },
-                ore_locations = {
+                oreLocations = {
                     {
                         coords = {
                             --TODO better coords
@@ -130,6 +132,8 @@ return {
             }
         }
     },
+
+    ---@type Red40Panning
     panning = {
         xpTables = {
             { level = 1, xp = 0 },
@@ -140,9 +144,9 @@ return {
         },
         lootTables = {
             pan_loot = {
-                { name = 'gold_ore', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'gold_ore',    chance = 0.5, min = 1, max = 4, level = 1 },
                 { name = 'red40_stone', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'sand', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'sand',        chance = 0.5, min = 1, max = 4, level = 1 },
             }
         },
         tools = {
@@ -153,10 +157,10 @@ return {
                 maxXp = 10,         -- Stop earning xp after this level
                 minUseTime = 5000,  -- Minimum time in milliseconds to use the tool
                 maxUseTime = 10000, -- Maximum time in milliseconds to use the tool
-                prop = `bkr_prop_meth_tray_01b`,
+                prop = `prop_red40_goldpan`,
                 bone = 57005,
-                offset = vec3(0.14, 0, -0.01),
-                rotation = vec3(90.0, -90.0, 180.0),
+                offset = vec3(0.3, 0.16, 0),
+                rotation = vec3(-90.0, 30, 60),
                 anim = {
                     anim = 'amb@medic@standing@tendtodead@base',
                     dict = 'base',
@@ -170,15 +174,15 @@ return {
                 maxXp = 100,
                 minUseTime = 3000, -- Minimum time in milliseconds to use the tool
                 maxUseTime = 7000, -- Maximum time in milliseconds to use the tool
-                prop = `bkr_prop_meth_tray_01b`,
+                prop = `prop_red40_goldpan`,
                 bone = 57005,
-                offset = vec3(0.14, 0, -0.01),
-                rotation = vec3(90.0, -90.0, 180.0),
+                offset = vec3(0.3, 0.16, 0),
+                rotation = vec3(-90.0, 30, 60),
                 anim = {
                     anim = 'amb@medic@standing@tendtodead@base',
                     dict = 'base',
                 },
-                type = 'sifter',
+                type = 'pan',
             },
         },
         durability = function()
@@ -196,6 +200,7 @@ return {
                     enable = true,
                     name = 'Panning Spot',
                     sprite = 436,
+                    scale = 1.0,
                     color = 1,
                     coords = vec3(1074.89, -1988.19, 30.89)
                 },
@@ -211,6 +216,8 @@ return {
             }
         }
     },
+
+    ---@type Red40Washing
     washing = {
         xpTables = {
             { level = 1, xp = 0 },
@@ -221,16 +228,16 @@ return {
         },
         lootTables = {
             wash_loot = {
-                { name = 'copper_ore', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'gold_ore', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'silver_ore', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'platinum_ore', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'iron_ore', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'aluminum_ore', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'uncut_emerald', chance = 0.25, min = 1, max = 4, level = 1 },
-                { name = 'uncut_ruby', chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'copper_ore',     chance = 0.5,  min = 1, max = 4, level = 1 },
+                { name = 'gold_ore',       chance = 0.5,  min = 1, max = 4, level = 1 },
+                { name = 'silver_ore',     chance = 0.5,  min = 1, max = 4, level = 1 },
+                { name = 'platinum_ore',   chance = 0.5,  min = 1, max = 4, level = 1 },
+                { name = 'iron_ore',       chance = 0.5,  min = 1, max = 4, level = 1 },
+                { name = 'aluminum_ore',   chance = 0.5,  min = 1, max = 4, level = 1 },
+                { name = 'uncut_emerald',  chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'uncut_ruby',     chance = 0.25, min = 1, max = 4, level = 1 },
                 { name = 'uncut_sapphire', chance = 0.25, min = 1, max = 4, level = 1 },
-                { name = 'uncut_diamond', chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'uncut_diamond',  chance = 0.25, min = 1, max = 4, level = 1 },
             }
         },
 
@@ -262,6 +269,7 @@ return {
                     enable = true,
                     name = 'Washing Spot',
                     sprite = 436,
+                    scale = 1.0,
                     color = 1,
                     coords = vec3(1832.7822, 419.7999, 159.3571)
                 },
@@ -275,6 +283,8 @@ return {
             }
         }
     },
+
+    ---@type Red40Cracking
     cracking = {
         xpTables = {
             { level = 1, xp = 0 },
@@ -285,16 +295,16 @@ return {
         },
         lootTables = {
             crack_loot = {
-                { name = 'copper_ore', chance = 0.25, min = 1, max = 4, level = 1 },
-                { name = 'gold_ore', chance = 0.25, min = 1, max = 4, level = 1 },
-                { name = 'silver_ore', chance = 0.25, min = 1, max = 4, level = 1 },
-                { name = 'platinum_ore', chance = 0.25, min = 1, max = 4, level = 1 },
-                { name = 'iron_ore', chance = 0.25, min = 1, max = 4, level = 1 },
-                { name = 'aluminum_ore', chance = 0.25, min = 1, max = 4, level = 1 },
-                { name = 'uncut_emerald', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'uncut_ruby', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'uncut_sapphire', chance = 0.5, min = 1, max = 4, level = 1 },
-                { name = 'uncut_diamond', chance = 0.5, min = 1, max = 4, level = 1 },
+                { name = 'copper_ore',     chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'gold_ore',       chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'silver_ore',     chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'platinum_ore',   chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'iron_ore',       chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'aluminum_ore',   chance = 0.25, min = 1, max = 4, level = 1 },
+                { name = 'uncut_emerald',  chance = 0.5,  min = 1, max = 4, level = 1 },
+                { name = 'uncut_ruby',     chance = 0.5,  min = 1, max = 4, level = 1 },
+                { name = 'uncut_sapphire', chance = 0.5,  min = 1, max = 4, level = 1 },
+                { name = 'uncut_diamond',  chance = 0.5,  min = 1, max = 4, level = 1 },
             }
         },
         tools = {
@@ -339,6 +349,7 @@ return {
                     enable = true,
                     name = 'Cracking Spot',
                     sprite = 436,
+                    scale = 1.0,
                     color = 1,
                     coords = vec3(1109.19, -1992.8, 30.98)
                 },
@@ -353,66 +364,79 @@ return {
             }
         }
     },
-    jewelcutting = {
+
+    ---@type Red40Jewelry
+    jewelry = {
+        xpTables = {
+            { level = 1, xp = 0 },
+            { level = 2, xp = 10 },
+            { level = 3, xp = 30 },
+            { level = 4, xp = 60 },
+            { level = 5, xp = 100 },
+        },
         recipes = { -- define categories of items that can be crafted, with their inputs and outputs, locale is matched to the key name for the list
             gems = {
-                emerald = { input = { uncut_emerald = 1 }, amount = 1 },
-                ruby = { input = { uncut_ruby = 1 }, amount = 1 },
-                sapphire = { input = { uncut_sapphire = 1 }, amount = 1 },
-                diamond = { input = { uncut_diamond = 1 }, amount = 1 },
+                { output = { emerald = 1 },  input = { uncut_emerald = 1 },  level = 1 },
+                { output = { ruby = 1 },     input = { uncut_ruby = 1 },     level = 1 },
+                { output = { sapphire = 1 }, input = { uncut_sapphire = 1 }, level = 1 },
+                { output = { diamond = 1 },  input = { uncut_diamond = 1 },  level = 1 },
             },
             rings = {
-                gold_ring = { input = { gold_ingot = 1 }, amount = 1 },
-                silver_ring = { input = { silver_ingot = 1 }, amount = 1 },
-                platinum_ring = { input = { platinum_ingot = 1 }, amount = 1 },
-                gold_diamond_ring = { input = { diamond = 1, gold_ingot = 1 }, amount = 1 },
-                gold_emerald_ring = { input = { emerald = 1, gold_ingot = 1 }, amount = 1 },
-                gold_ruby_ring = { input = { ruby = 1, gold_ingot = 1 }, amount = 1 },
-                gold_sapphire_ring = { input = { sapphire = 1, gold_ingot = 1 }, amount = 1 },
-                silver_diamond_ring = { input = { diamond = 1, silver_ingot = 1 }, amount = 1 },
-                silver_emerald_ring = { input = { emerald = 1, silver_ingot = 1 }, amount = 1 },
-                silver_ruby_ring = { input = { ruby = 1, silver_ingot = 1 }, amount = 1 },
-                silver_sapphire_ring = { input = { sapphire = 1, silver_ingot = 1 }, amount = 1 },
-                platinum_diamond_ring = { input = { diamond = 1, platinum_ingot = 1 }, amount = 1 },
-                platinum_emerald_ring = { input = { emerald = 1, platinum_ingot = 1 }, amount = 1 },
-                platinum_ruby_ring = { input = { ruby = 1, platinum_ingot = 1 }, amount = 1 },
-                platinum_sapphire_ring = { input = { sapphire = 1, platinum_ingot = 1 }, amount = 1 },
+                { output = { gold_ring = 1 },              input = { gold_ingot = 1 },                   level = 1 },
+                { output = { silver_ring = 1 },            input = { silver_ingot = 1 },                 level = 1 },
+                { output = { platinum_ring = 1 },          input = { platinum_ingot = 1 },               level = 1 },
+                { output = { gold_diamond_ring = 1 },      input = { diamond = 1, gold_ingot = 1 },      level = 2 },
+                { output = { gold_emerald_ring = 1 },      input = { emerald = 1, gold_ingot = 1 },      level = 2 },
+                { output = { gold_ruby_ring = 1 },         input = { ruby = 1, gold_ingot = 1 },         level = 2 },
+                { output = { gold_sapphire_ring = 1 },     input = { sapphire = 1, gold_ingot = 1 },     level = 2 },
+                { output = { silver_diamond_ring = 1 },    input = { diamond = 1, silver_ingot = 1 },    level = 2 },
+                { output = { silver_emerald_ring = 1 },    input = { emerald = 1, silver_ingot = 1 },    level = 2 },
+                { output = { silver_ruby_ring = 1 },       input = { ruby = 1, silver_ingot = 1 },       level = 2 },
+                { output = { silver_sapphire_ring = 1 },   input = { sapphire = 1, silver_ingot = 1 },   level = 2 },
+                { output = { platinum_diamond_ring = 1 },  input = { diamond = 1, platinum_ingot = 1 },  level = 2 },
+                { output = { platinum_emerald_ring = 1 },  input = { emerald = 1, platinum_ingot = 1 },  level = 2 },
+                { output = { platinum_ruby_ring = 1 },     input = { ruby = 1, platinum_ingot = 1 },     level = 2 },
+                { output = { platinum_sapphire_ring = 1 }, input = { sapphire = 1, platinum_ingot = 1 }, level = 2 },
             },
+
             necklace = {
-                gold_necklace = { input = { gold_ingot = 1 }, amount = 1 },
-                silver_necklace = { input = { silver_ingot = 1 }, amount = 1 },
-                platinum_necklace = { input = { platinum_ingot = 1 }, amount = 1 },
-                gold_diamond_necklace = { input = { diamond = 1, gold_necklace = 1 }, amount = 1 },
-                gold_emerald_necklace = { input = { emerald = 1, gold_necklace = 1 }, amount = 1 },
-                gold_ruby_necklace = { input = { ruby = 1, gold_necklace = 1 }, amount = 1 },
-                gold_sapphire_necklace = { input = { sapphire = 1, gold_necklace = 1 }, amount = 1 },
-                silver_diamond_necklace = { input = { diamond = 1, silver_necklace = 1 }, amount = 1 },
-                silver_emerald_necklace = { input = { emerald = 1, silver_necklace = 1 }, amount = 1 },
-                silver_ruby_necklace = { input = { ruby = 1, silver_necklace = 1 }, amount = 1 },
-                silver_sapphire_necklace = { input = { sapphire = 1, silver_necklace = 1 }, amount = 1 },
-                platinum_diamond_necklace = { input = { diamond = 1, platinum_necklace = 1 }, amount = 1 },
-                platinum_emerald_necklace = { input = { emerald = 1, platinum_necklace = 1 }, amount = 1 },
-                platinum_ruby_necklace = { input = { ruby = 1, platinum_necklace = 1 }, amount = 1 },
-                platinum_sapphire_necklace = { input = { sapphire = 1, platinum_necklace = 1 }, amount = 1 },
+                { output = { gold_necklace = 1 },              input = { gold_ingot = 1 },                   level = 1 },
+                { output = { silver_necklace = 1 },            input = { silver_ingot = 1 },                 level = 1 },
+                { output = { platinum_necklace = 1 },          input = { platinum_ingot = 1 },               level = 1 },
+                { output = { gold_diamond_necklace = 1 },      input = { diamond = 1, gold_ingot = 1 },      level = 2 },
+                { output = { gold_emerald_necklace = 1 },      input = { emerald = 1, gold_ingot = 1 },      level = 2 },
+                { output = { gold_ruby_necklace = 1 },         input = { ruby = 1, gold_ingot = 1 },         level = 2 },
+                { output = { gold_sapphire_necklace = 1 },     input = { sapphire = 1, gold_ingot = 1 },     level = 2 },
+                { output = { silver_diamond_necklace = 1 },    input = { diamond = 1, silver_ingot = 1 },    level = 2 },
+                { output = { silver_emerald_necklace = 1 },    input = { emerald = 1, silver_ingot = 1 },    level = 2 },
+                { output = { silver_ruby_necklace = 1 },       input = { ruby = 1, silver_ingot = 1 },       level = 2 },
+                { output = { silver_sapphire_necklace = 1 },   input = { sapphire = 1, silver_ingot = 1 },   level = 2 },
+                { output = { platinum_diamond_necklace = 1 },  input = { diamond = 1, platinum_ingot = 1 },  level = 2 },
+                { output = { platinum_emerald_necklace = 1 },  input = { emerald = 1, platinum_ingot = 1 },  level = 2 },
+                { output = { platinum_ruby_necklace = 1 },     input = { ruby = 1, platinum_ingot = 1 },     level = 2 },
+                { output = { platinum_sapphire_necklace = 1 }, input = { sapphire = 1, platinum_ingot = 1 }, level = 2 },
             },
             earring = {
-                gold_earring = { input = { gold_ingot = 1 }, amount = 1 },
-                silver_earring = { input = { silver_ingot = 1 }, amount = 1 },
-                platinum_earring = { input = { platinum_ingot = 1 }, amount = 1 },
-                gold_diamond_earring = { input = { diamond = 1, gold_earring = 1 }, amount = 1 },
-                gold_emerald_earring = { input = { emerald = 1, gold_earring = 1 }, amount = 1 },
-                gold_ruby_earring = { input = { ruby = 1, gold_earring = 1 }, amount = 1 },
-                gold_sapphire_earring = { input = { sapphire = 1, gold_earring = 1 }, amount = 1 },
-                silver_diamond_earring = { input = { diamond = 1, silver_earring = 1 }, amount = 1 },
-                silver_emerald_earring = { input = { emerald = 1, silver_earring = 1 }, amount = 1 },
-                silver_ruby_earring = { input = { ruby = 1, silver_earring = 1 }, amount = 1 },
-                silver_sapphire_earring = { input = { sapphire = 1, silver_earring = 1 }, amount = 1 },
-                platinum_diamond_earring = { input = { diamond = 1, platinum_earring = 1 }, amount = 1 },
-                platinum_emerald_earring = { input = { emerald = 1, platinum_earring = 1 }, amount = 1 },
-                platinum_ruby_earring = { input = { ruby = 1, platinum_earring = 1 }, amount = 1 },
-                platinum_sapphire_earring = { input = { sapphire = 1, platinum_earring = 1 }, amount = 1 },
+                { output = { gold_earring = 1 },              input = { gold_ingot = 1 },                     level = 1 },
+                { output = { silver_earring = 1 },            input = { silver_ingot = 1 },                   level = 1 },
+                { output = { platinum_earring = 1 },          input = { platinum_ingot = 1 },                 level = 1 },
+                { output = { gold_diamond_earring = 1 },      input = { diamond = 1, gold_earring = 1 },      level = 2 },
+                { output = { gold_emerald_earring = 1 },      input = { emerald = 1, gold_earring = 1 },      level = 2 },
+                { output = { gold_ruby_earring = 1 },         input = { ruby = 1, gold_earring = 1 },         level = 2 },
+                { output = { gold_sapphire_earring = 1 },     input = { sapphire = 1, gold_earring = 1 },     level = 2 },
+                { output = { silver_diamond_earring = 1 },    input = { diamond = 1, silver_earring = 1 },    level = 2 },
+                { output = { silver_emerald_earring = 1 },    input = { emerald = 1, silver_earring = 1 },    level = 2 },
+                { output = { silver_ruby_earring = 1 },       input = { ruby = 1, silver_earring = 1 },       level = 2 },
+                { output = { silver_sapphire_earring = 1 },   input = { sapphire = 1, silver_earring = 1 },   level = 2 },
+                { output = { platinum_diamond_earring = 1 },  input = { diamond = 1, platinum_earring = 1 },  level = 2 },
+                { output = { platinum_emerald_earring = 1 },  input = { emerald = 1, platinum_earring = 1 },  level = 2 },
+                { output = { platinum_ruby_earring = 1 },     input = { ruby = 1, platinum_earring = 1 },     level = 2 },
+                { output = { platinum_sapphire_earring = 1 }, input = { sapphire = 1, platinum_earring = 1 }, level = 2 },
             }
         },
+        xpPerAction = function()
+            return math.random(1, 3) -- Random XP between 1 and 3 for each successful action,
+        end,
         locations = {
             {
                 name = 'jewel_cutting_location_1',
@@ -421,6 +445,7 @@ return {
                     enable = true,
                     name = 'Jewel Cutting Spot',
                     sprite = 436,
+                    scale = 1.0,
                     color = 1,
                     coords = vec3(1074.89, -1988.19, 30.89)
                 },
@@ -430,11 +455,15 @@ return {
                     dict = 'anim@amb@machinery@speed_drill@'
                 },
                 locations = {
-                    { coords = vec3(1074.89, -1988.19, 30.89), rotation = vec3(0.0, 0.0, 0.0) },
+                    { coords = vector3(1077.3005, -1984.0283, 30.0132), rotation = vec3(0.0, 0.0, 0.0) },
                 },
+                minUseTime = 5000,  -- Minimum time in milliseconds to cut
+                maxUseTime = 10000, -- Maximum time in milliseconds to cut
+                recipes = { 'gems', 'rings', 'necklace', 'earring' } -- which recipes are available here
             }
         }
     },
+    ---@type Red40Smelting
     smelting = {
         xpTables = {
             { level = 1, xp = 0 },
@@ -445,20 +474,20 @@ return {
         },
         recipes = {
             forge = {
-                { output = { gold_ingot = 1 },     input = { gold_ore = 2 }, level = 1 },
-                { output = { gold_ingot = 1 },     input = { gold_necklace = 4 }, level = 1 },
-                { output = { gold_ingot = 1 },     input = { gold_ring = 4 }, level = 1 },
-                { output = { silver_ingot = 1 },   input = { silver_ore = 2 }, level = 1 },
-                { output = { silver_ingot = 1 },   input = { silver_necklace = 4 }, level = 1 },
-                { output = { silver_ingot = 1 },   input = { silver_ring = 4 }, level = 1 },
-                { output = { platinum_ingot = 1 }, input = { platinum_ore = 2 }, level = 1 },
-                { output = { platinum_ingot = 1 }, input = { platinum_necklace = 4 }, level = 1 },
-                { output = { platinum_ingot = 1 }, input = { platinum_ring = 4 }, level = 1 },
-                { output = { copper_ingot = 1 },   input = { copper_ore = 2 }, level = 1 },
-                { output = { iron_ingot = 1 },     input = { iron_ore = 2 }, level = 1 },
-                { output = { aluminum_ingot = 1 }, input = { aluminum_ore = 2 }, level = 1 },
+                { output = { gold_ingot = 1 },     input = { gold_ore = 2 },           level = 1 },
+                { output = { gold_ingot = 1 },     input = { gold_necklace = 4 },      level = 1 },
+                { output = { gold_ingot = 1 },     input = { gold_ring = 4 },          level = 1 },
+                { output = { silver_ingot = 1 },   input = { silver_ore = 2 },         level = 1 },
+                { output = { silver_ingot = 1 },   input = { silver_necklace = 4 },    level = 1 },
+                { output = { silver_ingot = 1 },   input = { silver_ring = 4 },        level = 1 },
+                { output = { platinum_ingot = 1 }, input = { platinum_ore = 2 },       level = 1 },
+                { output = { platinum_ingot = 1 }, input = { platinum_necklace = 4 },  level = 1 },
+                { output = { platinum_ingot = 1 }, input = { platinum_ring = 4 },      level = 1 },
+                { output = { copper_ingot = 1 },   input = { copper_ore = 2 },         level = 1 },
+                { output = { iron_ingot = 1 },     input = { iron_ore = 2 },           level = 1 },
+                { output = { aluminum_ingot = 1 }, input = { aluminum_ore = 2 },       level = 1 },
                 { output = { steel_ingot = 1 },    input = { iron_ore = 1, coal = 1 }, level = 1 },
-                { output = { glass_pane = 1 },     input = { sand = 2 }, level = 1 },
+                { output = { glass_pane = 1 },     input = { sand = 2 },               level = 1 },
             }
         },
         xpPerAction = function()
@@ -472,23 +501,26 @@ return {
                     enable = true,
                     name = 'Smelting Spot',
                     sprite = 436,
+                    scale = 1.0,
                     color = 1,
                     coords = vec3(1074.89, -1988.19, 30.89)
                 },
-                prop = `gr_prop_gr_speeddrill_01c`,
+                prop = false,
                 anim = {
                     anim = 'operate_02_hi_amy_skater_01',    -- change
                     dict = 'anim@amb@machinery@speed_drill@' -- change
                 },
                 locations = {
-                    { coords = vec3(1074.89, -1988.19, 30.89), rotation = vec3(0.0, 0.0, 0.0) },
+                    { coords = vec3(1110.8182, -2008.7269, 31.3372), rotation = vec3(0.0, 0.0, 0.0) },
                 },
                 minUseTime = 5000,  -- Minimum time in milliseconds to smelt
                 maxUseTime = 10000, -- Maximum time in milliseconds to smelt
-                smelts = 'forge'    -- Which recipes are available here
+                smelts = { 'forge' } -- Which recipes are available here
             }
         }
     },
+
+    ---@type Red40Peds
     peds = {
         style = 'ox_lib',    -- 'ox_inventory' or 'ox_lib'
         moneyItem = 'money', -- which item to use for sale stashes
@@ -501,6 +533,7 @@ return {
                     enable = true,
                     name = 'Ore Vendor',
                     sprite = 436,
+                    scale = 1.0,
                     color = 1,
                     coords = vec3(1074.89, -1988.19, 30.89)
                 },
@@ -545,6 +578,7 @@ return {
                     enable = true,
                     name = 'Jewel Vendor',
                     sprite = 436,
+                    scale = 1.0,
                     color = 1,
                     coords = vec3(1100.89, -1990.19, 30.89)
                 },

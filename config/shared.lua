@@ -3,7 +3,7 @@ return {
     panning = true,
     washing = true,
     cracking = true,
-    jewelcutting = true,
+    jewelry = true,
     smelting = true,
     peds = true,
 }

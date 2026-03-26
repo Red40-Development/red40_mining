@@ -26,10 +26,12 @@ files {
     'locales/**/*',
     'config/client.lua',
     'config/shared.lua',
+    'stream/*.ytyp',
     'audiodirectory/red40_mining.awc',
     'data/audioexample_sounds.dat54.rel',
 }
 
+data_file 'DLC_ITYP_REQUEST' 'stream/*.ytyp'
 data_file 'AUDIO_WAVEPACK'  'audiodirectory'
 data_file 'AUDIO_SOUNDDATA' 'data/audioexample_sounds.dat'
 
