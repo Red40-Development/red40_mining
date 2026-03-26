@@ -22,7 +22,9 @@
         "mining": "Mining Ore...",
         "washing": "Washing Ore...",
         "panning": "Panning for Gold...",
-        "cracking": "Cracking Ore..."
+        "cracking": "Cracking Ore...",
+        "smelting": "Smelting %s of %s...",
+        "jewelry": "Crafting %s of %s..."
     },
     "info": {
         "found_nothing": "You found nothing"
@@ -38,14 +40,18 @@
         "buy_title": "Buy Items",
         "smelt_item": "Smelt %s",
         "smelt_amount": "Smelt %s (Max: %s)",
-        "smelt_title": "Smelt Items"
+        "smelt_title": "Smelt Items",
+        "jewelry_item": "Craft %s",
+        "jewelry_amount": "Craft %s (Max: %s)",
+        "jewelry_title": "Craft Jewelry"
     },
     "target": {
         "buy": "Buy Items",
         "sell": "Sell Items",
-        "smelt": "Smelt Items",
         "mine": "Mine Ore",
-        "crack": "Crack Ore"
+        "crack": "Crack Ore",
+        "smelt": "Smelt Items",
+        "jewelry": "Craft Jewelry"
     },
     "drawtext": {
         "mine": "~w~[~g~E~w~] to Mine",
@@ -53,7 +59,8 @@
         "shop": "~w~[~g~E~w~] to Sell\n~w~[~r~F~w~] to Buy",
         "buyshop": "~w~[~r~F~w~] to Buy",
         "sellshop": "~w~[~g~E~w~] to Sell",
-        "smelt": "~w~[~g~E~w~] to Smelt"
+        "smelt": "~w~[~g~E~w~] to Smelt",
+        "jewelry": "~w~[~g~E~w~] to Craft Jewelry"
     },
     "textui": {
         "mine": "[E] Mine Ore",
@@ -61,6 +68,7 @@
         "shop": "[E] Sell\n[F] Buy",
         "buyshop": "[F] Buy",
         "sellshop": "[E] Sell",
-        "smelt": "[E] Smelt"
+        "smelt": "[E] Smelt",
+        "jewelry": "[E] Craft Jewelry"
     }
 }
