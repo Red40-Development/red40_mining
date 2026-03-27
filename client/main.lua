@@ -5,7 +5,6 @@ function DrawText3d(params) -- luacheck: ignore
     local isScaleparamANumber = type(params.scale) == "number"
     local text = params.text
     local coords = params.coords
----@diagnostic disable-next-line: param-type-mismatch
     local scale = (isScaleparamANumber and vec2(params.scale, params.scale))
         or params.scale
         or vec2(0.35, 0.35)

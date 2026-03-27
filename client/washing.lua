@@ -39,7 +39,6 @@ end)
 
 local function buildWashingZone(zone)
     if zone.debug then
-
         lib.zones.poly({
             points = zone.points,
             thickness = zone.thickness,

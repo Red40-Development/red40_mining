@@ -11,7 +11,7 @@ local function inputBox(jewelryPointId, recipeId, itemName, maxAmount)
     local title = locale('menu.jewelry_item', itemLabel)
     local label = locale('menu.jewelry_amount', itemLabel, maxAmount)
     local input = lib.inputDialog(title,
-        { { type = 'number', label = label, required = true, min = 1, max = maxAmount } },
+        { { type = 'number', label = label, required = true, min = 1, max = maxAmount, default = 1 } },
         { size = 'sm' })
     if input then
         local amount = tonumber(input[1])
@@ -82,7 +82,7 @@ local function createJewelryPoint(point)
         rot = point.rot,
         id = point.id,
         textOffset = offset,
-        options = shopOptions,
+        shopOptions = shopOptions,
     })
 
     if point.blip.enabled then
@@ -110,15 +110,15 @@ local function createJewelryPoint(point)
             FreezeEntityPosition(self.propNumber, true)
             SetEntityInvincible(self.propNumber, true)
             if config.jewelryTarget then
-                config.addLocalEntityTarget(self.propNumber, self.options)
+                config.addLocalEntityTarget(self.propNumber, self.shopOptions)
             end
         end
     end
 
     function pedPoint:onExit()
         if config.jewelryTarget then
-            for i = 1, #self.options do
-                config.removeLocalEntityTarget(self.propNumber, self.options[i].name)
+            for i = 1, #self.shopOptions do
+                config.removeLocalEntityTarget(self.propNumber, self.shopOptions[i].name)
             end
             if self.targetId then
                 config.removeSphereTarget(self.targetId)

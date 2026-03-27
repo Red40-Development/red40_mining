@@ -11,7 +11,7 @@ local function inputBox(smeltPointId, recipeId, itemName, maxAmount)
     local title = locale('menu.smelt_item', itemLabel)
     local label = locale('menu.smelt_amount', itemLabel, maxAmount)
     local input = lib.inputDialog(title,
-        { { type = 'number', label = label, required = true, min = 1, max = maxAmount } },
+        { { type = 'number', label = label, required = true, min = 1, max = maxAmount, default = 1 } },
         { size = 'sm' })
     if input then
         local amount = tonumber(input[1])
@@ -82,7 +82,7 @@ local function createSmeltPoint(point)
         rot = point.rot,
         id = point.id,
         textOffset = offset,
-        options = shopOptions,
+        shopOptions = shopOptions,
     })
 
     if point.blip.enabled then
@@ -110,15 +110,15 @@ local function createSmeltPoint(point)
             FreezeEntityPosition(self.propNumber, true)
             SetEntityInvincible(self.propNumber, true)
             if config.smeltingTarget then
-                config.addLocalEntityTarget(self.propNumber, self.options)
+                config.addLocalEntityTarget(self.propNumber, self.shopOptions)
             end
         end
     end
 
     function smeltPoint:onExit()
         if config.smeltingTarget then
-            for i = 1, #self.options do
-                config.removeLocalEntityTarget(self.propNumber, self.options[i].name)
+            for i = 1, #self.shopOptions do
+                config.removeLocalEntityTarget(self.propNumber, self.shopOptions[i].name)
             end
             if self.targetId then
                 config.removeZoneTarget(self.targetId)
@@ -135,7 +135,7 @@ local function createSmeltPoint(point)
     if not config.smeltingTarget then
         function smeltPoint:nearby()
             if not self.isClosest then return end
-            if self.currentDistance < 2 and not lib.getOpenContextMenu() then
+            if self.currentDistance < 2 and (not lib.getOpenContextMenu() and not lib.progressActive()) then
                 if config.use3dText then
                     DrawText3d({
                         coords = self.textOffset,

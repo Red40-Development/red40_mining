@@ -4,9 +4,9 @@ return {
     useKey2 = 23, -- The control key to use for action prompts (default is F) -- https://docs.fivem.net/docs/game-references/controls/#controls
     miningTarget = true, -- True removes prompts and adds target interactions for mining locations
     crackingTarget = true, -- True removes prompts and adds target interactions for cracking locations
-    smeltingTarget = false, -- True removes prompts and adds target interactions for smelting locations
+    smeltingTarget = true, -- True removes prompts and adds target interactions for smelting locations
     jewelryTarget = true, -- True removes prompts and adds target interactions for jewelry locations
-    useTarget = false, -- Set to true to enable target interactions for peds
+    useTarget = true, -- Set to true to enable target interactions for peds
     addLocalEntityTarget = function(entity, options)
         exports.ox_target:addLocalEntity(entity, options)
     end,

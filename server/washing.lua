@@ -91,17 +91,13 @@ local function buildWashingZone()
                 points = zone.points,
                 thickness = zone.thickness or 400,
                 blip = zone.blip,
-                rewards = zone.rewards,
-                minTime = zone.minTime,
-                maxTime = zone.maxTime,
-                min = zone.min,
-                max = zone.max,
             })
             if zone.debug then
                 local clientZone = {
                     points = zone.points,
                     thickness = zone.thickness or 400,
                     blip = zone.blip,
+                    debug = true,
                 }
                 washingClientZones[#washingClientZones + 1] = clientZone
             end

@@ -30,6 +30,7 @@ local function loadMiningSounds(type)
         lib.print.debug('You could add a sound here')
     elseif type == 'drill' then
         --TODO load native audio drill sound
+        lib.print.debug('No sound for drill yet')
     elseif type == 'laserdrill' then
         while not RequestScriptAudioBank('audiodirectory/red40_mining', false) do Wait(0) end
     end
@@ -39,6 +40,7 @@ local function unloadMiningSounds(type)
         lib.print.debug('You could unload a sound here')
     elseif type == 'drill' then
         --TODO unload native audio drill sound
+        lib.print.debug('No sound for drill yet')
     elseif type == 'laserdrill' then
         ReleaseNamedScriptAudioBank('audiodirectory/red40_mining')
     end
@@ -50,6 +52,7 @@ local function createMiningSounds(type, toolEntity)
         lib.print.debug('You could add a sound here')
     elseif type == 'drill' then
         --TODO use native audio drill sound
+        lib.print.debug('No sound for drill yet')
     elseif type == 'laserdrill' then
         PlaySoundFromEntity(soundId, 'laserdrill_start', toolEntity, 'special_soundset', true, 0)
         while not HasSoundFinished(soundId) do

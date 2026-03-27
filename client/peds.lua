@@ -12,7 +12,7 @@ local function inputBox(action, shopName, item, maxAmount)
     local itemLabel = Items[item.name] and Items[item.name].label or item.name
     local title = action == 'sell' and locale('menu.sell_item', itemLabel) or locale('menu.buy_item', itemLabel)
     local label = action == 'sell' and locale('menu.sell_amount', itemLabel, maxAmount) or locale('menu.buy_amount', itemLabel)
-    local input = lib.inputDialog(title, {{ type = 'number', label = label, required = true, min = 1, max = maxAmount, precision = 1}},
+    local input = lib.inputDialog(title, {{ type = 'number', label = label, required = true, min = 1, max = maxAmount, default = 1 }},
         { size = 'sm' })
     if input then
         local amount = tonumber(input[1])
@@ -68,7 +68,7 @@ end
 local function createPedPoint(point)
     local shopOptions = {}
     if point.style == 'ox_inventory' and oxInv and config.useTarget then
-        if point.pedpedBuys then
+        if point.pedBuys then
             shopOptions[#shopOptions + 1] = {
                 name = 'red40_mining_buy',
                 label = locale('target.buy'),
@@ -78,7 +78,7 @@ local function createPedPoint(point)
                 end,
             }
         end
-        if point.pedpedSells then
+        if point.pedSells then
             shopOptions[#shopOptions + 1] = {
                 name = 'red40_mining_sell',
                 label = locale('target.sell'),
@@ -89,7 +89,7 @@ local function createPedPoint(point)
             }
         end
     elseif config.useTarget then
-        if point.pedpedBuys then
+        if point.pedBuys then
             shopOptions[#shopOptions + 1] = {
                 name = 'red40_mining_buy',
                 label = locale('target.buy'),
@@ -99,7 +99,7 @@ local function createPedPoint(point)
                 end,
             }
         end
-        if point.pedpedSells then
+        if point.pedSells then
             shopOptions[#shopOptions + 1] = {
                 name = 'red40_mining_sell',
                 label = locale('target.sell'),
@@ -128,7 +128,7 @@ local function createPedPoint(point)
         heading = point.coords.w,
         pedAnim = point.anim,
         pedScenario = point.pedScenario,
-        options = shopOptions,
+        shopOptions = shopOptions,
     })
 
     function pedPoint:onEnter()
@@ -152,14 +152,14 @@ local function createPedPoint(point)
         SetEntityInvincible(self.ped, true)
         SetBlockingOfNonTemporaryEvents(self.ped, true)
         if config.useTarget then
-            config.addLocalEntityTarget(self.ped, self.options)
+            config.addLocalEntityTarget(self.ped, shopOptions)
         end
     end
 
     function pedPoint:onExit()
         if config.useTarget then
-            for i = 1, #self.options do
-                config.removeLocalEntityTarget(self.ped, self.options[i].name)
+            for i = 1, #shopOptions do
+                config.removeLocalEntityTarget(self.ped, shopOptions[i].name)
             end
         end
         if DoesEntityExist(self.ped) then
@@ -170,10 +170,10 @@ local function createPedPoint(point)
     end
 
     if not config.useTarget then
-        local textLocale = point.pedpedBuys and point.pedpedSells and locale('textui.shop') or
-            (point.pedpedBuys and locale('textui.buyshop') or (point.pedpedSells and locale('textui.sellshop') or ''))
-        local drawTextLocale = point.pedpedBuys and point.pedpedSells and locale('drawtext.shop') or
-            (point.pedpedBuys and locale('drawtext.buyshop') or (point.pedpedSells and locale('drawtext.sellshop') or ''))
+        local textLocale = point.pedBuys and point.pedSells and locale('textui.shop') or
+            (point.pedBuys and locale('textui.buyshop') or (point.pedSells and locale('textui.sellshop') or ''))
+        local drawTextLocale = point.pedBuys and point.pedSells and locale('drawtext.shop') or
+            (point.pedBuys and locale('drawtext.buyshop') or (point.pedSells and locale('drawtext.sellshop') or ''))
         function pedPoint:nearby()
             if not self.isClosest then return end
             if self.currentDistance < 2 and not lib.getOpenContextMenu() then

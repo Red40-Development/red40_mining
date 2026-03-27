@@ -85,6 +85,9 @@ RegisterNetEvent('red40_mining:server:smeltItem', function(smeltPointId, recipeI
                 CustomDrop(src, excessItems, pedCoords)
             end
             AddXp(src, config.xpPerAction(), 'smelting')
+        else
+            Notify(src, locale('error.craft_cancelled'), 'error')
+            return
         end
     end
 end)

@@ -56,7 +56,7 @@ lib.callback.register('red40_mining:client:crackSpot', function(waitTime, entity
     while #(oreCoords - GetEntityCoords(cache.ped)) > 2 do
         Wait(10)
     end
-    if not IsPedHeadingTowardsPosition(cache.ped, oreCoords.x, oreCoords.y, oreCoords.z, 40.0) then
+    if not IsPedHeadingTowardsPosition(cache.ped, oreCoords.x, oreCoords.y, oreCoords.z, 20.0) then
         TaskTurnPedToFaceCoord(cache.ped, oreCoords.x, oreCoords.y, oreCoords.z, 1500)
     end
     TaskLookAtEntity(cache.ped, entity, -1, 2048, 3)

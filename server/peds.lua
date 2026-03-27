@@ -185,11 +185,14 @@ if config.style == 'ox_inventory' then
                 createSaleStash('red40_mining_sale_' .. location.name, location.label, location.buys, location.coords)
                 local sellItems = {}
                 ---@diagnostic disable-next-line: param-type-mismatch
-                for itemName, price in pairs(location.sells) do
-                    sellItems[#sellItems + 1] = {
-                        name = itemName,
-                        price = price,
-                    }
+                if location.sells and next(location.sells) then
+                    ---@diagnostic disable-next-line: param-type-mismatch
+                    for itemName, price in pairs(location.sells) do
+                        sellItems[#sellItems + 1] = {
+                            name = itemName,
+                            price = price,
+                        }
+                    end
                 end
                 ox_inventory:RegisterShop('red40_mining' .. location.name,
                     { name = location.label, inventory = sellItems, label = location.label })
@@ -335,6 +338,10 @@ else
                     pedModel = location.pedModel,
                     pedAnim = location.pedAnim,
                     pedScenario = location.pedScenario,
+                    ---@diagnostic disable-next-line: param-type-mismatch
+                    pedBuys = location.buys and next(location.buys) and true or false,
+                    ---@diagnostic disable-next-line: param-type-mismatch
+                    pedSells = location.sells and next(location.sells) and true or false,
                 }
                 pedPoints[#pedPoints + 1] = pedPoint
             end

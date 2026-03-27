@@ -159,7 +159,7 @@ function RemoveItemDurability(source, itemName, durability)
         if Inv == 'ox_inventory' then
             local slot = exports.ox_inventory:GetSlotWithItem(source, itemName)
             if not slot then return false end
-            return exports.ox_inventory:SetDurability(source, slot.slot, (slot.metadata.durability - durability))
+            return exports.ox_inventory:SetDurability(source, slot.slot, ((slot.metadata.durability or 100) - durability))
         elseif Inv == 'core_inventory' then
             return exports.core_inventory:removeDurability(source, itemName, durability)
         elseif Inv == 'qs-inventory' then

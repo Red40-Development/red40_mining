@@ -120,6 +120,7 @@
 ---@field debug boolean
 ---@field blip blipData
 ---@field points vector3[]
+---@field thickness number?
 
 ---@class Red40Washing
 ---@field xpTables xpTable[]

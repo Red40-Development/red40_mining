@@ -14,6 +14,10 @@
         "cracking_tool_level_too_low": "Your cracking tool level is too low",
         "no_crackable_item": "You need a crackable item",
         "invalid_crackable_item": "Invalid crackable item",
+        "no_smeltable_items": "You do not have any items that can be smelted",
+        "no_jewelry_items": "You do not have any items that can be crafted into jewelry",
+        "not_in_jewelry_point": "You are not in a jewelry crafting zone",
+        "craft_cancelled": "Crafting cancelled",
         "tool_broke": "Your tool broke",
         "not_enough_items": "You don't have enough items",
         "not_carry": "You cannot carry that much"

@@ -77,6 +77,9 @@ RegisterNetEvent('red40_mining:server:jewelryItem', function(jewelryPointId, rec
                 CustomDrop(src, excessItems, pedCoords)
             end
             AddXp(src, config.xpPerAction(), 'jewelry')
+        else
+            Notify(src, locale('error.craft_cancelled'), 'error')
+            return
         end
     end
 end)

@@ -19,10 +19,10 @@ return {
             red40_pickaxe = {
                 level = 1,
                 damage = true,
-                minXp = 0,          -- Minimum XP required to use this tool
-                maxXp = 10,         -- Stop earning xp after this level
-                minUseTime = 5000,  -- Minimum time in milliseconds to use the tool
-                maxUseTime = 10000, -- Maximum time in milliseconds to use the tool
+                minXp = 0,
+                maxXp = 10,
+                minUseTime = 5000,
+                maxUseTime = 10000,
                 prop = `prop_tool_pickaxe`,
                 bone = 57005,
                 offset = vec3(0.09, -0.33, -0.12),
@@ -38,8 +38,8 @@ return {
                 damage = true,
                 minXp = 10,
                 maxXp = 100,
-                minUseTime = 3000, -- Minimum time in milliseconds to use the tool
-                maxUseTime = 7000, -- Maximum time in milliseconds to use the tool
+                minUseTime = 3000,
+                maxUseTime = 7000,
                 prop = `hei_prop_heist_drill`,
                 bone = 57005,
                 offset = vec3(0.14, 0, -0.01),
@@ -55,8 +55,8 @@ return {
                 damage = false,
                 minXp = 20,
                 maxXp = 200,
-                minUseTime = 750,  -- Minimum time in milliseconds to use the tool
-                maxUseTime = 2000, -- Maximum time in milliseconds to use the tool
+                minUseTime = 750,
+                maxUseTime = 2000,
                 prop = `ch_prop_laserdrill_01a`,
                 bone = 57005,
                 offset = vec3(0.14, 0, -0.01),
@@ -69,22 +69,22 @@ return {
             }
         },
         durability = function()
-            return math.random(1, 5) -- Random durability loss between 1 and 5 for each use
+            return math.random(1, 5)
         end,
         xpPerAction = function()
-            return math.random(1, 3) -- Random XP between 1 and 3 for each successful action,
+            return math.random(1, 3)
         end,
         locations = {
             {
-                name = 'mine_shaft_1', -- Unique identifier for the location, referenced in logs
+                name = 'mine_shaft_1',
                 enabled = true,
                 blip = {
-                    enable = true,
+                    enabled = true,
                     name = 'Mines',
-                    sprite = 436,
+                    sprite = 527,
                     scale = 1.0,
-                    color = 1,
-                    coords = vec3(1074.89, -1988.19, 30.89)
+                    color = 81,
+                    coords = vec3(3003.6047, 2760.3113, 43.798)
                 },
                 lights = {
                     enabled = true,
@@ -97,7 +97,6 @@ return {
                 oreLocations = {
                     {
                         coords = {
-                            --TODO better coords
                             vector3(3003.6047, 2760.3113, 43.798),
                             vector3(3005.9736, 2768.9956, 43.6523),
                             vector3(3005.0918, 2779.6118, 44.6404),
@@ -122,13 +121,13 @@ return {
                         },
                         rotation = vec3(0.0, 0.0, 0.0),
                         prop = `prop_rock_4_b`,
-                        rewards = 'mining_table', -- which loot table to pick from
+                        rewards = 'mining_table',
                         min = 1,
                         max = 3
                     },
                 },
-                respawnTimeMin = 30000, -- Time in milliseconds for ores to respawn minimum
-                respawnTimeMax = 60000, -- Time in milliseconds for ores to respawn maximum
+                respawnTimeMin = 30000,
+                respawnTimeMax = 60000,
             }
         }
     },
@@ -153,10 +152,10 @@ return {
             red40_pan = {
                 level = 1,
                 damage = false,
-                minXp = 0,          -- Minimum XP required to use this tool
-                maxXp = 10,         -- Stop earning xp after this level
-                minUseTime = 5000,  -- Minimum time in milliseconds to use the tool
-                maxUseTime = 10000, -- Maximum time in milliseconds to use the tool
+                minXp = 0,
+                maxXp = 10,
+                minUseTime = 5000,
+                maxUseTime = 10000,
                 prop = `prop_red40_goldpan`,
                 bone = 57005,
                 offset = vec3(0.3, 0.16, 0),
@@ -172,8 +171,8 @@ return {
                 damage = false,
                 minXp = 10,
                 maxXp = 100,
-                minUseTime = 3000, -- Minimum time in milliseconds to use the tool
-                maxUseTime = 7000, -- Maximum time in milliseconds to use the tool
+                minUseTime = 3000,
+                maxUseTime = 7000,
                 prop = `prop_red40_goldpan`,
                 bone = 57005,
                 offset = vec3(0.3, 0.16, 0),
@@ -186,10 +185,10 @@ return {
             },
         },
         durability = function()
-            return math.random(1, 5) -- Random durability loss between 1 and 5 for each use
+            return math.random(1, 5)
         end,
         xpPerAction = function()
-            return math.random(1, 3) -- Random XP between 1 and 3 for each successful action,
+            return math.random(1, 3)
         end,
         locations = {
             {
@@ -197,12 +196,12 @@ return {
                 enabled = true,
                 debug = false,
                 blip = {
-                    enable = true,
+                    enabled = true,
                     name = 'Panning Spot',
-                    sprite = 436,
+                    sprite = 467,
                     scale = 1.0,
-                    color = 1,
-                    coords = vec3(1074.89, -1988.19, 30.89)
+                    color = 5,
+                    coords = vec3(-1380.126, 2004.7308, 59.9556)
                 },
                 points = {
                     vector3(-1380.126, 2004.7308, 59.9556),
@@ -211,8 +210,8 @@ return {
                     vector3(-1379.6307, 1999.1255, 59.9556),
                 },
                 rewards = 'pan_loot',
-                min = 1, -- Minimum amount of items to reward
-                max = 3  -- Maximum amount of items to reward
+                min = 1,
+                max = 3
             }
         }
     },
@@ -250,27 +249,27 @@ return {
                 bone = 60309,
                 offset = vec3(0.1, 0.0, 0.05),
                 rotation = vec3(90.0, -90.0, 90.0),
-                minUseTime = 5000,  -- Minimum time in milliseconds to wash
-                maxUseTime = 10000, -- Maximum time in milliseconds to wash
+                minUseTime = 5000,
+                maxUseTime = 10000,
                 rewards = 'wash_loot',
                 min = 1,
                 max = 3
             }
         },
         xpPerAction = function()
-            return math.random(1, 3) -- Random XP between 1 and 3 for each successful action,
+            return math.random(1, 3)
         end,
         locations = {
             {
                 name = 'washing_location_1',
                 enabled = true,
-                debug = true,
+                debug = false,
                 blip = {
-                    enable = true,
+                    enabled = true,
                     name = 'Washing Spot',
-                    sprite = 436,
+                    sprite = 467,
                     scale = 1.0,
-                    color = 1,
+                    color = 3,
                     coords = vec3(1832.7822, 419.7999, 159.3571)
                 },
                 points = {
@@ -311,18 +310,18 @@ return {
             red40_drillbit = {
                 level = 1,
                 damage = true,
-                minXp = 0,          -- Minimum XP required to use this tool
-                maxXp = 10,         -- Stop earning xp after this level
-                minUseTime = 5000,  -- Minimum time in milliseconds to crack
-                maxUseTime = 10000, -- Maximum time in milliseconds to crack
+                minXp = 0,
+                maxXp = 10,
+                minUseTime = 5000,
+                maxUseTime = 10000,
             },
             red40_carbidedrillbit = {
                 level = 2,
                 damage = true,
                 minXp = 10,
                 maxXp = 100,
-                minUseTime = 3000, -- Minimum time in milliseconds to crack
-                maxUseTime = 7000, -- Maximum time in milliseconds to crack
+                minUseTime = 3000,
+                maxUseTime = 7000,
             },
         },
         crackableItems = {
@@ -336,27 +335,27 @@ return {
             }
         },
         durability = function()
-            return math.random(1, 5) -- Random durability loss between 1 and 5 for each use
+            return math.random(1, 5)
         end,
         xpPerAction = function()
-            return math.random(1, 3) -- Random XP between 1 and 3 for each successful action,
+            return math.random(1, 3)
         end,
         locations = {
             {
                 name = 'cracking_location_1',
                 enabled = true,
                 blip = {
-                    enable = true,
+                    enabled = true,
                     name = 'Cracking Spot',
-                    sprite = 436,
+                    sprite = 566,
                     scale = 1.0,
-                    color = 1,
+                    color = 81,
                     coords = vec3(1109.19, -1992.8, 30.98)
                 },
                 prop = `prop_vertdrill_01`,
                 anim = {
                     anim = 'anim@amb@machinery@speed_drill@',
-                    dict = 'operate_02_hi_amy_skater_01',
+                    dict = 'operate_04_amy_skater_01',
                 },
                 locations = {
                     { coords = vec3(1109.19, -1992.8, 29.98), rotation = vec3(0.0, 0.0, 326.88) },
@@ -374,7 +373,7 @@ return {
             { level = 4, xp = 60 },
             { level = 5, xp = 100 },
         },
-        recipes = { -- define categories of items that can be crafted, with their inputs and outputs, locale is matched to the key name for the list
+        recipes = {
             gems = {
                 { output = { emerald = 1 },  input = { uncut_emerald = 1 },  level = 1 },
                 { output = { ruby = 1 },     input = { uncut_ruby = 1 },     level = 1 },
@@ -435,19 +434,19 @@ return {
             }
         },
         xpPerAction = function()
-            return math.random(1, 3) -- Random XP between 1 and 3 for each successful action,
+            return math.random(1, 3)
         end,
         locations = {
             {
                 name = 'jewel_cutting_location_1',
                 enabled = true,
                 blip = {
-                    enable = true,
+                    enabled = true,
                     name = 'Jewel Cutting Spot',
-                    sprite = 436,
+                    sprite = 566,
                     scale = 1.0,
-                    color = 1,
-                    coords = vec3(1074.89, -1988.19, 30.89)
+                    color = 81,
+                    coords = vec3(1077.3005, -1984.0283, 30.0132)
                 },
                 prop = `gr_prop_gr_speeddrill_01c`,
                 anim = {
@@ -457,9 +456,9 @@ return {
                 locations = {
                     { coords = vector3(1077.3005, -1984.0283, 30.0132), rotation = vec3(0.0, 0.0, 0.0) },
                 },
-                minUseTime = 5000,  -- Minimum time in milliseconds to cut
-                maxUseTime = 10000, -- Maximum time in milliseconds to cut
-                recipes = { 'gems', 'rings', 'necklace', 'earring' } -- which recipes are available here
+                minUseTime = 5000,
+                maxUseTime = 10000,
+                recipes = { 'gems', 'rings', 'necklace', 'earring' }
             }
         }
     },
@@ -491,38 +490,38 @@ return {
             }
         },
         xpPerAction = function()
-            return math.random(1, 3) -- Random XP between 1 and 3 for each successful action,
+            return math.random(1, 3)
         end,
         locations = {
             {
                 name = 'smelting_location_1',
                 enabled = true,
                 blip = {
-                    enable = true,
+                    enabled = true,
                     name = 'Smelting Spot',
                     sprite = 436,
                     scale = 1.0,
                     color = 1,
-                    coords = vec3(1074.89, -1988.19, 30.89)
+                    coords = vec3(1110.8182, -2008.7269, 31.3372)
                 },
                 prop = false,
                 anim = {
-                    anim = 'operate_02_hi_amy_skater_01',    -- change
-                    dict = 'anim@amb@machinery@speed_drill@' -- change
+                    anim = 'base',
+                    dict = 'amb@world_human_stand_mobile@male@text@enter'
                 },
                 locations = {
                     { coords = vec3(1110.8182, -2008.7269, 31.3372), rotation = vec3(0.0, 0.0, 0.0) },
                 },
-                minUseTime = 5000,  -- Minimum time in milliseconds to smelt
-                maxUseTime = 10000, -- Maximum time in milliseconds to smelt
-                smelts = { 'forge' } -- Which recipes are available here
+                minUseTime = 5000,
+                maxUseTime = 10000,
+                smelts = { 'forge' }
             }
         }
     },
 
     ---@type Red40Peds
     peds = {
-        style = 'ox_lib',    -- 'ox_inventory' or 'ox_lib'
+        style = 'ox_inventory',    -- 'ox_inventory' or 'ox_lib'
         moneyItem = 'money', -- which item to use for sale stashes
         locations = {
             {
@@ -530,12 +529,12 @@ return {
                 label = 'Ore Vendor',
                 enabled = true,
                 blip = {
-                    enable = true,
+                    enabled = true,
                     name = 'Ore Vendor',
-                    sprite = 436,
+                    sprite = 568,
                     scale = 1.0,
-                    color = 1,
-                    coords = vec3(1074.89, -1988.19, 30.89)
+                    color = 81,
+                    coords = vec3(1075.2479, -1992.1158, 29.8811)
                 },
                 coords = vec4(1075.2479, -1992.1158, 29.8811, 0),
                 pedModel = `s_m_m_dockwork_01`,
@@ -575,12 +574,12 @@ return {
                 label = 'Jewel Vendor',
                 enabled = true,
                 blip = {
-                    enable = true,
+                    enabled = true,
                     name = 'Jewel Vendor',
-                    sprite = 436,
+                    sprite = 527,
                     scale = 1.0,
-                    color = 1,
-                    coords = vec3(1100.89, -1990.19, 30.89)
+                    color = 617,
+                    coords = vec3(1100.2479, -1995.1158, 29.8811)
                 },
                 coords = vec4(1100.2479, -1995.1158, 29.8811, 0),
                 pedModel = `s_f_m_shop_high`,
