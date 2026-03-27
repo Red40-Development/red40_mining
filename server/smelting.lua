@@ -46,10 +46,9 @@ RegisterNetEvent('red40_mining:server:smeltItem', function(smeltPointId, recipeI
         end
     end
 
-    local removeItem = nil
     --Remove required items
     for itemName, requiredAmount in pairs(recipe.input) do
-        removeItem = RemoveItem(src, itemName, requiredAmount * amount)
+        local removeItem = RemoveItem(src, itemName, requiredAmount * amount)
         if not removeItem then
             Notify(src, locale('error.not_enough_items'), 'error')
             return
@@ -172,7 +171,7 @@ end
 
 local function tagSmeltRecipes()
     local recipeCount = 1
-    for recipeList, recipes in pairs(config.recipes) do
+    for _, recipes in pairs(config.recipes) do
         for i = 1, #recipes do
             local recipe = recipes[i]
             ---@diagnostic disable-next-line: inject-field

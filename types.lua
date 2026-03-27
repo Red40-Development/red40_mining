@@ -179,6 +179,7 @@
 ---@field moneyItem string
 
 ---@class Red40Recipe
+---@field id integer?
 ---@field output table<string, number>
 ---@field input table<string, number>
 ---@field level number
