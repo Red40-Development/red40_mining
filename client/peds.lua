@@ -21,7 +21,6 @@ local function inputBox(action, shopName, item, maxAmount)
 end
 
 local function openSellMenu(shopName)
-    --TODO: query server for list of sellable items and build ox_lib context menu
     local itemsForSale = lib.callback.await('red40_mining:server:getSellableItems', false, shopName)
     local sellOptions = {}
     for i = 1, #itemsForSale do
@@ -44,7 +43,6 @@ local function openSellMenu(shopName)
 end
 
 local function openBuyMenu(shopName)
-    --TODO: query server for list of items in shop and build ox_lib context menu
     local itemsForSale = lib.callback.await('red40_mining:server:getShopItems', false, shopName)
     local buyOptions = {}
     for i = 1, #itemsForSale do
@@ -112,6 +110,17 @@ local function createPedPoint(point)
             }
         end
     end
+
+    if point.blip.enabled then
+        CreateBlip({
+            coords = point.blip.coords,
+            sprite = point.blip.sprite,
+            color = point.blip.color,
+            scale = point.blip.scale,
+            name = point.blip.name,
+        })
+    end
+
     local pedPoint = lib.points.new({
         coords = vec3(point.coords.x, point.coords.y, point.coords.z),
         distance = 200.0,

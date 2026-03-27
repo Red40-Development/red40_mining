@@ -4,8 +4,6 @@ if not enabled then
     return
 end
 
--- local config = require 'config.client'
-
 local playerState = LocalPlayer.state
 
 local function createWashingEffects(type, toolEntity)
@@ -40,11 +38,23 @@ lib.callback.register('red40_mining:client:washSpot', function(waitTime)
 end)
 
 local function buildWashingZone(zone)
-    lib.zones.poly({
-        points = zone.points,
-        thickness = zone.thickness,
-        debug = true,
-    })
+    if zone.debug then
+
+        lib.zones.poly({
+            points = zone.points,
+            thickness = zone.thickness,
+            debug = true,
+        })
+    end
+    if zone.blip.enabled then
+        CreateBlip({
+            coords = zone.blip.coords,
+            sprite = zone.blip.sprite,
+            color = zone.blip.color,
+            scale = zone.blip.scale,
+            name = zone.blip.name,
+        })
+    end
 end
 
 CreateThread(function()

@@ -8,6 +8,7 @@ local config = require 'config.server'.mining
 
 local orePoints = {}
 local lightPoints = {}
+local miningBlips = {}
 
 RegisterNetEvent('red40_mining:server:startMining', function(oreId)
     local src = source
@@ -25,7 +26,6 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
         return
     end
 
-    -- Distance Check
     local coords = GetEntityCoords(GetPlayerPed(src))
     if #(coords - orePoint.coords) > 5.0 then
         Notify(src, locale('error.too_far'), 'error')
@@ -44,7 +44,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
 
     local waitTime = math.random(config.tools[tool].minUseTime, config.tools[tool].maxUseTime)
 
-    local success = lib.callback.await('red40_mining:client:mineSpot', src, waitTime,  config.tools[tool].type)
+    local success = lib.callback.await('red40_mining:client:mineSpot', src, waitTime, config.tools[tool].type)
 
     if success and not orePoint.looted then
         orePoints[orePoint.id].looted = true
@@ -76,10 +76,10 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
             for itemName, v in pairs(items) do
                 if not CanCarryItem(src, itemName, v.amount, v.metadata) then
                     lib.print.debug('Player ' .. src .. ' cannot carry item ' .. itemName .. ' x' .. v.amount)
-                    itemList[#itemList + 1] = {itemName, v.amount, v.metadata}
+                    itemList[#itemList + 1] = { itemName, v.amount, v.metadata }
                 else
-                     AddItem(src, itemName, v.amount, v.metadata)
-                     lib.print.debug('Added items to player ' .. src .. ': ', items)
+                    AddItem(src, itemName, v.amount, v.metadata)
+                    lib.print.debug('Added items to player ' .. src .. ': ', items)
                 end
             end
             if itemList and next(itemList) then
@@ -101,21 +101,18 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
             local durabilityRemoved = config.durability()
             local durabilityLeft = RemoveItemDurability(src, tool, durabilityRemoved)
             lib.print.debug('Removed ' ..
-            durabilityRemoved .. ' durability from player ' .. src .. ' for mining with tool ' .. tool)
+                durabilityRemoved .. ' durability from player ' .. src .. ' for mining with tool ' .. tool)
             if durabilityLeft and durabilityLeft <= 0 then
                 Notify(src, locale('error.tool_broke'), 'error')
-                Logger(src, 'red40_mining', 'Player ' .. src .. '\'s tool ' .. tool .. ' broke due to durability reaching 0.')
+                Logger(src, 'red40_mining',
+                    'Player ' .. src .. '\'s tool ' .. tool .. ' broke due to durability reaching 0.')
             end
         end
     end
 end)
 
 lib.callback.register('red40_mining:server:getMiningPoints', function(_)
-    return orePoints
-end)
-
-lib.callback.register('red40_mining:server:getMiningLightPoints', function(_)
-    return lightPoints
+    return orePoints, lightPoints, miningBlips
 end)
 
 -- Build ore points
@@ -151,6 +148,15 @@ local function buildPoints()
                 coords = lightPoint.coords,
                 prop = location.lights.prop,
                 rot = lightPoint.rotation,
+            }
+        end
+        if location.blip and location.blip.enabled then
+            miningBlips[#miningBlips + 1] = {
+                coords = location.blip.coords,
+                sprite = location.blip.sprite,
+                color = location.blip.color,
+                scale = location.blip.scale,
+                name = location.blip.name,
             }
         end
     end

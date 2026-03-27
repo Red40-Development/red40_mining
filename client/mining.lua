@@ -69,7 +69,7 @@ end
 
 local function createMiningEffects(type, toolEntity, oreEntity)
     lib.playAnim(cache.ped, playerState.red40_mining.anim.anim, playerState.red40_mining.anim.dict, 8.0, 8.0,
-        -1, 1, 1.0, false, false, false)
+        -1, 1, 1.0, false, 0, false)
     if type == 'pickaxe' then
         lib.print.debug('You could add a particle effect here')
     elseif type == 'drill' then
@@ -108,8 +108,10 @@ local function createMiningEffects(type, toolEntity, oreEntity)
 end
 
 lib.callback.register('red40_mining:client:mineSpot', function(waitTime, toolType)
-    --TODO add animation, skillcheck (optional), and sounds here (tool config based)
     local closestOre = lib.points.getClosestPoint()
+
+    if not closestOre then return end
+
     local oreCoords = GetEntityCoords(closestOre.propNumber)
     TaskGoStraightToCoord(cache.ped, oreCoords.x, oreCoords.y, oreCoords.z, 0.5, 400, 0.0, 0)
     while #(oreCoords - GetEntityCoords(cache.ped)) > 2 do
@@ -254,17 +256,26 @@ end
 
 
 CreateThread(function()
-    local points = lib.callback.await('red40_mining:server:getMiningPoints')
+    local points, lightPoints, blips = lib.callback.await('red40_mining:server:getMiningPoints')
 
     for i = 1, #points do
         local point = points[i]
         buildOrePoints(point)
     end
 
-    local lightPoints = lib.callback.await('red40_mining:server:getMiningLightPoints')
-
     for i = 1, #lightPoints do
         local point = lightPoints[i]
         buildLightPoints(point)
+    end
+
+    for i = 1, #blips do
+        local blip = blips[i]
+        CreateBlip({
+            coords = blip.coords,
+            sprite = blip.sprite,
+            color = blip.color,
+            scale = blip.scale,
+            name = blip.name,
+        })
     end
 end)

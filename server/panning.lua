@@ -68,10 +68,11 @@ local function panSpot(src, itemName)
             local durabilityRemoved = config.durability()
             local durabilityLeft = RemoveItemDurability(src, itemName, durabilityRemoved)
             lib.print.debug('Removed ' ..
-            durabilityRemoved .. ' durability from player ' .. src .. ' for panning with tool ' .. itemName)
+                durabilityRemoved .. ' durability from player ' .. src .. ' for panning with tool ' .. itemName)
             if durabilityLeft and durabilityLeft <= 0 then
                 Notify(src, locale('error.tool_broke'), 'error')
-                Logger(src, 'red40_mining', 'Player ' .. src .. '\'s tool ' .. itemName .. ' broke due to durability reaching 0.')
+                Logger(src, 'red40_mining',
+                    'Player ' .. src .. '\'s tool ' .. itemName .. ' broke due to durability reaching 0.')
             end
         end
     end
@@ -96,14 +97,14 @@ local function buildPanningZone()
                 min = zone.min,
                 max = zone.max,
             })
-            if zone.debug then
-                local clientZone = {
-                    points = zone.points,
-                    thickness = zone.thickness or 400,
-                    blip = zone.blip,
-                }
-                panningClientZones[#panningClientZones + 1] = clientZone
-            end
+
+            local clientZone = {
+                points = zone.points,
+                thickness = zone.thickness or 400,
+                debug = zone.debug or false,
+                blip = zone.blip,
+            }
+            panningClientZones[#panningClientZones + 1] = clientZone
             panningZones[#panningZones + 1] = createdZone
         end
     end

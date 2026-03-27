@@ -85,6 +85,16 @@ local function createSmeltPoint(point)
         options = shopOptions,
     })
 
+    if point.blip.enabled then
+        CreateBlip({
+            coords = point.blip.coords,
+            sprite = point.blip.sprite,
+            color = point.blip.color,
+            scale = point.blip.scale,
+            name = point.blip.name,
+        })
+    end
+
     function smeltPoint:onEnter()
         if config.smeltingTarget and not self.prop then
             self.targetId = config.addSphereTarget({

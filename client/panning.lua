@@ -11,7 +11,7 @@ local effectsLoop = false
 
 local function createPanningEffects(type, toolEntity)
     lib.playAnim(cache.ped, playerState.red40_mining.anim.anim, playerState.red40_mining.anim.dict, 8.0, 8.0,
-        -1, 1, 1.0, false, false, false)
+        -1, 1, 1.0, false, 0, false)
     if type == 'pan' then
         lib.requestNamedPtfxAsset('core', 10000)
         CreateThread(function()
@@ -66,11 +66,22 @@ lib.callback.register('red40_mining:client:panSpot', function(waitTime)
 end)
 
 local function buildPanningZone(zone)
-    lib.zones.poly({
-        points = zone.points,
-        thickness = zone.thickness,
-        debug = true,
-    })
+    if zone.debug then
+        lib.zones.poly({
+            points = zone.points,
+            thickness = zone.thickness,
+            debug = true,
+        })
+    end
+    if zone.blip.enabled then
+        CreateBlip({
+            coords = zone.blip.coords,
+            sprite = zone.blip.sprite,
+            color = zone.blip.color,
+            scale = zone.blip.scale,
+            name = zone.blip.name,
+        })
+    end
 end
 
 CreateThread(function()

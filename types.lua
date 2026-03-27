@@ -19,6 +19,7 @@
 ---@field color number
 ---@field scale number
 ---@field coords vector3
+---@field enabled boolean?
 
 ---@class locationPoint
 ---@field coords vector3

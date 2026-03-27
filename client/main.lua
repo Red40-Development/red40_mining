@@ -1,8 +1,11 @@
+local blips = {}
+
 ---@param params { text: string, coords: vector3, scale?: number|vector2, font?: number, color?: vector4, enableDropShadow?: boolean, enableOutline?: boolean }
 function DrawText3d(params) -- luacheck: ignore
     local isScaleparamANumber = type(params.scale) == "number"
     local text = params.text
     local coords = params.coords
+---@diagnostic disable-next-line: param-type-mismatch
     local scale = (isScaleparamANumber and vec2(params.scale, params.scale))
         or params.scale
         or vec2(0.35, 0.35)
@@ -29,11 +32,29 @@ function DrawText3d(params) -- luacheck: ignore
     ClearDrawOrigin()
 end
 
+function CreateBlip(data)
+    local blip = AddBlipForCoord(data.coords.x, data.coords.y, data.coords.z)
+    SetBlipSprite(blip, data.sprite)
+    SetBlipDisplay(blip, 4)
+    SetBlipScale(blip, data.scale or 0.8)
+    SetBlipColour(blip, data.color or 2)
+    SetBlipAsShortRange(blip, true)
+    if data.name then
+        BeginTextCommandSetBlipName('STRING')
+        AddTextComponentSubstringPlayerName(data.name)
+        EndTextCommandSetBlipName(blip)
+    end
+    blips[#blips + 1] = blip
+end
+
 AddEventHandler('onResourceStop', function(resourceName)
     if resourceName ~= cache.resource then return end
     local points = lib.points.getAllPoints()
     for i = 1, #points do
         local point = points[i]
         point:onExit()
+    end
+    for i = 1, #blips do
+        RemoveBlip(blips[i])
     end
 end)

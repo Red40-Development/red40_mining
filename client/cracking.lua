@@ -11,7 +11,7 @@ local effectsLoop = false
 
 local function createMiningEffects(anim, oreCoords)
     lib.playAnim(cache.ped, anim.anim, anim.dict, 8.0, 8.0,
-        -1, 1, 1.0, false, false, false)
+        -1, 1, 1.0, false, 0, false)
     lib.requestNamedPtfxAsset('core', 10000)
     CreateThread(function()
         while effectsLoop do
@@ -96,6 +96,16 @@ local function buildCrackPoints(crackPoint)
         id = crackPoint.id,
         looted = crackPoint.looted,
     })
+
+    if crackPoint.blip.enabled then
+        CreateBlip({
+            coords = crackPoint.blip.coords,
+            sprite = crackPoint.blip.sprite,
+            color = crackPoint.blip.color,
+            scale = crackPoint.blip.scale,
+            name = crackPoint.blip.name,
+        })
+    end
 
     local targetOptions = {}
     if config.crackingTarget then

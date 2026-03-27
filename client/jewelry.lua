@@ -85,6 +85,16 @@ local function createJewelryPoint(point)
         options = shopOptions,
     })
 
+    if point.blip.enabled then
+        CreateBlip({
+            coords = point.blip.coords,
+            sprite = point.blip.sprite,
+            color = point.blip.color,
+            scale = point.blip.scale,
+            name = point.blip.name,
+        })
+    end
+
     function pedPoint:onEnter()
         if config.jewelryTarget and not self.prop then
             self.targetId = config.addSphereTarget({
