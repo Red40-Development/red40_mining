@@ -6,7 +6,7 @@ An advanced mining resource for FiveM servers
 - [GitHub Issues](https://github.com/Red40-Development/red40_mining/issues)
 
 # Documentation
-- [Docs](https://docs.red40.dev/scripts/red40_mining)
+- [Docs](https://docs.red40.dev/free_scripts/red40_mining)
 
 # Conversion Tool
 - [Here](https://mining.red40.dev)
