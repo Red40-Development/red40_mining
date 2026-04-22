@@ -95,7 +95,7 @@ RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
         rotation = crackableConfig.rotation,
     }
 
-    local success = lib.callback.await('red40_mining:client:crackSpot', src, waitTime, entityData)
+    local success = lib.callback.await('red40_mining:client:crackSpot', src, waitTime, entityData, spotId)
 
     -- Cleanup the cracking prop
     DeleteEntity(object)

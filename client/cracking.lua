@@ -6,6 +6,7 @@ end
 
 local config = require 'config.client'
 
+local crackPoints = {}
 local effectsLoop = false
 
 
@@ -23,8 +24,8 @@ local function createMiningEffects(anim, oreCoords)
     end)
 end
 
-lib.callback.register('red40_mining:client:crackSpot', function(waitTime, entityData)
-    local closestSpot = lib.points.getClosestPoint()
+lib.callback.register('red40_mining:client:crackSpot', function(waitTime, entityData, spotId)
+    local closestSpot = crackPoints[spotId]
     if not closestSpot then return end
     while not NetworkDoesEntityExistWithNetworkId(entityData.entity) do
         Wait(35)
@@ -177,6 +178,8 @@ local function buildCrackPoints(crackPoint)
             end
         end
     end
+
+    crackPoints[crackPoint.id] = point
 end
 
 
