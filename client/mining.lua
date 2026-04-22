@@ -110,8 +110,8 @@ local function createMiningEffects(type, toolEntity, oreEntity)
     end
 end
 
-lib.callback.register('red40_mining:client:mineSpot', function(waitTime, toolType)
-    local closestOre = lib.points.getClosestPoint()
+lib.callback.register('red40_mining:client:mineSpot', function(waitTime, toolType, oreId)
+    local closestOre = orePoints[oreId]
 
     if not closestOre then return end
 

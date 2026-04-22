@@ -44,7 +44,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
 
     local waitTime = math.random(config.tools[tool].minUseTime, config.tools[tool].maxUseTime)
 
-    local success = lib.callback.await('red40_mining:client:mineSpot', src, waitTime, config.tools[tool].type)
+    local success = lib.callback.await('red40_mining:client:mineSpot', src, waitTime, config.tools[tool].type, oreId)
 
     if success and not orePoint.looted then
         orePoints[orePoint.id].looted = true
