@@ -4,7 +4,7 @@ game 'gta5'
 name 'red40_mining'
 description 'A mining script by Red40 Development'
 author 'Red40 Development'
-version '1.0.0'
+version '1.0.1'
 
 ox_lib 'locale'
 
