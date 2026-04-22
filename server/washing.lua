@@ -32,7 +32,7 @@ local function washSpot(src, itemName)
         return
     end
     local playerXp = GetXp(src, 'washing') or 0
-    local playerLevel = GetXpLevel(playerXp, config.xpTables) or 0
+    local playerLevel = GetXpLevel(playerXp, config.xpTables) or 1
     if playerLevel < toolConfig.level then
         Notify(src, locale('error.washing_tool_level_too_low'), 'error')
         return

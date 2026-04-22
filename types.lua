@@ -113,6 +113,8 @@
 ---@field rewards string
 ---@field min number
 ---@field max number
+---@field minUseTime number
+---@field maxUseTime number
 
 ---@class washingLocations
 ---@field name string

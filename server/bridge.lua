@@ -1,3 +1,5 @@
+local config = require 'config.server'
+
 Inv = nil
 local function detectInventory()
     if GetResourceState('ox_inventory') == 'started' then
@@ -30,15 +32,32 @@ function GetXpLevel(xp, xpTable)
         local table = xpTable[i]
         if xp >= table.xp then
             level = table.level
-        else
             break
         end
     end
     return level
 end
 
-function Logger(src, type, message)
-    lib.logger(src, type, message, 'red40_mining')
+lib.addCommand('red40_mining_xp', {
+    help = 'Get your current XP for an activity',
+    params = {
+        {
+            name = 'activity',
+            help = 'The activity to check XP for (mining, washing, panning, cracking, smelting, jewelry)',
+            type = 'string',
+        }
+    }
+}, function(source, args)
+    local xpLevel = GetXpLevel(GetXp(source, args.activity) or 0, config[args.activity].xpTables)
+    if xpLevel then
+        Notify(source, locale('info.xp_level', locale(args.activity), xpLevel), 'inform')
+    else
+        Notify(source, locale('error.invalid_activity'), 'error')
+    end
+end)
+
+function Logger(src, msgType, message)
+    lib.logger(src, msgType, message, 'red40_mining')
 end
 
 ---@param src number

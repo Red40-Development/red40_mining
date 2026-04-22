@@ -95,7 +95,7 @@ lib.callback.register('red40_mining:server:getJewelryItems', function(source, je
     end
 
     local playerXp = GetXp(source, 'jewelry') or 0
-    local playerLevel = GetXpLevel(playerXp, config.xpTables) or 0
+    local playerLevel = GetXpLevel(playerXp, config.xpTables) or 1
 
     local craftableItems = {}
     for _, recipeTable in pairs(jewelryPoint.recipes) do

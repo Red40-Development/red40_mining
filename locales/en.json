@@ -20,7 +20,17 @@
         "craft_cancelled": "Crafting cancelled",
         "tool_broke": "Your tool broke",
         "not_enough_items": "You don't have enough items",
-        "not_carry": "You cannot carry that much"
+        "not_carry": "You cannot carry that much",
+        "tool_level_too_low": "Your %s level is too low to use this tool",
+        "invalid_activity": "Invalid activity"
+    },
+    "activity": {
+      "mining": "Mining",
+      "washing": "Washing",
+      "panning": "Panning",
+      "cracking": "Cracking",
+      "smelting": "Smelting",
+      "jewelry": "Crafting Jewelry"
     },
     "progress": {
         "mining": "Mining Ore...",
@@ -31,7 +41,8 @@
         "jewelry": "Crafting %s of %s..."
     },
     "info": {
-        "found_nothing": "You found nothing"
+        "found_nothing": "You found nothing",
+        "xp_level": "Your %s level is now %s"
     },
     "menu": {
         "sell_item": "Sell %s",

@@ -26,6 +26,13 @@ local function panSpot(src, itemName)
         return
     end
 
+    local playerXp = GetXp(src, 'panning') or 0
+    local playerLevel = GetXpLevel(playerXp, config.xpTables) or 1
+    if config.tools[itemName].level and playerLevel < config.tools[itemName].level then
+        Notify(src, locale('error.tool_level_too_low', locale('activity.panning')), 'error')
+        return
+    end
+
     StartMining(src, 'panning', itemName)
 
     local waitTime = math.random(config.tools[itemName].minUseTime, config.tools[itemName].maxUseTime)
@@ -33,9 +40,7 @@ local function panSpot(src, itemName)
     local success = lib.callback.await('red40_mining:client:panSpot', src, waitTime, config.tools[itemName].type)
 
     if success then
-        local playerXp = GetXp(src, 'panning') or 0
-        local items = GenerateLoot(panningZone.rewards, panningZone.min, panningZone.max,
-            GetXpLevel(playerXp, config.xpTables) or 0)
+        local items = GenerateLoot(panningZone.rewards, panningZone.min, panningZone.max, playerLevel)
         lib.print.debug('Generated loot for player ' .. src .. ' at pan zone ' .. panningZone.id .. ': ', items)
 
         if items and next(items) then

@@ -103,7 +103,7 @@ lib.callback.register('red40_mining:server:getSmeltableItems', function(source, 
     end
 
     local playerXp = GetXp(source, 'smelting') or 0
-    local playerLevel = GetXpLevel(playerXp, config.xpTables) or 0
+    local playerLevel = GetXpLevel(playerXp, config.xpTables) or 1
 
     local smeltableItems = {}
     for _, recipeTable in pairs(smeltPoint.smelts) do

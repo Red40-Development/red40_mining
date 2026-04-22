@@ -42,6 +42,13 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
         return
     end
 
+    local playerXp = GetXp(src, 'mining') or 0
+    local playerLevel = GetXpLevel(playerXp, config.xpTables) or 1
+    if config.tools[tool].level and playerLevel < config.tools[tool].level then
+        Notify(src, locale('error.tool_level_too_low', locale('activity.mining')), 'error')
+        return
+    end
+
     local waitTime = math.random(config.tools[tool].minUseTime, config.tools[tool].maxUseTime)
 
     local success = lib.callback.await('red40_mining:client:mineSpot', src, waitTime, config.tools[tool].type, oreId)
@@ -66,9 +73,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
             return
         end
 
-        local playerXp = GetXp(src, 'mining') or 0
-        local items = GenerateLoot(orePoint.rewards, orePoint.min, orePoint.max,
-            GetXpLevel(playerXp, config.xpTables) or 0)
+        local items = GenerateLoot(orePoint.rewards, orePoint.min, orePoint.max, playerLevel)
         lib.print.debug('Generated loot for player ' .. src .. ' at ore point ' .. orePoint.id .. ': ', items)
 
         if items and next(items) then

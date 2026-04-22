@@ -37,7 +37,7 @@ RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
     end
 
     local playerXp = GetXp(src, 'cracking') or 0
-    local playerLevel = GetXpLevel(playerXp, config.xpTables) or 0
+    local playerLevel = GetXpLevel(playerXp, config.xpTables) or 1
 
     --Find first tool in inventory
     local toolItem = findToolInInventory(src)
