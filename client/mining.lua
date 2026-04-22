@@ -8,7 +8,6 @@ local config = require 'config.client'
 
 local orePoints = {}
 local playerState = LocalPlayer.state
-local soundId = nil
 local effectsLoop = false
 
 RegisterNetEvent('red40_mining:client:updateMiningSpot', function(oreId, looted)
@@ -24,58 +23,37 @@ RegisterNetEvent('red40_mining:client:updateMiningSpot', function(oreId, looted)
     end
 end)
 
-
-local function loadMiningSounds(type)
-    if type == 'pickaxe' then
-        lib.print.debug('You could add a sound here')
-    elseif type == 'drill' then
-        --TODO load native audio drill sound
-        lib.print.debug('No sound for drill yet')
-    elseif type == 'laserdrill' then
-        while not RequestScriptAudioBank('audiodirectory/red40_mining', false) do Wait(0) end
-    end
-end
-local function unloadMiningSounds(type)
-    if type == 'pickaxe' then
-        lib.print.debug('You could unload a sound here')
-    elseif type == 'drill' then
-        --TODO unload native audio drill sound
-        lib.print.debug('No sound for drill yet')
-    elseif type == 'laserdrill' then
-        ReleaseNamedScriptAudioBank('audiodirectory/red40_mining')
-    end
-end
-
-local function createMiningSounds(type, toolEntity)
-    soundId = GetSoundId()
-    if type == 'pickaxe' then
-        lib.print.debug('You could add a sound here')
-    elseif type == 'drill' then
-        --TODO use native audio drill sound
-        lib.print.debug('No sound for drill yet')
-    elseif type == 'laserdrill' then
-        PlaySoundFromEntity(soundId, 'laserdrill_start', toolEntity, 'special_soundset', true, 0)
-        while not HasSoundFinished(soundId) do
-            Wait(0)
-        end
-        CreateThread(function()
-            Wait(100)
+local function createMiningSounds(miningTool, toolEntity)
+    Citizen.CreateThreadNow(function()
+        lib.requestAudioBank('audiodirectory/red40_mining')
+        local soundId, soundId2 = GetSoundId(), GetSoundId()
+        if miningTool == 'pickaxe' then
+            lib.print.debug('You could add a sound here')
+        elseif miningTool == 'drill' then
+            --TODO use native audio drill sound
+            lib.print.debug('No sound for drill yet')
+        elseif miningTool == 'laserdrill' then
+            PlaySoundFromEntity(soundId, 'laserdrill_start', toolEntity, 'special_soundset', true, 0)
+            Wait(250)
             while effectsLoop do
-                PlaySoundFromEntity(soundId, 'laserdrill_hit', toolEntity, 'special_soundset', true, 0)
-                while not HasSoundFinished(soundId) do
-                    Wait(0)
-                end
+                PlaySoundFromEntity(soundId2, 'laserdrill_hit', toolEntity, 'special_soundset', true, 0)
+                Wait(500)
             end
-        end)
-    end
+            ReleaseNamedScriptAudioBank('audiodirectory/red40_mining')
+        end
+        StopSound(soundId)
+        ReleaseSoundId(soundId)
+        StopSound(soundId2)
+        ReleaseSoundId(soundId2)
+    end)
 end
 
-local function createMiningEffects(type, toolEntity, oreEntity)
+local function createMiningEffects(miningTool, toolEntity, oreEntity)
     lib.playAnim(cache.ped, playerState.red40_mining.anim.anim, playerState.red40_mining.anim.dict, 8.0, 8.0,
         -1, 1, 1.0, false, 0, false)
-    if type == 'pickaxe' then
+    if miningTool == 'pickaxe' then
         lib.print.debug('You could add a particle effect here')
-    elseif type == 'drill' then
+    elseif miningTool == 'drill' then
         lib.requestNamedPtfxAsset('core', 10000)
         CreateThread(function()
             while effectsLoop do
@@ -87,7 +65,7 @@ local function createMiningEffects(type, toolEntity, oreEntity)
                 Wait(350)
             end
         end)
-    elseif type == 'laserdrill' then
+    elseif miningTool == 'laserdrill' then
         lib.requestNamedPtfxAsset('core', 10000)
         CreateThread(function()
             while effectsLoop do
@@ -125,7 +103,6 @@ lib.callback.register('red40_mining:client:mineSpot', function(waitTime, toolTyp
     end
     TaskLookAtEntity(cache.ped, closestOre.propNumber, -1, 2048, 3)
     effectsLoop = true
-    loadMiningSounds(toolType)
     createMiningSounds(toolType, Prop)
     createMiningEffects(toolType, Prop, closestOre.propNumber)
     local success = lib.progressBar({
@@ -140,11 +117,6 @@ lib.callback.register('red40_mining:client:mineSpot', function(waitTime, toolTyp
         },
     })
     effectsLoop = false
-    if soundId then
-        StopSound(soundId)
-        ReleaseSoundId(soundId)
-    end
-    unloadMiningSounds(toolType)
     RemoveNamedPtfxAsset('core')
     ClearPedTasks(cache.ped)
     return success
@@ -198,8 +170,8 @@ local function buildOrePoints(orePoint)
                 onSelect = function()
                     TriggerServerEvent('red40_mining:server:startMining', orePoint.id)
                 end,
-                canInteract = function()
-                    if playerState.red40_mining?.activity ~= 'mining' then return false end
+                canInteract = function(_, distance)
+                    if playerState.red40_mining?.activity ~= 'mining' or distance > 4.5 then return false end
                     return true
                 end
             }}
