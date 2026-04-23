@@ -290,7 +290,7 @@ else
 
     lib.callback.register('red40_mining:server:getSellableItems', function(source, shopName)
         local shop = getShop(shopName)
-        if not shop then return end
+        if not shop or not shop.buys then return end
 
         local sellableItems = {}
         ---@diagnostic disable-next-line: param-type-mismatch
@@ -309,7 +309,7 @@ else
 
     lib.callback.register('red40_mining:server:getShopItems', function(source, shopName)
         local shop = getShop(shopName)
-        if not shop then return end
+        if not shop or not shop.sells then return end
 
         local itemsForSale = {}
         ---@diagnostic disable-next-line: param-type-mismatch
