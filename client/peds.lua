@@ -74,7 +74,7 @@ end
 local function createPedPoint(point)
     local shopOptions = {}
     if point.style == 'ox_inventory' and oxInv and config.useTarget then
-        if point.pedBuys then
+        if point.pedSells then
             shopOptions[#shopOptions + 1] = {
                 name = 'red40_mining_buy',
                 label = locale('target.buy'),
@@ -84,7 +84,7 @@ local function createPedPoint(point)
                 end,
             }
         end
-        if point.pedSells then
+        if point.pedBuys then
             shopOptions[#shopOptions + 1] = {
                 name = 'red40_mining_sell',
                 label = locale('target.sell'),
@@ -95,7 +95,7 @@ local function createPedPoint(point)
             }
         end
     elseif config.useTarget then
-        if point.pedBuys then
+        if point.pedSells then
             shopOptions[#shopOptions + 1] = {
                 name = 'red40_mining_buy',
                 label = locale('target.buy'),
@@ -105,7 +105,7 @@ local function createPedPoint(point)
                 end,
             }
         end
-        if point.pedSells then
+        if point.pedBuys then
             shopOptions[#shopOptions + 1] = {
                 name = 'red40_mining_sell',
                 label = locale('target.sell'),
