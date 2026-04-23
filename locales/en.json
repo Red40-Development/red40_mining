@@ -22,7 +22,9 @@
         "not_enough_items": "You don't have enough items",
         "not_carry": "You cannot carry that much",
         "tool_level_too_low": "Your %s level is too low to use this tool",
-        "invalid_activity": "Invalid activity"
+        "invalid_activity": "Invalid activity",
+        "no_items_to_sell": "You have no items to sell",
+        "no_items_to_buy": "There are no items available for purchase"
     },
     "activity": {
       "mining": "Mining",

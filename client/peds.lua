@@ -20,9 +20,12 @@ local function inputBox(action, shopName, item, maxAmount)
     end
 end
 
-local function openSellMenu(shopName)
+local function openItemsToSellMenu(shopName)
     local itemsForSale = lib.callback.await('red40_mining:server:getSellableItems', false, shopName)
     local sellOptions = {}
+    if not itemsForSale or #itemsForSale == 0 then
+        return Notify(locale('error.no_items_to_sell'), 'error')
+    end
     for i = 1, #itemsForSale do
         local item = itemsForSale[i]
         sellOptions[#sellOptions + 1] = {
@@ -42,11 +45,14 @@ local function openSellMenu(shopName)
     lib.showContext('red40_mining_sell_menu')
 end
 
-local function openBuyMenu(shopName)
-    local itemsForSale = lib.callback.await('red40_mining:server:getShopItems', false, shopName)
+local function openItemsToBuyMenu(shopName)
+    local itemsToBuy = lib.callback.await('red40_mining:server:getShopItems', false, shopName)
     local buyOptions = {}
-    for i = 1, #itemsForSale do
-        local item = itemsForSale[i]
+    if not itemsToBuy or #itemsToBuy == 0 then
+        return Notify(locale('error.no_items_to_buy'), 'error')
+    end
+    for i = 1, #itemsToBuy do
+        local item = itemsToBuy[i]
         local label = Items[item.name] and Items[item.name].label or item.name
         buyOptions[#buyOptions + 1] = {
             title = locale('menu.buy_item', label),
@@ -95,7 +101,7 @@ local function createPedPoint(point)
                 label = locale('target.buy'),
                 icon = 'fa-solid fa-box',
                 onSelect = function()
-                    openBuyMenu(point.shopName)
+                    openItemsToBuyMenu(point.shopName)
                 end,
             }
         end
@@ -105,7 +111,7 @@ local function createPedPoint(point)
                 label = locale('target.sell'),
                 icon = 'fa-solid fa-hand-holding-dollar',
                 onSelect = function()
-                    openSellMenu(point.shopName)
+                    openItemsToSellMenu(point.shopName)
                 end,
             }
         end
@@ -189,11 +195,11 @@ local function createPedPoint(point)
                         lib.showTextUI(textLocale)
                     end
                 end
-                if IsControlJustReleased(0, config.useKey) then
-                    openSellMenu(point.shopName)
+                if IsControlJustReleased(0, config.useKey) and point.pedBuys then
+                    openItemsToSellMenu(point.shopName)
                 end
-                if IsControlJustReleased(0, config.useKey2) then
-                    openBuyMenu(point.shopName)
+                if IsControlJustReleased(0, config.useKey2) and point.pedSells then
+                    openItemsToBuyMenu(point.shopName)
                 end
             else
                 local textOpen, text = lib.isTextUIOpen()
