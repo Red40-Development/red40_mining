@@ -18,7 +18,7 @@
 ---@field sprite number
 ---@field color number
 ---@field scale number
----@field coords vector3
+---@field coords vector2?
 ---@field enabled boolean?
 
 ---@class locationPoint

@@ -201,7 +201,6 @@ return {
                     sprite = 467,
                     scale = 1.0,
                     color = 5,
-                    coords = vec3(-1380.126, 2004.7308, 59.9556)
                 },
                 points = {
                     vector3(-1380.126, 2004.7308, 59.9556),
@@ -270,7 +269,6 @@ return {
                     sprite = 467,
                     scale = 1.0,
                     color = 3,
-                    coords = vec3(1832.7822, 419.7999, 159.3571)
                 },
                 points = {
                     vector3(1832.7822, 419.7999, 159.3571),

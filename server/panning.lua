@@ -93,6 +93,7 @@ local function buildPanningZone()
     for i = 1, #config.locations do
         local zone = config.locations[i]
         if zone.enabled then
+            zone.blip.coords = GetPointsCenter(zone.points)
             local createdZone = lib.zones.poly({
                 name = zone.name,
                 points = zone.points,

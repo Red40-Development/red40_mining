@@ -24,6 +24,19 @@ end
 
 detectInventory()
 
+
+function GetPointsCenter(points)
+    local x, y = 0, 0
+    local count = #points
+
+    for i = 1, count do
+        x = x + points[i].x
+        y = y + points[i].y
+    end
+
+    return vector2(x / count, y / count)
+end
+
 ---@param xp number
 ---@param xpTable table
 function GetXpLevel(xp, xpTable)
