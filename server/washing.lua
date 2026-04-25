@@ -93,15 +93,13 @@ local function buildWashingZone()
                 thickness = zone.thickness or 400,
                 blip = zone.blip,
             })
-            if zone.debug then
-                local clientZone = {
-                    points = zone.points,
-                    thickness = zone.thickness or 400,
-                    blip = zone.blip,
-                    debug = true,
-                }
-                washingClientZones[#washingClientZones + 1] = clientZone
-            end
+            local clientZone = {
+                points = zone.points,
+                thickness = zone.thickness or 400,
+                blip = zone.blip,
+                debug = zone.debug or false,
+            }
+            washingClientZones[#washingClientZones + 1] = clientZone
             washingZones[#washingZones + 1] = createdZone
         end
     end
