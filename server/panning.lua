@@ -8,6 +8,7 @@ local config = require 'config.server'.panning
 
 local panningZones = {}
 local panningClientZones = {}
+local panningTracker = {}
 
 local function getPanningZone(coords)
     for i = 1, #panningZones do
@@ -33,6 +34,11 @@ local function panSpot(src, itemName)
         return
     end
 
+    if panningTracker[src] then
+        Notify(src, locale('error.already_panning'), 'error')
+        return
+    end
+    panningTracker[src] = true
     StartMining(src, 'panning', itemName)
 
     local waitTime = math.random(config.tools[itemName].minUseTime, config.tools[itemName].maxUseTime)
@@ -44,6 +50,7 @@ local function panSpot(src, itemName)
     if not totalTime >= waitTime then
         Notify(src, locale('error.generic_error'), 'error')
         Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
+        panningTracker[src] = nil
         return
     end
 
@@ -89,6 +96,7 @@ local function panSpot(src, itemName)
             end
         end
     end
+    panningTracker[src] = nil
     DeleteMiningObject(src)
 end
 
