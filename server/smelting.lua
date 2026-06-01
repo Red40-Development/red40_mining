@@ -37,6 +37,14 @@ RegisterNetEvent('red40_mining:server:smeltItem', function(smeltPointId, recipeI
 
     local recipe = getRecipe(smeltPoint.smelts, recipeId)
     if not recipe then return end
+
+    local playerXp = GetXp(src, 'smelting') or 0
+    local playerLevel = GetXpLevel(playerXp, config.xpTables) or 1
+    if playerLevel < recipe.level then
+        Notify(src, locale('error.tool_level_too_low', locale('activity.smelting')), 'error')
+        return
+    end
+
     if smeltTracker[src] then
         Notify(src, locale('error.already_smelting'), 'error')
         return
