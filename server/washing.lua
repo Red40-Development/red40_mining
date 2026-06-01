@@ -60,6 +60,11 @@ local function washSpot(src, itemName)
     end
 
     if success then
+        if not RemoveItem(src, itemName, 1) then
+            Notify(src, locale('error.invalid_tool'), 'error')
+            washingTracker[src] = nil
+            return
+        end
         local items = GenerateLoot(toolConfig.rewards, toolConfig.min, toolConfig.max, playerLevel)
         lib.print.debug('Generated loot for player ' .. src .. ' at washing zone ' .. washingZone.id .. ': ', items)
 
@@ -88,7 +93,6 @@ local function washSpot(src, itemName)
             AddXp(src, xpGained, 'washing')
             lib.print.debug('Added ' .. xpGained .. ' XP to player ' .. src .. ' for washing')
         end
-        RemoveItem(src, itemName, 1)
     end
     washingTracker[src] = nil
     DeleteMiningObject(src)
