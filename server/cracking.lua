@@ -103,7 +103,7 @@ RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
         rotation = crackableConfig.rotation,
     }
 
-local gameTime = GetGameTimer()
+    local gameTime = GetGameTimer()
     local success = lib.callback.await('red40_mining:client:crackSpot', src, waitTime, entityData, spotId)
 
     local totalTime = GetGameTimer() - gameTime
@@ -118,6 +118,12 @@ local gameTime = GetGameTimer()
     DeleteEntity(object)
 
     if success then
+        if not RemoveItem(src, crackableItem, 1) then
+            Notify(src, locale('error.missing_cracking_item'), 'error')
+            crackingTracker[src] = nil
+            return
+        end
+
         local items = GenerateLoot(crackableConfig.rewards, crackableConfig.min, crackableConfig.max, playerLevel)
         lib.print.debug('Generated loot for player ' .. src .. ' at cracking spot ' .. crackingSpot.id .. ': ', items)
         if items and next(items) then
@@ -145,7 +151,6 @@ local gameTime = GetGameTimer()
             AddXp(src, xpGained, 'cracking')
             lib.print.debug('Added ' .. xpGained .. ' XP to player ' .. src .. ' for cracking')
         end
-        RemoveItem(src, crackableItem, 1)
         if toolConfig.damage then
             local durabilityRemoved = config.durability()
             local durabilityLeft = RemoveItemDurability(src, toolItem, durabilityRemoved)
