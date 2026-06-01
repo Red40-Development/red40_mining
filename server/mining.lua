@@ -9,6 +9,7 @@ local config = require 'config.server'.mining
 local orePoints = {}
 local lightPoints = {}
 local miningBlips = {}
+local miningTracker = {}
 
 RegisterNetEvent('red40_mining:server:startMining', function(oreId)
     local src = source
@@ -49,6 +50,12 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
         return
     end
 
+    if miningTracker[src] then
+        Notify(src, locale('error.already_mining'), 'error')
+        return
+    end
+    miningTracker[src] = true
+
     local waitTime = math.random(config.tools[tool].minUseTime, config.tools[tool].maxUseTime)
 
     local gameTime = GetGameTimer()
@@ -58,6 +65,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
     if not totalTime >= waitTime then
         Notify(src, locale('error.generic_error'), 'error')
         Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
+        miningTracker[src] = nil
         return
     end
 
@@ -78,6 +86,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
             Logger(src, 'red40_mining',
                 'Player finished mining ore point ' ..
                 oreId .. ' but was too far away. Distance: ' .. #(coords - orePoint.coords))
+            miningTracker[src] = nil
             return
         end
 
@@ -121,6 +130,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
                     'Player ' .. src .. '\'s tool ' .. tool .. ' broke due to durability reaching 0.')
             end
         end
+        miningTracker[src] = nil
     end
 end)
 
