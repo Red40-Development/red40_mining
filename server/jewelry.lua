@@ -7,6 +7,7 @@ end
 local config = require 'config.server'.jewelry
 
 local jewelryPoints = {}
+local jewelryTracker = {}
 
 local function getRecipe(recipeTable, recipeId)
     for _, recipeList in pairs(recipeTable) do
@@ -36,12 +37,18 @@ RegisterNetEvent('red40_mining:server:jewelryItem', function(jewelryPointId, rec
 
     local recipe = getRecipe(jewelryPoint.recipes, recipeId)
     if not recipe then return end
+    if jewelryTracker[src] then
+        Notify(src, locale('error.already_jewelrying'), 'error')
+        return
+    end
+    jewelryTracker[src] = true
 
     --Check if player has required items
     for itemName, requiredAmount in pairs(recipe.input) do
         local itemCount = GetItemCount(src, itemName)
         if itemCount < (requiredAmount * amount) then
             Notify(src, locale('error.not_enough_items'), 'error')
+            jewelryTracker[src] = nil
             return
         end
     end
@@ -51,6 +58,7 @@ RegisterNetEvent('red40_mining:server:jewelryItem', function(jewelryPointId, rec
         local removeItem = RemoveItem(src, itemName, requiredAmount * amount)
         if not removeItem then
             Notify(src, locale('error.not_enough_items'), 'error')
+            jewelryTracker[src] = nil
             return
         end
     end
@@ -70,6 +78,7 @@ RegisterNetEvent('red40_mining:server:jewelryItem', function(jewelryPointId, rec
         if not totalTime >= waitTime then
             Notify(src, locale('error.generic_error'), 'error')
             Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
+            jewelryTracker[src] = nil
             return
         end
 
@@ -88,9 +97,11 @@ RegisterNetEvent('red40_mining:server:jewelryItem', function(jewelryPointId, rec
             AddXp(src, config.xpPerAction(), 'jewelry')
         else
             Notify(src, locale('error.craft_cancelled'), 'error')
+            jewelryTracker[src] = nil
             return
         end
     end
+    jewelryTracker[src] = nil
 end)
 
 lib.callback.register('red40_mining:server:getJewelryItems', function(source, jewelryPointId)
