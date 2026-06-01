@@ -107,7 +107,7 @@ RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
     local success = lib.callback.await('red40_mining:client:crackSpot', src, waitTime, entityData, spotId)
 
     local totalTime = GetGameTimer() - gameTime
-    if not totalTime >= waitTime then
+    if totalTime < waitTime then
         Notify(src, locale('error.generic_error'), 'error')
         Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
         crackingTracker[src] = nil

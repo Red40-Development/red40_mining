@@ -62,7 +62,7 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
     local success = lib.callback.await('red40_mining:client:mineSpot', src, waitTime, config.tools[tool].type, oreId)
 
     local totalTime = GetGameTimer() - gameTime
-    if not totalTime >= waitTime then
+    if totalTime < waitTime then
         Notify(src, locale('error.generic_error'), 'error')
         Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
         miningTracker[src] = nil

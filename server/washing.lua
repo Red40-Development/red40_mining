@@ -52,7 +52,7 @@ local function washSpot(src, itemName)
     local success = lib.callback.await('red40_mining:client:washSpot', src, waitTime)
 
     local totalTime = GetGameTimer() - gameTime
-    if not totalTime >= waitTime then
+    if totalTime < waitTime then
         Notify(src, locale('error.generic_error'), 'error')
         Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
         washingTracker[src] = nil

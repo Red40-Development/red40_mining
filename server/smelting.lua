@@ -89,7 +89,7 @@ RegisterNetEvent('red40_mining:server:smeltItem', function(smeltPointId, recipeI
         local success = lib.callback.await('red40_mining:client:playSmeltAnim', src, waitTime, i, amount, smeltPoint.anim)
 
         local totalTime = GetGameTimer() - gameTime
-        if not totalTime >= waitTime then
+        if totalTime < waitTime then
             Notify(src, locale('error.generic_error'), 'error')
             Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
             smeltTracker[src] = nil
