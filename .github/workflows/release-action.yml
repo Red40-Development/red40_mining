@@ -108,6 +108,10 @@ jobs:
             -H "${{ secrets.CFX_API_CLIENT_SECRET }}" \
             -F "file=@${{ github.event.repository.name }}.zip" \
             -F "assetName=${{ github.event.repository.name }}" \
+            -F "version=${{ github.ref_name }}" \
+            -F "changelog=${{ steps.changelog.outputs.changes }}" \
+            -F "release_candidate=false" \
+            -F "delete_previous_versions=true" \
             -F "createNew=true")
 
           http_code=$(echo "$response" | tail -n1)
