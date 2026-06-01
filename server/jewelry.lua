@@ -37,6 +37,14 @@ RegisterNetEvent('red40_mining:server:jewelryItem', function(jewelryPointId, rec
 
     local recipe = getRecipe(jewelryPoint.recipes, recipeId)
     if not recipe then return end
+
+    local playerXp = GetXp(src, 'jewelry') or 0
+    local playerLevel = GetXpLevel(playerXp, config.xpTables) or 1
+    if playerLevel < recipe.level then
+        Notify(src, locale('error.tool_level_too_low', locale('activity.jewelry')), 'error')
+        return
+    end
+
     if jewelryTracker[src] then
         Notify(src, locale('error.already_jewelrying'), 'error')
         return
