@@ -26,7 +26,7 @@ function GetItemCountFramework(source, itemName)
     local xPlayer = GetPlayer(source)
     if not xPlayer then return 0 end
     local itemInfo = xPlayer.getInventoryItem(itemName)
-    return itemInfo.county or itemInfo.amount or 0
+    return itemInfo.count or itemInfo.amount or 0
 end
 
 function CanCarryItemFramework(source, item, amount, metadata)
