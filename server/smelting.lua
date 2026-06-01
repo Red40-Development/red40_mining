@@ -7,6 +7,7 @@ end
 local config = require 'config.server'.smelting
 
 local smeltPoints = {}
+local smeltTracker = {}
 
 local function getRecipe(recipeTable, recipeId)
     for _, recipeList in pairs(recipeTable) do
@@ -36,12 +37,18 @@ RegisterNetEvent('red40_mining:server:smeltItem', function(smeltPointId, recipeI
 
     local recipe = getRecipe(smeltPoint.smelts, recipeId)
     if not recipe then return end
+    if smeltTracker[src] then
+        Notify(src, locale('error.already_smelting'), 'error')
+        return
+    end
+    smeltTracker[src] = true
 
     --Check if player has required items
     for itemName, requiredAmount in pairs(recipe.input) do
         local itemCount = GetItemCount(src, itemName)
         if itemCount < (requiredAmount * amount) then
             Notify(src, locale('error.not_enough_items'), 'error')
+            smeltTracker[src] = nil
             return
         end
     end
@@ -51,6 +58,7 @@ RegisterNetEvent('red40_mining:server:smeltItem', function(smeltPointId, recipeI
         local removeItem = RemoveItem(src, itemName, requiredAmount * amount)
         if not removeItem then
             Notify(src, locale('error.not_enough_items'), 'error')
+            smeltTracker[src] = nil
             return
         end
     end
@@ -70,6 +78,7 @@ RegisterNetEvent('red40_mining:server:smeltItem', function(smeltPointId, recipeI
         if not totalTime >= waitTime then
             Notify(src, locale('error.generic_error'), 'error')
             Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
+            smeltTracker[src] = nil
             return
         end
 
@@ -77,6 +86,7 @@ RegisterNetEvent('red40_mining:server:smeltItem', function(smeltPointId, recipeI
         pedCoords = GetEntityCoords(GetPlayerPed(src))
         if #(pedCoords - smeltPoint.coords) > 5.0 then
             Notify(src, locale('error.not_in_smelt_point'), 'error')
+            smeltTracker[src] = nil
             return
         end
 
@@ -95,9 +105,11 @@ RegisterNetEvent('red40_mining:server:smeltItem', function(smeltPointId, recipeI
             AddXp(src, config.xpPerAction(), 'smelting')
         else
             Notify(src, locale('error.craft_cancelled'), 'error')
+            smeltTracker[src] = nil
             return
         end
     end
+    smeltTracker[src] = nil
 end)
 
 lib.callback.register('red40_mining:server:getSmeltableItems', function(source, smeltPointId)
