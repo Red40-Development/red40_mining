@@ -63,7 +63,16 @@ RegisterNetEvent('red40_mining:server:jewelryItem', function(jewelryPointId, rec
 
 
         --Trigger callback for animation
+        local gameTime = GetGameTimer()
         local success = lib.callback.await('red40_mining:client:playJewelryAnim', src, waitTime, i, amount, jewelryPoint.anim)
+
+        local totalTime = GetGameTimer() - gameTime
+        if not totalTime >= waitTime then
+            Notify(src, locale('error.generic_error'), 'error')
+            Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
+            return
+        end
+
         if success then
             local excessItems = {}
             for outputItem, outputAmount in pairs(recipe.output) do

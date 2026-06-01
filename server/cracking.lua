@@ -95,7 +95,15 @@ RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
         rotation = crackableConfig.rotation,
     }
 
+local gameTime = GetGameTimer()
     local success = lib.callback.await('red40_mining:client:crackSpot', src, waitTime, entityData, spotId)
+
+    local totalTime = GetGameTimer() - gameTime
+    if not totalTime >= waitTime then
+        Notify(src, locale('error.generic_error'), 'error')
+        Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
+        return
+    end
 
     -- Cleanup the cracking prop
     DeleteEntity(object)

@@ -42,7 +42,15 @@ local function washSpot(src, itemName)
 
     local waitTime = math.random(toolConfig.minUseTime, toolConfig.maxUseTime)
 
+    local gameTime = GetGameTimer()
     local success = lib.callback.await('red40_mining:client:washSpot', src, waitTime)
+
+    local totalTime = GetGameTimer() - gameTime
+    if not totalTime >= waitTime then
+        Notify(src, locale('error.generic_error'), 'error')
+        Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
+        return
+    end
 
     if success then
         local items = GenerateLoot(toolConfig.rewards, toolConfig.min, toolConfig.max, playerLevel)

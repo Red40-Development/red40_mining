@@ -51,7 +51,15 @@ RegisterNetEvent('red40_mining:server:startMining', function(oreId)
 
     local waitTime = math.random(config.tools[tool].minUseTime, config.tools[tool].maxUseTime)
 
+    local gameTime = GetGameTimer()
     local success = lib.callback.await('red40_mining:client:mineSpot', src, waitTime, config.tools[tool].type, oreId)
+
+    local totalTime = GetGameTimer() - gameTime
+    if not totalTime >= waitTime then
+        Notify(src, locale('error.generic_error'), 'error')
+        Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
+        return
+    end
 
     if success and not orePoint.looted then
         orePoints[orePoint.id].looted = true
