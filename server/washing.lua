@@ -8,6 +8,7 @@ local config = require 'config.server'.washing
 
 local washingZones = {}
 local washingClientZones = {}
+local washingTracker = {}
 
 local function getWashingZone(coords)
     for i = 1, #washingZones do
@@ -38,6 +39,11 @@ local function washSpot(src, itemName)
         return
     end
 
+    if washingTracker[src] then
+        Notify(src, locale('error.already_washing'), 'error')
+        return
+    end
+    washingTracker[src] = true
     StartMining(src, 'washing', itemName)
 
     local waitTime = math.random(toolConfig.minUseTime, toolConfig.maxUseTime)
@@ -49,6 +55,7 @@ local function washSpot(src, itemName)
     if not totalTime >= waitTime then
         Notify(src, locale('error.generic_error'), 'error')
         Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
+        washingTracker[src] = nil
         return
     end
 
@@ -83,6 +90,7 @@ local function washSpot(src, itemName)
         end
         RemoveItem(src, itemName, 1)
     end
+    washingTracker[src] = nil
     DeleteMiningObject(src)
 end
 
