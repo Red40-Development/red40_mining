@@ -233,6 +233,11 @@ else
     RegisterNetEvent('red40_mining:server:buy', function(shopName, itemName, amount)
         local src = source
 
+        amount = tonumber(amount)
+        if not amount or amount < 1 then
+            Notify(src, locale('error.invalid_amount'), 'error')
+            return
+        end
 
         local shop = getShop(shopName)
         if not shop then return end
@@ -264,6 +269,12 @@ else
 
     RegisterNetEvent('red40_mining:server:sell', function(shopName, itemName, amount)
         local src = source
+
+        amount = tonumber(amount)
+        if not amount or amount < 1 then
+            Notify(src, locale('error.invalid_amount'), 'error')
+            return
+        end
 
         local shop = getShop(shopName)
         if not shop then return end

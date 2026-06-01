@@ -25,6 +25,12 @@ end
 RegisterNetEvent('red40_mining:server:smeltItem', function(smeltPointId, recipeId, amount)
     local src = source
 
+    amount = tonumber(amount)
+    if not amount or amount < 1 then
+        Notify(src, locale('error.invalid_amount'), 'error')
+        return
+    end
+
     local smeltPoint = smeltPoints[smeltPointId]
     if not smeltPoint then return end
 

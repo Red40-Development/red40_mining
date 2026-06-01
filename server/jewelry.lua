@@ -25,6 +25,12 @@ end
 RegisterNetEvent('red40_mining:server:jewelryItem', function(jewelryPointId, recipeId, amount)
     local src = source
 
+    amount = tonumber(amount)
+    if not amount or amount < 1 then
+        Notify(src, locale('error.invalid_amount'), 'error')
+        return
+    end
+
     local jewelryPoint = jewelryPoints[jewelryPointId]
     if not jewelryPoint then return end
 
