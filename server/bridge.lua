@@ -61,6 +61,11 @@ lib.addCommand('red40_mining_xp', {
         }
     }
 }, function(source, args)
+    if not args.activity or not config[args.activity] then
+        Notify(source, locale('error.invalid_activity'), 'error')
+        return
+    end
+
     local xpLevel = GetXpLevel(GetXp(source, args.activity) or 0, config[args.activity].xpTables)
     if xpLevel then
         Notify(source, locale('info.xp_level', locale(args.activity), xpLevel), 'inform')
