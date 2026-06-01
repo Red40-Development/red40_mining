@@ -24,7 +24,14 @@
         "tool_level_too_low": "Your %s level is too low to use this tool",
         "invalid_activity": "Invalid activity",
         "no_items_to_sell": "You have no items to sell",
-        "no_items_to_buy": "There are no items available for purchase"
+        "no_items_to_buy": "There are no items available for purchase",
+        "generic_error": "An error occurred",
+        "already_cracking": "You are already cracking ore",
+        "already_washing": "You are already washing ore",
+        "already_panning": "You are already panning for gold",
+        "already_smelting": "You are already smelting items",
+        "already_jewelry": "You are already crafting jewelry",
+        "missing_cracking_item": "You don't have any ore to crack"
     },
     "activity": {
       "mining": "Mining",
