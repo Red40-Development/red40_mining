@@ -7,6 +7,7 @@ end
 local config = require 'config.server'.cracking
 
 local crackingSpots = {}
+local crackingTracker = {}
 
 local toolTable = {}
 for item, _ in pairs(config.tools) do
@@ -23,6 +24,12 @@ end
 
 RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
     local src = source
+
+    if crackingTracker[src] then
+        Notify(src, locale('error.already_cracking'), 'error')
+        return
+    end
+
     local pedCoords = GetEntityCoords(GetPlayerPed(src))
     local crackingSpot = crackingSpots[spotId]
 
@@ -76,6 +83,7 @@ RegisterNetEvent('red40_mining:server:startCracking', function(spotId)
         return
     end
 
+    crackingTracker[src] = true
     local waitTime = math.random(toolConfig.minUseTime, toolConfig.maxUseTime)
 
     -- Create the cracking prop and pass to client
@@ -102,6 +110,7 @@ local gameTime = GetGameTimer()
     if not totalTime >= waitTime then
         Notify(src, locale('error.generic_error'), 'error')
         Logger(src, 'red40_mining', 'Player ' .. src .. ' returned callback too fast. Time taken: ' .. totalTime .. 'ms')
+        crackingTracker[src] = nil
         return
     end
 
@@ -149,6 +158,7 @@ local gameTime = GetGameTimer()
             end
         end
     end
+    crackingTracker[src] = nil
 end)
 
 lib.callback.register('red40_mining:server:getCrackingPoints', function()
