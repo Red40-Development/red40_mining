@@ -21,7 +21,7 @@ function GetItemCountFramework(source, itemName)
     local player = GetPlayer(source)
     if not player then return 0 end
     local itemInfo = player.Functions.GetItemByName(itemName)
-    return itemInfo.amount or itemInfo.count or 0
+    return itemInfo?.amount or itemInfo?.count or 0
 end
 
 function CanCarryItemFramework(source, item, amount, metadata)
