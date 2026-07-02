@@ -3,6 +3,7 @@ return {
     useKey = 38, -- The control key to use for action prompts (default is E) -- https://docs.fivem.net/docs/game-references/controls/#controls
     useKey2 = 23, -- The control key to use for action prompts (default is F) -- https://docs.fivem.net/docs/game-references/controls/#controls
     miningTarget = true, -- True removes prompts and adds target interactions for mining locations
+    disableMiningSounds = false, -- True disables mining sounds for mining tools
     crackingTarget = true, -- True removes prompts and adds target interactions for cracking locations
     smeltingTarget = true, -- True removes prompts and adds target interactions for smelting locations
     jewelryTarget = true, -- True removes prompts and adds target interactions for jewelry locations

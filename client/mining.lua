@@ -103,7 +103,7 @@ lib.callback.register('red40_mining:client:mineSpot', function(waitTime, toolTyp
     end
     TaskLookAtEntity(cache.ped, closestOre.propNumber, -1, 2048, 3)
     effectsLoop = true
-    createMiningSounds(toolType, Prop)
+    if not config.disableMiningSounds then createMiningSounds(toolType, Prop) end
     createMiningEffects(toolType, Prop, closestOre.propNumber)
     local success = lib.progressBar({
         duration = waitTime,
