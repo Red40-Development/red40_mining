@@ -25,7 +25,6 @@ end)
 
 local function createMiningSounds(miningTool, toolEntity)
     Citizen.CreateThreadNow(function()
-        lib.requestAudioBank('audiodirectory/red40_mining')
         local soundId, soundId2 = GetSoundId(), GetSoundId()
         if miningTool == 'pickaxe' then
             lib.print.debug('You could add a sound here')
@@ -33,6 +32,7 @@ local function createMiningSounds(miningTool, toolEntity)
             --TODO use native audio drill sound
             lib.print.debug('No sound for drill yet')
         elseif miningTool == 'laserdrill' then
+            lib.requestAudioBank('audiodirectory/red40_mining')
             PlaySoundFromEntity(soundId, 'laserdrill_start', toolEntity, 'special_soundset', true, 0)
             Wait(250)
             while effectsLoop do
