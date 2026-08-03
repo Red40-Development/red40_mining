@@ -1,20 +1,12 @@
 name: "Discord Commit"
 
-on: [push]
+on:
+  push:
 
 jobs:
-  discord_notification:
-    if: github.event.repository.default_branch == github.ref_name
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-
-      - name: Run Discord Webhook
-        uses: solareon/discord-commits@v1
-        with:
-          id: ${{ secrets.DISCORD_WEBHOOK_ID }}
-          token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
-          hideCommitUrl: true
-          repoName: ${{ github.event.repository.name }}
-          avatarUrl: ${{ secrets.DISCORD_WEBHOOK_AVATARURL }}
+  discord-notification:
+    uses: Red40-Development/red40_repo_sync/.github/workflows/reusable-discord-push.yml@v1
+    secrets:
+      DISCORD_WEBHOOK_ID: ${{ secrets.DISCORD_WEBHOOK_ID }}
+      DISCORD_WEBHOOK_TOKEN: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+      DISCORD_WEBHOOK_AVATARURL: ${{ secrets.DISCORD_WEBHOOK_AVATARURL }}

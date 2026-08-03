@@ -4,22 +4,7 @@ on:
   release:
     types: [published]
 jobs:
-  github-releases-to-discord:
-    name: Discord Releases Changelog
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v7
-
-      - name: Github Releases To Discord
-        uses: SethCohen/github-releases-to-discord@v1
-        with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          color: "16736808"
-          username: ${{ github.event.repository.name }}
-          avatar_url: "https://assets.red40.dev/red40_short_logo.webp"
-          remove_github_reference_links: true
-          footer_timestamp: true
-          footer_title: "Red40 Development"
-          footer_icon_url: "https://red40.dev/red40_logo_transparent_256.png"
-
+  discord-release:
+    uses: Red40-Development/red40_repo_sync/.github/workflows/reusable-discord-release.yml@v1
+    secrets:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
