@@ -7,4 +7,7 @@ on:
 jobs:
   lint:
     uses: Red40-Development/red40_repo_sync/.github/workflows/reusable-lint.yml@v1
+    with:
+      # Override this value when the repository needs additional FiveM resources.
+      extra_libs: ox_lib+mysql+qblocales+qbox+qbox_playerdata+qbox_lib
     secrets: inherit
